@@ -1,0 +1,9 @@
+# Aplikasi: Apache DocumentRoot sebaiknya ke folder "public" (lihat README).
+<IfModule mod_dir.c>
+    DirectoryIndex index.php index.html
+</IfModule>
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.env">
+        Require all denied
+    </FilesMatch>
+</IfModule>
