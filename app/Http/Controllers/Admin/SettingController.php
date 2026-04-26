@@ -11,23 +11,33 @@ class SettingController extends Controller
     public function index()
     {
         $settings = Setting::all()->groupBy('group');
+
         return view('admin.settings.index', compact('settings'));
     }
 
     public function update(Request $request)
     {
+        $request->validate([
+            'files' => ['nullable', 'array'],
+            'files.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:15360'],
+        ], [
+            'files.*.image' => 'Berkas harus gambar (JPG, PNG, WebP).',
+            'files.*.max' => 'Ukuran gambar maksimum 15 MB per file.',
+        ]);
+
         $input = $request->except(['_token', '_method', 'files']);
         foreach ($input as $key => $value) {
-            if ($key === 'files') {
-                continue;
-            }
             Setting::set($key, is_array($value) ? json_encode($value) : (string) $value);
         }
 
-        if ($request->file('files')) {
-            foreach ($request->file('files', []) as $key => $file) {
-                if ($file && $file->isValid()) {
-                    $path = $file->store('settings', 'public');
+        $fileBag = $request->file('files', []);
+        if (is_array($fileBag)) {
+            foreach ($fileBag as $key => $file) {
+                if (! $file || ! $file->isValid()) {
+                    continue;
+                }
+                $path = $file->store('settings', 'public');
+                if ($path) {
                     Setting::set($key, $path, 'identity', 'image');
                 }
             }

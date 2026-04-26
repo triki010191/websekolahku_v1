@@ -24,11 +24,12 @@
         <input type="file" name="images[]" class="form-control" accept="image/*" multiple required>
         <button class="btn btn-outline-primary">Upload</button>
     </form>
+    <p class="small text-secondary mb-0 mt-1">Beberapa file sekaligus. Maks. 15MB per gambar. Publik: jenis <code>object-fit: cover</code>.</p>
     <div class="row g-2 mt-3">
         @foreach($album->items ?? [] as $item)
         <div class="col-3">
             <div class="position-relative">
-                <img src="{{ asset('storage/'.$item->url) }}" class="w-100 rounded" alt="">
+                <img src="{{ asset('storage/'.$item->url) }}" class="w-100 rounded" style="aspect-ratio:1;object-fit:cover" alt="">
                 <form method="post" action="{{ route('admin.gallery.items.destroy', $item) }}" class="position-absolute top-0 end-0" onsubmit="return confirm('Hapus?')">@csrf @method('delete')
                     <button class="btn btn-sm btn-danger">×</button>
                 </form>

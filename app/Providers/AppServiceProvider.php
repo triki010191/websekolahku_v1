@@ -32,11 +32,18 @@ class AppServiceProvider extends ServiceProvider
             $request = $this->app->make('request');
             if ($request->getHost() && in_array($request->getScheme() ?: 'http', ['http', 'https'], true)) {
                 // XAMPP subfolder: asset() & route() harus pakai root URL sesuai browser, bukan APP_URL salah.
-                URL::forceRootUrl($request->root());
+                $root = $request->root();
+                // Sebelum middleware TrustProxies, skema sering "http" walau klien pakai https (ngrok, reverse proxy).
+                // Tanpa ini, asset() jadi http di halaman https = mixed content, CSS/JS (hero-gradient, dsb) tidak ter-load.
+                if ($request->header('X-Forwarded-Proto') === 'https' && str_starts_with($root, 'http://')) {
+                    $root = 'https://'.substr($root, strlen('http://'));
+                }
+                URL::forceRootUrl($root);
             }
         }
 
         $this->ensureViewCompiledPathExists();
+        $this->ensurePublicStorageLink();
 
         Gate::policy(Post::class, PostPolicy::class);
 
@@ -54,6 +61,28 @@ class AppServiceProvider extends ServiceProvider
         $path = config('view.compiled') ?: storage_path('framework/views');
         if (is_string($path) && $path !== '' && ! File::isDirectory($path)) {
             File::makeDirectory($path, 0755, true, true);
+        }
+    }
+
+    /**
+     * Membuat symlink public/storage jika belum ada (XAMPP / deploy baru sering lupa `php artisan storage:link`).
+     */
+    private function ensurePublicStorageLink(): void
+    {
+        if ($this->app->environment('testing')) {
+            return;
+        }
+        $link = public_path('storage');
+        $target = storage_path('app/public');
+        if (File::exists($link) || ! File::isDirectory($target)) {
+            return;
+        }
+        try {
+            if (function_exists('symlink')) {
+                symlink($target, $link);
+            }
+        } catch (\Throwable) {
+            // Abaikan: Windows tanpa izin symlink, dll.
         }
     }
 }

@@ -12,9 +12,14 @@
             @if($item->type==='video')
             <div class="ratio ratio-1x1 bg-dark rounded d-flex align-items-center justify-content-center text-white">Video</div>
             @else
-            <a href="{{ asset('storage/'.$item->url) }}" target="_blank" class="d-block">
-                <img src="{{ asset('storage/'.$item->url) }}" class="img-fluid rounded w-100 shadow-sm" alt="">
+            @php $imgUrl = public_storage_url($item->url); @endphp
+            @if($imgUrl)
+            <a href="{{ $imgUrl }}" target="_blank" rel="noopener" class="d-block">
+                <img src="{{ $imgUrl }}" class="img-fluid rounded w-100 shadow-sm" alt="" loading="lazy" style="object-fit:cover;aspect-ratio:1">
             </a>
+            @else
+            <div class="ratio ratio-1x1 bg-body-secondary rounded d-flex align-items-center justify-content-center text-muted small">Tidak ada file</div>
+            @endif
             @endif
         </div>
         @endforeach

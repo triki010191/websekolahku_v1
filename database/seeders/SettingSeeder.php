@@ -15,8 +15,11 @@ class SettingSeeder extends Seeder
             ['key' => 'site_short',        'value' => 'SMKN 8 Pandeglang',                        'group' => 'identity'],
             ['key' => 'site_tagline',      'value' => 'Pusat Keunggulan & Prestasi Akademik',     'group' => 'identity'],
             ['key' => 'site_npsn',         'value' => '20604321',                                 'group' => 'identity'],
-            ['key' => 'site_accreditation','value' => 'A (Unggul)',                               'group' => 'identity'],
+            ['key' => 'site_accreditation', 'value' => 'A (Unggul)',                               'group' => 'identity'],
             ['key' => 'site_logo',         'value' => '',                                         'group' => 'identity', 'type' => 'image'],
+            ['key' => 'hero_principal_image', 'value' => '',                                    'group' => 'identity', 'type' => 'image'],
+            ['key' => 'hero_principal_caption', 'value' => 'Kepala Sekolah',                    'group' => 'identity'],
+            ['key' => 'sambutan_section_image', 'value' => '',                                    'group' => 'identity', 'type' => 'image'],
 
             // theme
             ['key' => 'theme_primary',     'value' => '#1d4ed8', 'group' => 'theme', 'type' => 'color'],
@@ -31,13 +34,13 @@ class SettingSeeder extends Seeder
             ['key' => 'contact_email',    'value' => 'info@smkn8pandeglang.sch.id',      'group' => 'contact'],
             ['key' => 'contact_ppdb',     'value' => 'ppdb@smkn8pandeglang.sch.id',      'group' => 'contact'],
             ['key' => 'contact_latitude', 'value' => '-6.3000',                          'group' => 'contact'],
-            ['key' => 'contact_longitude','value' => '106.1023',                         'group' => 'contact'],
+            ['key' => 'contact_longitude', 'value' => '106.1023',                         'group' => 'contact'],
 
             // social
             ['key' => 'social_instagram', 'value' => 'smkn8pandeglang', 'group' => 'social'],
             ['key' => 'social_facebook',  'value' => 'smkn8pandeglang', 'group' => 'social'],
-            ['key' => 'social_youtube',   'value' => '@smkn8pandeglang','group' => 'social'],
-            ['key' => 'social_tiktok',    'value' => '@smkn8pandeglang','group' => 'social'],
+            ['key' => 'social_youtube',   'value' => '@smkn8pandeglang', 'group' => 'social'],
+            ['key' => 'social_tiktok',    'value' => '@smkn8pandeglang', 'group' => 'social'],
 
             // seo
             ['key' => 'seo_title',       'value' => 'SMKN 8 Pandeglang — Pusat Keunggulan & Prestasi Akademik', 'group' => 'seo'],
@@ -50,6 +53,8 @@ class SettingSeeder extends Seeder
             ['key' => 'ppdb_start',    'value' => '2026-06-01',      'group' => 'ppdb', 'type' => 'date'],
             ['key' => 'ppdb_end',      'value' => '2026-07-15',      'group' => 'ppdb', 'type' => 'date'],
             ['key' => 'ppdb_announce', 'value' => '2026-07-20',      'group' => 'ppdb', 'type' => 'date'],
+            ['key' => 'spmb_banten_url',  'value' => 'https://spmb.bantenprov.go.id/', 'group' => 'ppdb'],
+            ['key' => 'spmb_banten_logo', 'value' => '',               'group' => 'ppdb', 'type' => 'image'],
         ];
 
         foreach ($data as $row) {
@@ -58,7 +63,7 @@ class SettingSeeder extends Seeder
                 [
                     'value' => $row['value'],
                     'group' => $row['group'] ?? 'general',
-                    'type'  => $row['type']  ?? 'text',
+                    'type' => $row['type'] ?? 'text',
                 ]
             );
         }

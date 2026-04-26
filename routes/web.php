@@ -1,7 +1,25 @@
 <?php
 
+use App\Http\Controllers\Admin\AlumniJobController;
+use App\Http\Controllers\Admin\AlumniProfileController;
+use App\Http\Controllers\Admin\AnnouncementController as AdminAnnouncement;
+use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DownloadController as AdminDownload;
+use App\Http\Controllers\Admin\ExtracurricularController as AdminExtracurricular;
+use App\Http\Controllers\Admin\FacilityController as AdminFacility;
+use App\Http\Controllers\Admin\PartnerController as AdminPartner;
+use App\Http\Controllers\Admin\GalleryController as AdminGallery;
+use App\Http\Controllers\Admin\HeroSlideController;
+use App\Http\Controllers\Admin\MajorController as AdminMajor;
+use App\Http\Controllers\Admin\PostController as AdminPost;
+use App\Http\Controllers\Admin\PpdbController as AdminPpdb;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TeacherController as AdminTeacher;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\Auth\AlumniAuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DownloadController;
@@ -17,17 +35,6 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PpdbController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\Admin\AnnouncementController as AdminAnnouncement;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\GalleryController as AdminGallery;
-use App\Http\Controllers\Admin\MajorController as AdminMajor;
-use App\Http\Controllers\Admin\PostController as AdminPost;
-use App\Http\Controllers\Admin\PpdbController as AdminPpdb;
-use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\Admin\AlumniProfileController;
-use App\Http\Controllers\Admin\TeacherController as AdminTeacher;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Auth\AlumniAuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -49,34 +56,37 @@ Route::get('/event', [EventController::class, 'index'])->name('event.index');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.show');
 Route::get('/kalender', [EventController::class, 'calendar'])->name('kalender.index');
 Route::get('/download', [DownloadController::class, 'index'])->name('download.index');
+Route::get('/download/berkas/{download}', [DownloadController::class, 'file'])->name('download.file');
 
 /* Fasilitas & program */
 Route::get('/fasilitas', [FacilityController::class, 'index'])->name('fasilitas.index');
 Route::get('/fasilitas/{facility:slug}', [FacilityController::class, 'show'])->name('fasilitas.show');
 Route::get('/ekstrakurikuler', [ExtracurricularController::class, 'index'])->name('ekstrakurikuler.index');
+Route::get('/ekstrakurikuler/{extracurricular:slug}', [ExtracurricularController::class, 'show'])->name('ekstrakurikuler.show');
 Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni.index');
 Route::get('/alumni/lowongan', [AlumniController::class, 'jobs'])->name('alumni.jobs');
 Route::get('/kerjasama', [PartnerController::class, 'index'])->name('kerjasama.index');
+Route::get('/kerjasama/{partner:slug}', [PartnerController::class, 'show'])->name('kerjasama.show');
 
 /* Layanan */
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::get('/kontak', [ContactController::class, 'index'])->name('kontak.index');
-Route::post('/kontak', [ContactController::class, 'store'])->name('kontak.store');
+Route::post('/kontak', [ContactController::class, 'store'])->name('kontak.store')->middleware('throttle:20,1');
 
 /* PPDB */
 Route::get('/ppdb', [PpdbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
-Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store');
+Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store')->middleware('throttle:10,1');
 Route::get('/ppdb/sukses/{number}', [PpdbController::class, 'success'])->name('ppdb.success');
 
 /* Autentikasi admin (panel) */
 Route::get('/admin/login', [LoginController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [LoginController::class, 'login'])->name('admin.login.post');
+Route::post('/admin/login', [LoginController::class, 'login'])->name('admin.login.post')->middleware('throttle:6,1');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 /* Area alumni (login terpisah dari panel admin) */
 Route::get('/alumni/masuk', [AlumniAuthController::class, 'showLogin'])->name('alumni.login');
-Route::post('/alumni/masuk', [AlumniAuthController::class, 'login'])->name('alumni.login.post');
+Route::post('/alumni/masuk', [AlumniAuthController::class, 'login'])->name('alumni.login.post')->middleware('throttle:6,1');
 Route::get('/alumni/akun', [AlumniAuthController::class, 'dashboard'])->middleware(['auth', 'alumni.member'])->name('alumni.member.dashboard');
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.module'])->group(function () {
@@ -103,6 +113,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
 
     Route::middleware('role:super_admin')->group(function () {
         Route::resource('users', UserController::class)->except('show');
+        Route::resource('hero-slides', HeroSlideController::class)->except('show');
+        Route::resource('downloads', AdminDownload::class)->except('show');
+        Route::resource('facilities', AdminFacility::class)->except('show');
+        Route::resource('extracurriculars', AdminExtracurricular::class)->except('show');
+        Route::resource('partners', AdminPartner::class)->except('show');
+        Route::resource('alumni-jobs', AlumniJobController::class)->except('show');
+        Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::put('contact-messages/{contactMessage}/status', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
+        Route::delete('contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::match(['put', 'post'], 'settings', [SettingController::class, 'update'])->name('settings.update');
     });

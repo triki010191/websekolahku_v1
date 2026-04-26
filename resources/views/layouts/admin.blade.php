@@ -38,6 +38,13 @@
             <a href="{{ route('admin.teachers.index') }}" class="@if(request()->routeIs('admin.teachers.*')) active @endif"><i class="bi bi-people"></i> Guru &amp; TU</a>
             <a href="{{ route('admin.ppdb.index') }}" class="@if(request()->routeIs('admin.ppdb.*')) active @endif"><i class="bi bi-person-check"></i> SPMB</a>
             <a href="{{ route('admin.gallery.index') }}" class="@if(request()->routeIs('admin.gallery.*')) active @endif"><i class="bi bi-images"></i> Galeri</a>
+            <a href="{{ route('admin.hero-slides.index') }}" class="@if(request()->routeIs('admin.hero-slides.*')) active @endif"><i class="bi bi-collection-play"></i> Slider beranda</a>
+            <a href="{{ route('admin.downloads.index') }}" class="@if(request()->routeIs('admin.downloads.*')) active @endif"><i class="bi bi-cloud-arrow-down"></i> Download</a>
+            <a href="{{ route('admin.facilities.index') }}" class="@if(request()->routeIs('admin.facilities.*')) active @endif"><i class="bi bi-building"></i> Fasilitas</a>
+            <a href="{{ route('admin.extracurriculars.index') }}" class="@if(request()->routeIs('admin.extracurriculars.*')) active @endif"><i class="bi bi-trophy"></i> Ekstrakurikuler</a>
+            <a href="{{ route('admin.partners.index') }}" class="@if(request()->routeIs('admin.partners.*')) active @endif"><i class="bi bi-handshake"></i> Kerjasama DU-DI</a>
+            <a href="{{ route('admin.alumni-jobs.index') }}" class="@if(request()->routeIs('admin.alumni-jobs.*')) active @endif"><i class="bi bi-briefcase"></i> Lowongan alumni</a>
+            <a href="{{ route('admin.contact-messages.index') }}" class="@if(request()->routeIs('admin.contact-messages.*')) active @endif"><i class="bi bi-envelope-open"></i> Pesan hubungi kami</a>
             @endif
             @if($isSuper || $isAlumniAdmin)
             <a href="{{ route('admin.alumni-profiles.index') }}" class="@if(request()->routeIs('admin.alumni-profiles.*')) active @endif"><i class="bi bi-mortarboard-fill"></i> Data alumni</a>

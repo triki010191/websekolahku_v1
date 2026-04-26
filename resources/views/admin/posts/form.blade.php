@@ -35,6 +35,7 @@
     <div class="mb-2">
         <label class="form-label">Sampul</label>
         <input type="file" name="cover" class="form-control" accept="image/*">
+        <div class="form-text">JPG, PNG, WebP. Maks. 15MB — tampil di artikel memakai <em>object-fit: cover</em> agar rapi di semua lebar layar.</div>
     </div>
     <div class="form-check mb-3">
         <input class="form-check-input" type="checkbox" name="is_featured" value="1" id="f" @checked(old('is_featured', $post->is_featured))>

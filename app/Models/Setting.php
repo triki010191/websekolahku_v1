@@ -12,12 +12,25 @@ class Setting extends Model
     public static function get(string $key, mixed $default = null): mixed
     {
         $map = Cache::rememberForever('settings.all', fn () => self::pluck('value', 'key')->toArray());
+
         return $map[$key] ?? $default;
     }
 
-    public static function set(string $key, mixed $value, string $group = 'general', string $type = 'text'): void
+    /**
+     * @param  mixed  $value  Disimpan sebagai string; array di-json-kan di caller jika perlu.
+     */
+    public static function set(string $key, mixed $value, ?string $group = null, ?string $type = null): void
     {
-        self::updateOrCreate(['key' => $key], compact('value', 'group', 'type'));
+        $row = self::query()->where('key', $key)->first();
+        $group = $group ?? $row?->group ?? 'general';
+        $type = $type ?? $row?->type ?? 'text';
+        if (! is_string($value) && $value !== null) {
+            $value = (string) $value;
+        }
+        self::updateOrCreate(
+            ['key' => $key],
+            ['value' => (string) $value, 'group' => $group, 'type' => $type]
+        );
         Cache::forget('settings.all');
     }
 

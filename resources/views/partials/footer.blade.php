@@ -1,10 +1,17 @@
+@php
+    $footerLogo = setting('site_logo');
+@endphp
 <footer class="bg-dark text-white-50 mt-5 pt-5 pb-4">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="d-flex align-items-center gap-2 mb-3">
+                    @if($footerLogo)
+                    <img src="{{ asset('storage/'.$footerLogo) }}" alt="" class="rounded-2 border flex-shrink-0 bg-white" style="width:40px;height:40px;object-fit:contain" width="40" height="40" loading="lazy" decoding="async">
+                    @else
                     <span class="d-inline-flex align-items-center justify-content-center text-white fw-bold rounded-2"
                           style="width:38px;height:38px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);">S8</span>
+                    @endif
                     <div>
                         <div class="fw-bold text-white">{{ setting('site_name', 'SMKN 8 Pandeglang') }}</div>
                         <small>NPSN: {{ setting('site_npsn', '20604321') }} | Akreditasi {{ setting('site_accreditation', 'A') }}</small>
@@ -50,7 +57,7 @@
         <hr class="border-secondary my-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small">
             <div>&copy; {{ date('Y') }} {{ setting('site_name', 'SMKN 8 Pandeglang') }}. Seluruh hak cipta dilindungi.</div>
-            <div>Built with <i class="bi bi-heart-fill text-danger"></i> Laravel &amp; Bootstrap 5</div>
+            <div class="text-white-50">Dibuat Oleh Triki Maselanjana, S. Kom</div>
         </div>
     </div>
 </footer>

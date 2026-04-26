@@ -1,11 +1,16 @@
 @php
     $siteName = setting('site_short', 'SMKN 8 Pandeglang');
+    $siteLogo = setting('site_logo');
 @endphp
 <nav class="navbar main-nav navbar-expand-lg bg-body border-bottom sticky-top shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('home') }}">
+            @if($siteLogo)
+                <img src="{{ asset('storage/'.$siteLogo) }}" alt="" class="rounded-2 border flex-shrink-0" style="width:40px;height:40px;object-fit:contain;background:#fff" width="40" height="40" loading="eager" decoding="async">
+            @else
             <span class="d-inline-flex align-items-center justify-content-center text-white fw-bold rounded-2"
                   style="width:38px;height:38px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);font-family:'Plus Jakarta Sans',sans-serif;">S8</span>
+            @endif
             <span class="d-none d-sm-inline lh-sm">
                 {{ $siteName }}<br>
                 <span class="d-block fw-normal text-secondary" style="font-size:0.7rem;letter-spacing:.02em;">Digital Portal</span>
@@ -56,8 +61,9 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('ppdb.*') ? 'active fw-semibold' : '' }}" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
                     <ul class="dropdown-menu main-nav__dropdown border-0">
+                        <li><a class="dropdown-item" href="{{ route('ppdb.create') }}"><i class="bi bi-person-plus me-1 text-primary"></i> SPMB Online</a></li>
                         <li><a class="dropdown-item" href="{{ route('fasilitas.index') }}">Fasilitas</a></li>
                         <li><a class="dropdown-item" href="{{ route('ekstrakurikuler.index') }}">Ekstrakurikuler</a></li>
                         <li><a class="dropdown-item" href="{{ route('alumni.index') }}">Alumni</a></li>
@@ -71,9 +77,7 @@
                 <button type="button" class="btn btn-outline-secondary btn-sm" id="themeToggle" title="Ganti tema">
                     <i class="bi bi-moon-stars" id="themeIcon"></i>
                 </button>
-                <a href="{{ route('ppdb.create') }}" class="btn btn-primary btn-sm text-nowrap">
-                    <i class="bi bi-person-plus me-1"></i> SPMB Online
-                </a>
+                @include('partials.spmb-banten-button', ['variant' => 'sm'])
                 @auth
                     @if(auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="btn btn-dark btn-sm text-nowrap">

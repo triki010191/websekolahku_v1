@@ -15,7 +15,7 @@ class Post extends Model
 
     protected $casts = [
         'published_at' => 'datetime',
-        'is_featured'  => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
     public function author(): BelongsTo
@@ -31,7 +31,7 @@ class Post extends Model
     public function scopePublished(Builder $q): Builder
     {
         return $q->where('status', 'published')
-                 ->where('published_at', '<=', now());
+            ->where('published_at', '<=', now());
     }
 
     public function getUrlAttribute(): string
@@ -42,7 +42,7 @@ class Post extends Model
     public function getCoverUrlAttribute(): string
     {
         return $this->cover
-            ? asset('storage/' . $this->cover)
-            : 'https://via.placeholder.com/800x450/1d4ed8/ffffff?text=' . urlencode($this->title);
+            ? asset('storage/'.$this->cover)
+            : asset('images/placeholder-post.svg');
     }
 }

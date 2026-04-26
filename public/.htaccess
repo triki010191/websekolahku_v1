@@ -1,3 +1,9 @@
+# Unggah file besar (logo, galeri, slide) — butuh mod_php / Apache; di `php.ini` tetap atur bila memakai PHP built-in server.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 32M
+    php_value post_max_size 40M
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

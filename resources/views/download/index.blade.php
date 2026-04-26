@@ -22,7 +22,7 @@
                     <td>{{ $d->title }}</td>
                     <td>{{ $d->category?->name ?? '—' }}</td>
                     <td>{{ $d->size_human }}</td>
-                    <td class="text-end"><a href="{{ asset('storage/'.$d->file_path) }}" class="btn btn-sm btn-primary" download>Download</a></td>
+                    <td class="text-end"><a href="{{ route('download.file', $d) }}" class="btn btn-sm btn-primary">Download</a></td>
                 </tr>
                 @empty
                 <tr><td colspan="4" class="text-center py-4">Tidak ada file.</td></tr>

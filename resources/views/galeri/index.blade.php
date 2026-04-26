@@ -8,9 +8,13 @@
         <div class="col-md-4 col-lg-3">
             <a href="{{ route('galeri.show', $album) }}" class="text-decoration-none text-body">
                 <div class="card border-0 shadow-sm h-100">
-                    <div class="ratio ratio-4x3 bg-body-secondary">
-                        @if($album->cover)
-                        <img src="{{ asset('storage/'.$album->cover) }}" class="object-fit-cover rounded-top" alt="">
+                    @php
+                        $rawThumb = $album->cover ?? $firstItemUrlByAlbum->get($album->id);
+                        $thumbUrl = public_storage_url($rawThumb);
+                    @endphp
+                    <div class="ratio ratio-4x3 bg-body-secondary rounded-top">
+                        @if($thumbUrl)
+                        <img src="{{ $thumbUrl }}" class="object-fit-cover rounded-top" alt="" loading="lazy" width="400" height="300">
                         @endif
                     </div>
                     <div class="card-body">

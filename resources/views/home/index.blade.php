@@ -3,6 +3,48 @@
 @section('title', config('app.name').' — Beranda')
 
 @section('content')
+@php
+    $principalPath = setting('hero_principal_image');
+    $principalUrl  = $principalPath ? asset('storage/'.$principalPath) : asset('images/kepala-sekolah.png');
+    $principalCap  = setting('hero_principal_caption', 'Kepala Sekolah');
+@endphp
+
+@if($heroSlides->isNotEmpty())
+<section class="hero-slider position-relative p-0 border-bottom" aria-label="Sorotan">
+    <div id="homeHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5500">
+        <div class="carousel-indicators">
+            @foreach($heroSlides as $i => $s)
+            <button type="button" data-bs-target="#homeHeroCarousel" data-bs-slide-to="{{ $i }}" @if($i===0) class="active" aria-current="true" @endif aria-label="Slide {{ $i+1 }}"></button>
+            @endforeach
+        </div>
+        <div class="carousel-inner">
+            @foreach($heroSlides as $i => $s)
+            <div class="carousel-item @if($i===0) active @endif">
+                <div class="position-relative" style="max-height:min(58vh,500px); overflow:hidden; background:#0f172a;">
+                    <img src="{{ asset('storage/'.$s->image) }}" class="d-block w-100 hero-slider__img" alt="{{ $s->title }}" loading="{{ $i===0 ? 'eager' : 'lazy' }}">
+                </div>
+                <div class="carousel-caption text-start d-none d-md-block pb-3 hero-slider__caption">
+                    <div class="container py-2">
+                        <h2 class="h4 fw-bold mb-1">{{ $s->title }}</h2>
+                        @if($s->subtitle)<p class="small mb-2 opacity-90 text-wrap">{{ $s->subtitle }}</p>@endif
+                        @if($s->button_url && $s->button_text)
+                        <a href="{{ $s->button_url }}" class="btn btn-light btn-sm">{{ $s->button_text }}</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Sebelumnya</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeHeroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Berikutnya</span>
+        </button>
+    </div>
+</section>
+@endif
+
 {{-- Hero --}}
 <section class="hero-gradient position-relative overflow-hidden">
     <div class="container py-5 py-lg-6">
@@ -11,17 +53,16 @@
                 <span class="badge bg-warning text-dark mb-3">Sekolah Pusat Keunggulan</span>
                 <h1 class="display-5 fw-bold mb-3">{{ setting('site_tagline', 'Pusat Keunggulan & Prestasi Akademik') }}</h1>
                 <p class="lead text-white-50 mb-4">Mencetak generasi vokasi yang berpendidikan, berkarakter, dan siap bersaing di dunia kerja maupun pendidikan tinggi.</p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a href="{{ route('ppdb.create') }}" class="btn btn-light btn-lg px-4">SPMB Online <i class="bi bi-arrow-right ms-1"></i></a>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    @include('partials.spmb-banten-button', ['variant' => 'lg'])
                     <a href="{{ route('jurusan.index') }}" class="btn btn-outline-light btn-lg">Pelajari Jurusan</a>
                 </div>
             </div>
-            <div class="col-lg-5 d-none d-lg-block">
-                @if($banners->first()?->image)
-                    <img src="{{ asset('storage/'.$banners->first()->image) }}" class="img-fluid rounded-4 shadow-lg" alt="">
-                @else
-                    <div class="ratio ratio-4x3 rounded-4 overflow-hidden shadow-lg" style="background: linear-gradient(135deg,#1e40af,#60a5fa);"></div>
-                @endif
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <div class="rounded-4 overflow-hidden shadow-lg mx-auto bg-white bg-opacity-10" style="max-width: 380px;">
+                    <img src="{{ $principalUrl }}" class="w-100 d-block" style="object-fit: cover; object-position: top center; max-height: 420px; min-height: 300px" alt="{{ $principalCap }}">
+                </div>
+                <p class="small text-white-50 mt-2 mb-0">{{ $principalCap }}</p>
             </div>
         </div>
     </div>
@@ -64,7 +105,16 @@
     <div class="container">
         <div class="row g-4 align-items-center">
             <div class="col-md-5 reveal">
-                <div class="rounded-4 overflow-hidden shadow-sm border" style="aspect-ratio:4/5;background:linear-gradient(135deg,#dbeafe,#93c5fd);"></div>
+                @php
+                    $simg = setting('sambutan_section_image');
+                @endphp
+                <div class="rounded-4 overflow-hidden shadow-sm border bg-light" style="aspect-ratio:4/5;">
+                    @if($simg)
+                        <img src="{{ asset('storage/'.$simg) }}" alt="Sambutan Kepala Sekolah" class="w-100 h-100" style="object-fit:cover;object-position:top center" loading="lazy" width="500" height="625">
+                    @else
+                        <div class="w-100 h-100" style="min-height:240px;background:linear-gradient(135deg,#dbeafe,#93c5fd);"></div>
+                    @endif
+                </div>
             </div>
             <div class="col-md-7 reveal">
                 <span class="badge bg-primary bg-opacity-10 text-primary mb-2">Sambutan Kepala Sekolah</span>
@@ -224,7 +274,9 @@
     <div class="container text-center">
         <h2 class="fw-bold">SPMB {{ setting('ppdb_year', date('Y').'/'.(date('Y')+1)) }}</h2>
         <p class="mb-4 opacity-90">Pendaftaran calon peserta didik baru — cek jadwal &amp; alur, lalu isi formulir online.</p>
-        <a href="{{ route('ppdb.create') }}" class="btn btn-light btn-lg">SPMB Online</a>
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+            @include('partials.spmb-banten-button', ['variant' => 'cta'])
+        </div>
     </div>
 </section>
 @endsection

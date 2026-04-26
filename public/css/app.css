@@ -69,6 +69,48 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
 
 .btn-primary { --bs-btn-bg: #1d4ed8; --bs-btn-border-color: #1d4ed8; --bs-btn-hover-bg: #1e40af; --bs-btn-hover-border-color: #1e40af; --bs-btn-active-bg: #1e3a8a; }
 
+/* Slider beranda (Bootstrap carousel) */
+.hero-slider__img {
+  width: 100%;
+  object-fit: cover;
+  /* Foto acara/landscape: condong ke bawah agar subjek (orang, spanduk) ikut tampil */
+  object-position: center 58%;
+  max-height: min(58vh, 500px);
+  min-height: 200px;
+}
+@media (min-width: 992px) {
+  .hero-slider__img {
+    object-position: center 62%;
+  }
+}
+@media (min-width: 1400px) {
+  .hero-slider__img {
+    object-position: center 64%;
+  }
+}
+@media (min-width: 768px) {
+  .hero-slider__caption {
+    background: linear-gradient(transparent, rgba(15, 23, 42, 0.88));
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    padding-top: 2rem;
+  }
+}
+@media (max-width: 767.98px) {
+  .hero-slider .carousel-caption {
+    position: relative;
+    left: 0;
+    right: 0;
+    background: #0f172a;
+    padding: 0.75rem 1rem;
+  }
+  .hero-slider__img {
+    max-height: 42vh;
+    object-position: center 55%;
+  }
+}
+
 /* Hero gradient */
 .hero-gradient {
     background: radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.35), transparent 70%),

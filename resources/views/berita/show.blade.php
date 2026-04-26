@@ -12,7 +12,7 @@
             <span class="badge bg-primary">{{ $post->category?->name }}</span>
             <h1 class="fw-bold mt-2">{{ $post->title }}</h1>
             <p class="text-secondary small">{{ optional($post->published_at)->translatedFormat('d F Y') }} · {{ $post->author?->name }}</p>
-            <img src="{{ $post->cover_url }}" class="img-fluid rounded-3 w-100 mb-4" alt="">
+            <img src="{{ $post->cover_url }}" class="img-fluid rounded-3 w-100 mb-4" style="object-fit:cover;max-height:min(70vh,520px);width:100%" alt="">
             <article class="card border-0 shadow-sm p-4">
                 <div class="prose">{!! $post->content !!}</div>
                 @if($post->tags)

@@ -17,4 +17,9 @@ class Partner extends Model
         'mou_end'   => 'date',
         'is_active' => 'boolean',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }
