@@ -282,6 +282,10 @@
         </div>
     </div>
 </section>
+
+@include('partials.youtube-section')
+@include('partials.instagram-section')
+@include('partials.maps-section')
 @endsection
 
 @push('styles')

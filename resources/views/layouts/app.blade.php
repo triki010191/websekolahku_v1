@@ -45,9 +45,6 @@
         @yield('content')
     </main>
 
-    @include('partials.youtube-section')
-    @include('partials.instagram-section')
-    @include('partials.maps-section')
     @include('partials.footer')
 
     <a href="https://wa.me/{{ str_replace(['+', ' '], '', setting('contact_whatsapp', '6281234567890')) }}"
