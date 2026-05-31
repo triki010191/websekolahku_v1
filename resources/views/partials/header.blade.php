@@ -1,12 +1,13 @@
 @php
     $siteName = setting('site_short', 'SMKN 8 Pandeglang');
-    $siteLogo = setting('site_logo');
+    $siteLogoPath = setting('site_logo');
+    $siteLogoUrl = storage_file_exists($siteLogoPath) ? public_storage_url($siteLogoPath) : null;
 @endphp
 <nav class="navbar main-nav navbar-expand-lg bg-body border-bottom sticky-top shadow-sm">
     <div class="container">
         <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{{ route('home') }}">
-            @if($siteLogo)
-                <img src="{{ asset('storage/'.$siteLogo) }}" alt="" class="rounded-2 border flex-shrink-0" style="width:40px;height:40px;object-fit:contain;background:#fff" width="40" height="40" loading="eager" decoding="async">
+            @if($siteLogoUrl)
+                <img src="{{ $siteLogoUrl }}" alt="" class="rounded-2 border flex-shrink-0" style="width:40px;height:40px;object-fit:contain;background:#fff" width="40" height="40" loading="eager" decoding="async">
             @else
             <span class="d-inline-flex align-items-center justify-content-center text-white fw-bold rounded-2"
                   style="width:38px;height:38px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);font-family:'Plus Jakarta Sans',sans-serif;">S8</span>

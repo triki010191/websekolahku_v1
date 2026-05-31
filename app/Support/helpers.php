@@ -25,3 +25,27 @@ if (! function_exists('public_storage_url')) {
         return asset('storage/'.ltrim($path, '/'));
     }
 }
+
+if (! function_exists('storage_file_exists')) {
+    function storage_file_exists(?string $path): bool
+    {
+        if ($path === null || $path === '') {
+            return false;
+        }
+
+        return is_file(storage_path('app/public/'.ltrim($path, '/')));
+    }
+}
+
+if (! function_exists('public_asset_url')) {
+    /** URL file statis di folder public/ jika ada di server. */
+    function public_asset_url(string $path): ?string
+    {
+        $path = ltrim($path, '/');
+        if (! is_file(public_path($path))) {
+            return null;
+        }
+
+        return asset($path);
+    }
+}

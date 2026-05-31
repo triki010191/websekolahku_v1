@@ -6,7 +6,9 @@
     }
     $bLogo = setting('spmb_banten_logo');
     $v = $variant ?? 'sm';
-    $imgSrc = $bLogo ? asset('storage/'.$bLogo) : asset('images/spmb-banten-official.png');
+    $imgSrc = storage_file_exists($bLogo)
+        ? public_storage_url($bLogo)
+        : (public_asset_url('images/spmb-banten-official.png') ?? public_asset_url('images/ppdb-banten-badge.svg'));
     if ($v === 'cta') {
         $btnClass = 'btn btn-light btn-lg text-dark d-inline-flex align-items-center gap-2';
         $imgH = 40;
@@ -21,7 +23,7 @@
         $imgMax = 140;
     }
 @endphp
-@if($bUrl)
+@if($bUrl && $imgSrc)
 <a href="{{ $bUrl }}" target="_blank" rel="noopener" class="{{ $btnClass }} text-nowrap">
     <img src="{{ $imgSrc }}" alt="SPMB Online — Provinsi Banten" class="flex-shrink-0" width="{{ (int) round($imgH * 3) }}" height="{{ $imgH }}" style="height:{{ $imgH }}px;width:auto;max-width:min({{ $imgMax }}px,55vw);object-fit:contain" loading="lazy" decoding="async">
     @if($v === 'sm')

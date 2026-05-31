@@ -1,13 +1,14 @@
 @php
-    $footerLogo = setting('site_logo');
+    $footerLogoPath = setting('site_logo');
+    $footerLogoUrl = storage_file_exists($footerLogoPath) ? public_storage_url($footerLogoPath) : null;
 @endphp
 <footer class="bg-dark text-white-50 mt-5 pt-5 pb-4">
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    @if($footerLogo)
-                    <img src="{{ asset('storage/'.$footerLogo) }}" alt="" class="rounded-2 border flex-shrink-0 bg-white" style="width:40px;height:40px;object-fit:contain" width="40" height="40" loading="lazy" decoding="async">
+                    @if($footerLogoUrl)
+                    <img src="{{ $footerLogoUrl }}" alt="" class="rounded-2 border flex-shrink-0 bg-white" style="width:40px;height:40px;object-fit:contain" width="40" height="40" loading="lazy" decoding="async">
                     @else
                     <span class="d-inline-flex align-items-center justify-content-center text-white fw-bold rounded-2"
                           style="width:38px;height:38px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);">S8</span>

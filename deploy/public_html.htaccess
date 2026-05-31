@@ -1,0 +1,31 @@
+# public_html — Document Root domain utama (cPanel)
+# Pasang: cp deploy/public_html.htaccess ~/public_html/.htaccess
+
+<IfModule mod_php.c>
+    php_value upload_max_filesize 32M
+    php_value post_max_size 40M
+</IfModule>
+
+Options +FollowSymLinks -MultiViews -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # css/js/images statis di root public_html — storage TIDAK di-skip
+    # (supaya file upload bisa dilayani Laravel bila symlink rusak)
+    RewriteRule ^(css|js|images|favicon\.ico|robots\.txt)(/|$) - [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
