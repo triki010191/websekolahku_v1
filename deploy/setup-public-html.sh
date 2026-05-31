@@ -18,9 +18,11 @@ cp "$REPO/deploy/public_html.htaccess" "$WEB/.htaccess"
 
 cd "$WEB"
 
-ln -sfn "../repositories/websekolahku_v1/public/css" css
-ln -sfn "../repositories/websekolahku_v1/public/js" js
-ln -sfn "../repositories/websekolahku_v1/public/robots.txt" robots.txt
+# css/js: copy (symlink sering gagal di shared hosting)
+rm -rf "$WEB/css" "$WEB/js"
+cp -a "$REPO/public/css" "$WEB/css"
+cp -a "$REPO/public/js" "$WEB/js"
+ln -sfn "../repositories/websekolahku_v1/public/robots.txt" robots.txt 2>/dev/null || cp -a "$REPO/public/robots.txt" "$WEB/robots.txt" 2>/dev/null || true
 
 rm -rf "$WEB/images"
 cp -a "$REPO/public/images" "$WEB/images"
@@ -67,8 +69,6 @@ for folder in settings gallery hero-slides posts partners teachers; do
 done
 
 echo ""
-echo "==> Selesai. Tes URL (harus 200):"
-echo "    /images/spmb-banten-official.png"
-echo "    /storage/gallery/..."
-echo ""
+echo "==> Cek asset statis (harus ada file):"
+ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
 echo "Jalankan juga: cd $REPO && php artisan optimize:clear && php artisan optimize"

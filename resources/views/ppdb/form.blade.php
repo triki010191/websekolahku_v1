@@ -275,5 +275,9 @@ window.PPDB_WIZARD = {
     scholarshipTypes: @json(O::scholarshipTypes()),
 };
 </script>
+@if (is_file(public_path('js/ppdb-wizard.js')))
+<script>{!! str_replace('</script>', '<\/script>', file_get_contents(public_path('js/ppdb-wizard.js'))) !!}</script>
+@else
 <script src="{{ asset('js/ppdb-wizard.js') }}"></script>
+@endif
 @endpush
