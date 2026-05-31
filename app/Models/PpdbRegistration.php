@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PpdbRegistration extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'registration_number', 'spmb_banten_number', 'major_id',
         'full_name', 'nisn', 'nik', 'gender', 'religion', 'birth_place', 'birth_date',
@@ -73,9 +77,26 @@ class PpdbRegistration extends Model
     public static function generateNumber(): string
     {
         $year = date('Y');
-        $seq  = str_pad((self::whereYear('created_at', $year)->count() + 1), 4, '0', STR_PAD_LEFT);
 
-        return "DAFTAR-{$year}-{$seq}";
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($year) {
+            $last = self::query()
+                ->where('registration_number', 'like', "DAFTAR-{$year}-%")
+                ->lockForUpdate()
+                ->orderByDesc('registration_number')
+                ->value('registration_number');
+
+            $seq = 1;
+            if ($last && preg_match('/-(\d+)$/', $last, $m)) {
+                $seq = ((int) $m[1]) + 1;
+            }
+
+            return sprintf('DAFTAR-%s-%04d', $year, $seq);
+        });
+    }
+
+    public function scopeSubmitted(Builder $q): Builder
+    {
+        return $q->where('form_status', 'submitted');
     }
 
     public static function spmbAlreadySubmitted(string $number, ?int $exceptId = null): bool

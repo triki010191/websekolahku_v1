@@ -64,6 +64,11 @@ class User extends Authenticatable
         return is_array($role) ? in_array($this->role, $role, true) : $this->role === $role;
     }
 
+    public function isActive(): bool
+    {
+        return ($this->status ?? 'active') === 'active';
+    }
+
     public function alumniProfile(): HasOne
     {
         return $this->hasOne(AlumniProfile::class);

@@ -40,6 +40,17 @@
     </div>
 </section>
 
+@if(session('error'))
+<section class="py-0">
+    <div class="container pt-4">
+        <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+            <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    </div>
+</section>
+@endif
+
 <section class="py-5 bg-body-tertiary border-bottom">
     <div class="container">
         <h2 class="h5 fw-bold mb-4"><i class="bi bi-calendar-event text-primary me-2"></i>Jadwal Penting</h2>

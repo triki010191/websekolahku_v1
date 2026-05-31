@@ -120,6 +120,11 @@
                 saveLocal();
                 return;
             }
+            if (res.status === 403) {
+                const json403 = await res.json().catch(() => ({}));
+                if (statusEl) statusEl.textContent = json403.message || 'Pendaftaran formulir ditutup';
+                return;
+            }
             const json = await res.json().catch(() => ({}));
             if (json.ok) {
                 if (json.csrf_token) updateCsrf(json.csrf_token);
@@ -341,6 +346,14 @@
 
             if (res.status === 429) {
                 showSubmitErrors([json.message || 'Terlalu banyak percobaan kirim. Tunggu 1 menit lalu tekan Kirim Formulir sekali lagi.']);
+                showStep(total);
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalHtml;
+                return;
+            }
+
+            if (res.status === 403) {
+                showSubmitErrors([json.message || 'Pendaftaran formulir Dapodik sedang ditutup.']);
                 showStep(total);
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = originalHtml;

@@ -18,8 +18,8 @@ class DashboardController extends Controller
         $stats = [
             'students'     => Major::sum('student_count'),
             'teachers'     => Teacher::where('is_active', true)->count(),
-            'ppdb_total'   => PpdbRegistration::count(),
-            'ppdb_pending' => PpdbRegistration::where('status', 'pending')->count(),
+            'ppdb_total'   => PpdbRegistration::submitted()->count(),
+            'ppdb_pending' => PpdbRegistration::submitted()->where('status', 'pending')->count(),
             'posts'        => Post::count(),
             'announcements'=> Announcement::count(),
             'messages_new' => ContactMessage::where('status', 'new')->count(),
@@ -28,12 +28,12 @@ class DashboardController extends Controller
 
         $latest = [
             'posts'    => Post::latest()->take(5)->with('author')->get(),
-            'ppdb'     => PpdbRegistration::latest()->take(5)->with('major')->get(),
+            'ppdb'     => PpdbRegistration::submitted()->latest()->take(5)->with('major')->get(),
             'messages' => ContactMessage::latest()->take(5)->get(),
         ];
 
         $ppdbByMajor = Major::where('is_active', true)
-            ->withCount('ppdbRegistrations')
+            ->withCount(['ppdbRegistrations as ppdb_registrations_count' => fn ($q) => $q->where('form_status', 'submitted')])
             ->get()
             ->map(fn ($m) => ['label' => $m->code, 'value' => $m->ppdb_registrations_count, 'quota' => $m->quota]);
 

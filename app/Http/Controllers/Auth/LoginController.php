@@ -37,6 +37,15 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            if (! $user->isActive()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()
+                    ->withErrors(['email' => 'Akun nonaktif atau ditangguhkan. Hubungi administrator.'])
+                    ->onlyInput('email');
+            }
             if (! $user->isAdmin() && $user->hasRole(User::ROLE_ALUMNI)) {
                 Auth::logout();
                 $request->session()->invalidate();

@@ -88,7 +88,7 @@ Route::get('/spmb-2026', [SpmbController::class, 'index'])->name('spmb.index');
 Route::get('/ppdb', [SpmbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
 Route::get('/ppdb/csrf-token', [PpdbController::class, 'csrfToken'])->name('ppdb.csrf');
-Route::get('/ppdb/cek-spmb', [PpdbController::class, 'checkSpmb'])->name('ppdb.check-spmb');
+Route::get('/ppdb/cek-spmb', [PpdbController::class, 'checkSpmb'])->name('ppdb.check-spmb')->middleware('throttle:60,1');
 Route::post('/ppdb/cek-formulir', [PpdbController::class, 'lookup'])->name('ppdb.lookup')->middleware('throttle:30,1');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store')->middleware('throttle:60,1');
 Route::post('/ppdb/draft', [PpdbController::class, 'saveDraft'])->name('ppdb.draft')->middleware('throttle:120,1');

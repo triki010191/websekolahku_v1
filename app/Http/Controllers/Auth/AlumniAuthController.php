@@ -36,6 +36,16 @@ class AlumniAuthController extends Controller
 
             $user = Auth::user();
 
+            if (! $user->isActive()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()
+                    ->withErrors(['email' => 'Akun nonaktif atau ditangguhkan. Hubungi administrator.'])
+                    ->onlyInput('email');
+            }
+
             if ($user->isAdmin()) {
                 Auth::logout();
                 $request->session()->invalidate();

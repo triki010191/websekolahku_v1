@@ -6,6 +6,7 @@ use App\Models\PpdbRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class PpdbRegistrationService
 {
@@ -155,7 +156,9 @@ class PpdbRegistrationService
         $reg = PpdbRegistration::where('draft_token', $token)->first();
 
         if ($reg?->isSubmitted()) {
-            return $reg;
+            throw ValidationException::withMessages([
+                'draft' => 'Formulir sudah dikirim. Data tidak dapat disimpan sebagai draft lagi.',
+            ]);
         }
 
         $data['form_status'] = 'draft';

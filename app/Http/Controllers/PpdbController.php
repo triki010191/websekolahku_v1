@@ -7,15 +7,22 @@ use App\Models\PpdbRegistration;
 use App\Services\PpdbRegistrationService;
 use App\Support\PpdbFormOptions;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
 class PpdbController extends Controller
 {
     public function __construct(private PpdbRegistrationService $service) {}
 
-    public function create(Request $request)
+    public function create(Request $request): Response|RedirectResponse
     {
+        if ($closed = $this->ensurePpdbOpen()) {
+            return $closed;
+        }
+
         $majors  = Major::where('is_active', true)->orderBy('sort_order')->get();
         $options = PpdbFormOptions::class;
         $draft   = null;
@@ -24,7 +31,7 @@ class PpdbController extends Controller
             $draft = PpdbRegistration::where('draft_token', $token)->where('form_status', 'draft')->first();
         }
 
-        return view('ppdb.form', compact('majors', 'options', 'draft'));
+        return response()->view('ppdb.form', compact('majors', 'options', 'draft'));
     }
 
     public function csrfToken()
@@ -55,8 +62,12 @@ class PpdbController extends Controller
         ]);
     }
 
-    public function saveDraft(Request $request)
+    public function saveDraft(Request $request): JsonResponse|RedirectResponse
     {
+        if ($closed = $this->ensurePpdbOpen()) {
+            return $closed;
+        }
+
         $draftId = null;
         if ($token = $request->input('draft_token')) {
             $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
@@ -75,8 +86,12 @@ class PpdbController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse|RedirectResponse
     {
+        if ($closed = $this->ensurePpdbOpen()) {
+            return $closed;
+        }
+
         $draftId = null;
         if ($token = $request->input('draft_token')) {
             $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
@@ -91,6 +106,7 @@ class PpdbController extends Controller
         }
 
         $reg = $this->service->submit($request);
+        $this->grantPpdbAccess($reg);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -105,14 +121,14 @@ class PpdbController extends Controller
             ->with('success', 'Formulir Dapodik berhasil dikirim.');
     }
 
-    public function lookup(Request $request)
+    public function lookup(Request $request): RedirectResponse
     {
         $request->validate([
             'nisn'               => ['required', 'string', 'size:10'],
             'spmb_banten_number' => ['required', 'string', 'max:64'],
         ], [
-            'nisn.required'              => 'NISN wajib diisi.',
-            'nisn.size'                  => 'NISN harus 10 digit.',
+            'nisn.required'               => 'NISN wajib diisi.',
+            'nisn.size'                   => 'NISN harus 10 digit.',
             'spmb_banten_number.required' => 'No. Pendaftaran SPMB Banten wajib diisi.',
         ]);
 
@@ -130,19 +146,26 @@ class PpdbController extends Controller
                 ]);
         }
 
+        $this->grantPpdbAccess($reg);
+
         return redirect()
             ->route('ppdb.success', $reg->registration_number)
             ->with('lookup', true);
     }
 
-    public function success(string $number)
+    public function success(string $number): Response|RedirectResponse
     {
         $reg = PpdbRegistration::with('major')
             ->where('registration_number', $number)
             ->where('form_status', 'submitted')
             ->firstOrFail();
 
-        return view('ppdb.success', compact('reg'));
+        if (! $this->canAccessPpdb($reg)) {
+            return redirect()->route('spmb.index')
+                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan No. SPMB Banten Anda.');
+        }
+
+        return response()->view('ppdb.success', compact('reg'));
     }
 
     public function pdf(string $number)
@@ -152,8 +175,38 @@ class PpdbController extends Controller
             ->where('form_status', 'submitted')
             ->firstOrFail();
 
+        if (! $this->canAccessPpdb($reg)) {
+            return redirect()->route('spmb.index')
+                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan No. SPMB Banten Anda.');
+        }
+
         $pdf = Pdf::loadView('ppdb.pdf.bukti', compact('reg'))->setPaper('a4');
 
         return $pdf->download('formulir-dapodik-'.$reg->registration_number.'.pdf');
+    }
+
+    private function grantPpdbAccess(PpdbRegistration $reg): void
+    {
+        session(['ppdb_access' => $reg->registration_number]);
+    }
+
+    private function canAccessPpdb(PpdbRegistration $reg): bool
+    {
+        return session('ppdb_access') === $reg->registration_number;
+    }
+
+    private function ensurePpdbOpen(): JsonResponse|RedirectResponse|null
+    {
+        if ((bool) setting('ppdb_is_open', false)) {
+            return null;
+        }
+
+        $message = 'Pendaftaran formulir Dapodik sedang ditutup. Silakan cek jadwal di halaman SPMB.';
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => $message], 403);
+        }
+
+        return redirect()->route('spmb.index')->with('error', $message);
     }
 }

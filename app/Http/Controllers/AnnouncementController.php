@@ -14,7 +14,7 @@ class AnnouncementController extends Controller
 
     public function show(string $slug)
     {
-        $announcement = Announcement::where('slug', $slug)->with('category')->firstOrFail();
+        $announcement = Announcement::active()->where('slug', $slug)->with('category')->firstOrFail();
         return view('pengumuman.show', compact('announcement'));
     }
 }
