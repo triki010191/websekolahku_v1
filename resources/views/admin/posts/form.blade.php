@@ -5,7 +5,7 @@
 <form method="post" action="{{ $post->exists ? route('admin.posts.update', $post) : route('admin.posts.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:900px">
     @csrf
     @if($post->exists) @method('put') @endif
-    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $post->title) }}" required></div>
+    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $post->title) }}" required maxlength="255"></div>
     <div class="row g-2">
         <div class="col-md-6">
             <label class="form-label">Kategori</label>
@@ -29,9 +29,9 @@
             <input type="datetime-local" name="published_at" class="form-control" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}">
         </div>
     </div>
-    <div class="mb-2 mt-2"><label class="form-label">Ringkasan</label><textarea name="excerpt" class="form-control" rows="2">{{ old('excerpt', $post->excerpt) }}</textarea></div>
+    <div class="mb-2 mt-2"><label class="form-label">Ringkasan</label><textarea name="excerpt" class="form-control" rows="2" maxlength="500">{{ old('excerpt', $post->excerpt) }}</textarea><div class="form-text">Maks. 500 karakter — tampil di daftar berita.</div></div>
     <div class="mb-2"><label class="form-label">Konten *</label><textarea name="content" class="form-control" rows="12" required>{{ old('content', $post->content) }}</textarea></div>
-    <div class="mb-2"><label class="form-label">Tags (koma)</label><input class="form-control" name="tags" value="{{ old('tags', $post->tags) }}"></div>
+    <div class="mb-2"><label class="form-label">Tags (koma)</label><input class="form-control" name="tags" value="{{ old('tags', $post->tags) }}" maxlength="255"><div class="form-text">Maks. 255 karakter.</div></div>
     <div class="mb-2">
         <label class="form-label">Sampul</label>
         <input type="file" name="cover" class="form-control" accept="image/*">

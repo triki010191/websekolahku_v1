@@ -5,24 +5,26 @@
 <form method="post" action="{{ $x->exists ? route('admin.extracurriculars.update', $x) : route('admin.extracurriculars.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:800px">
     @csrf @if($x->exists) @method('put') @endif
     <div class="mb-2"><label class="form-label">Nama *</label>
-        <input class="form-control" name="name" value="{{ old('name', $x->name) }}" required></div>
+        <input class="form-control" name="name" value="{{ old('name', $x->name) }}" required maxlength="255"></div>
     <div class="row g-2">
         <div class="col-md-6"><label class="form-label">Slug</label>
-        <input class="form-control" name="slug" value="{{ old('slug', $x->slug) }}"></div>
+        <input class="form-control" name="slug" value="{{ old('slug', $x->slug) }}" maxlength="255"></div>
         <div class="col-md-3"><label class="form-label">Kategori</label>
-        <input class="form-control" name="category" value="{{ old('category', $x->category) }}"></div>
+        <input class="form-control" name="category" value="{{ old('category', $x->category) }}" maxlength="50"></div>
         <div class="col-md-3"><label class="form-label">Urutan</label>
         <input type="number" class="form-control" name="sort_order" value="{{ old('sort_order', $x->sort_order) }}"></div>
     </div>
     <div class="mb-2"><label class="form-label">Deskripsi singkat</label>
-        <textarea class="form-control" name="description" rows="2">{{ old('description', $x->description) }}</textarea></div>
+        <textarea class="form-control" name="description" rows="2" maxlength="2000">{{ old('description', $x->description) }}</textarea>
+        <div class="form-text">Maks. 2000 karakter.</div></div>
     <div class="mb-2"><label class="form-label">Konten (HTML)</label>
         <textarea class="form-control" name="content" rows="10">{{ old('content', $x->content) }}</textarea></div>
     <div class="row g-2 mb-2">
         <div class="col-md-6"><label class="form-label">Pembina</label>
-        <input class="form-control" name="coach" value="{{ old('coach', $x->coach) }}"></div>
+        <input class="form-control" name="coach" value="{{ old('coach', $x->coach) }}" maxlength="255"></div>
         <div class="col-md-3"><label class="form-label">Jadwal</label>
-        <input class="form-control" name="schedule" value="{{ old('schedule', $x->schedule) }}"></div>
+        <input class="form-control" name="schedule" value="{{ old('schedule', $x->schedule) }}" maxlength="255">
+        <div class="form-text">Maks. 255 karakter.</div></div>
         <div class="col-md-3"><label class="form-label">Jumlah anggota</label>
         <input type="number" class="form-control" name="member_count" value="{{ old('member_count', $x->member_count) }}"></div>
     </div>

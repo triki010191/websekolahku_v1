@@ -256,3 +256,35 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
 /* Line clamp */
 .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient: vertical; overflow:hidden; }
 .line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient: vertical; overflow:hidden; }
+
+/* Beranda — kartu berita terbaru (mobile-friendly) */
+.home-news-card { overflow: hidden; }
+.home-news-card__inner { min-height: 72px; }
+.home-news-card__thumb {
+    width: 88px;
+    min-width: 88px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+}
+.home-news-card__thumb img {
+    width: 100%;
+    height: 100%;
+    min-height: 72px;
+    object-fit: cover;
+    display: block;
+}
+.home-news-card__body {
+    padding: 0.65rem 0.75rem;
+    min-width: 0;
+    overflow: hidden;
+}
+@media (min-width: 576px) {
+    .home-news-card__thumb { width: 112px; min-width: 112px; }
+    .home-news-card__thumb img { min-height: 84px; }
+}
+
+/* Form — penghitung karakter */
+.field-limit-counter { font-size: 0.8125rem; }
+.field-limit-counter.is-near { color: #b45309; }
+.field-limit-counter.is-full { color: #dc2626; font-weight: 600; }

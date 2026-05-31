@@ -5,8 +5,8 @@
 <form method="post" action="{{ $album->exists ? route('admin.gallery.update', $album) : route('admin.gallery.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4 mb-3" style="max-width:700px">
     @csrf
     @if($album->exists) @method('put') @endif
-    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $album->title) }}" required></div>
-    <div class="mb-2"><label class="form-label">Deskripsi</label><textarea name="description" class="form-control" rows="2">{{ old('description', $album->description) }}</textarea></div>
+    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $album->title) }}" required maxlength="255"></div>
+    <div class="mb-2"><label class="form-label">Deskripsi</label><textarea name="description" class="form-control" rows="2" maxlength="2000">{{ old('description', $album->description) }}</textarea><div class="form-text">Maks. 2000 karakter.</div></div>
     <div class="form-check mb-2">
         <input class="form-check-input" type="checkbox" name="is_published" value="1" id="ip" @checked(old('is_published', $album->is_published ?? true))>
         <label class="form-check-label" for="ip">Publik</label>

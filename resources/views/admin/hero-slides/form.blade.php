@@ -27,11 +27,13 @@
     <div class="row g-2 mb-3">
         <div class="col-md-6">
             <label class="form-label">Teks tombol (opsional)</label>
-            <input class="form-control" name="button_text" value="{{ old('button_text', $slide->button_text) }}" placeholder="Baca selengkapnya">
+            <input class="form-control" name="button_text" value="{{ old('button_text', $slide->button_text) }}" placeholder="Baca selengkapnya" maxlength="80">
+            <div class="form-text">Maks. 80 karakter.</div>
         </div>
         <div class="col-md-6">
             <label class="form-label">Link tombol (opsional)</label>
-            <input class="form-control" name="button_url" value="{{ old('button_url', $slide->button_url) }}" placeholder="https://...">
+            <input class="form-control" name="button_url" value="{{ old('button_url', $slide->button_url) }}" placeholder="https://..." maxlength="500">
+            <div class="form-text">Maks. 500 karakter.</div>
         </div>
     </div>
     <div class="mb-3">

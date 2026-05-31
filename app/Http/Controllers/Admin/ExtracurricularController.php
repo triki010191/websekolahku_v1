@@ -77,7 +77,7 @@ class ExtracurricularController extends Controller
             'description'  => ['nullable', 'string', 'max:2000'],
             'content'      => ['nullable', 'string'],
             'coach'        => ['nullable', 'string', 'max:255'],
-            'schedule'     => ['nullable', 'string', 'max:500'],
+            'schedule'     => ['nullable', 'string', 'max:255'],
             'member_count' => ['nullable', 'integer', 'min:0'],
             'sort_order'   => ['nullable', 'integer', 'min:0'],
             'cover'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:15360'],

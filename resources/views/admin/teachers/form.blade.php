@@ -12,36 +12,37 @@
     <div class="row g-2">
         <div class="col-md-8">
             <label class="form-label">Nama Lengkap &amp; Gelar *</label>
-            <input class="form-control" name="name" value="{{ old('name', $teacher->name) }}" placeholder="Contoh: Drs. Ahmad Fauzi, M.Pd." required>
+            <input class="form-control" name="name" value="{{ old('name', $teacher->name) }}" placeholder="Contoh: Drs. Ahmad Fauzi, M.Pd." required maxlength="255">
         </div>
         <div class="col-md-4">
             <label class="form-label">NIP / NUPTK</label>
-            <input class="form-control" name="nip" value="{{ old('nip', $teacher->nip) }}" placeholder="Opsional">
+            <input class="form-control" name="nip" value="{{ old('nip', $teacher->nip) }}" placeholder="Opsional" maxlength="30">
         </div>
     </div>
     <div class="row g-2 mt-1">
         <div class="col-md-6">
             <label class="form-label">Jabatan *</label>
-            <input class="form-control" name="position" value="{{ old('position', $teacher->position) }}" placeholder="Contoh: Guru Produktif, Waka Kurikulum" required>
+            <input class="form-control" name="position" value="{{ old('position', $teacher->position) }}" placeholder="Contoh: Guru Produktif, Waka Kurikulum" required maxlength="255">
         </div>
         <div class="col-md-6">
             <label class="form-label">Mata Pelajaran yang Diampu</label>
-            <input class="form-control" name="subject" value="{{ old('subject', $teacher->subject) }}" placeholder="Contoh: Matematika, Pemrograman Web">
+            <input class="form-control" name="subject" value="{{ old('subject', $teacher->subject) }}" placeholder="Contoh: Matematika, Pemrograman Web" maxlength="255">
         </div>
     </div>
     <div class="row g-2 mt-1">
         <div class="col-md-6">
             <label class="form-label">Pendidikan Terakhir</label>
-            <input class="form-control" name="education" value="{{ old('education', $teacher->education) }}" placeholder="Contoh: S1 Pendidikan Matematika — UNJ">
+            <input class="form-control" name="education" value="{{ old('education', $teacher->education) }}" placeholder="Contoh: S1 Pendidikan Matematika — UNJ" maxlength="255">
         </div>
         <div class="col-md-6">
             <label class="form-label">Email Sekolah</label>
-            <input type="email" class="form-control" name="email" value="{{ old('email', $teacher->email) }}" placeholder="nama@smkn8pandeglang.sch.id">
+            <input type="email" class="form-control" name="email" value="{{ old('email', $teacher->email) }}" placeholder="nama@smkn8pandeglang.sch.id" maxlength="255">
         </div>
     </div>
     <div class="mb-2 mt-1">
         <label class="form-label">Moto Hidup / Quote Pribadi</label>
         <textarea name="motto" class="form-control" rows="2" maxlength="500" placeholder="Kutipan singkat yang ditampilkan di profil">{{ old('motto', $teacher->motto) }}</textarea>
+        <div class="form-text">Maks. 500 karakter.</div>
     </div>
     <div class="mb-3">
         <label class="form-label">Foto Guru</label>
@@ -73,11 +74,11 @@
         </div>
         <div class="col-md-3">
             <label class="form-label">Bidang / Jurusan</label>
-            <input class="form-control" name="field" value="{{ old('field', $teacher->field) }}" placeholder="rpl, akl, tu, ...">
+            <input class="form-control" name="field" value="{{ old('field', $teacher->field) }}" placeholder="rpl, akl, tu, ..." maxlength="50">
         </div>
         <div class="col-md-3">
             <label class="form-label">No. HP</label>
-            <input class="form-control" name="phone" value="{{ old('phone', $teacher->phone) }}">
+            <input class="form-control" name="phone" value="{{ old('phone', $teacher->phone) }}" maxlength="32">
         </div>
     </div>
     <div class="row g-2 mt-1">

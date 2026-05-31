@@ -36,6 +36,11 @@
                 </div>
             </div>
         @endif
+        @if ($errors->any() && !session('success'))
+            <div class="container mt-3">
+                @include('partials.validation-errors')
+            </div>
+        @endif
 
         @yield('content')
     </main>

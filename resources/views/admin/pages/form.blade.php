@@ -7,12 +7,12 @@
     @if($page->exists) @method('put') @endif
     <div class="mb-2">
         <label class="form-label">Judul *</label>
-        <input class="form-control" name="title" value="{{ old('title', $page->title) }}" required>
+        <input class="form-control" name="title" value="{{ old('title', $page->title) }}" required maxlength="255">
     </div>
     <div class="mb-2">
         <label class="form-label">Slug (URL) *</label>
-        <input class="form-control" name="slug" value="{{ old('slug', $page->slug) }}" required placeholder="contoh: spmb-2026">
-        <div class="form-text">Halaman SPMB menggunakan slug <code>spmb-2026</code> → URL <code>/spmb-2026</code>. Halaman profil → <code>/profil/{slug}</code>.</div>
+        <input class="form-control" name="slug" value="{{ old('slug', $page->slug) }}" required maxlength="120" placeholder="contoh: spmb-2026">
+        <div class="form-text">Maks. 120 karakter. Halaman SPMB menggunakan slug <code>spmb-2026</code> → URL <code>/spmb-2026</code>. Halaman profil → <code>/profil/{slug}</code>.</div>
     </div>
     <div class="mb-2">
         <label class="form-label">Isi konten *</label>
@@ -22,11 +22,12 @@
     <div class="row g-2">
         <div class="col-md-6">
             <label class="form-label">Meta title (SEO)</label>
-            <input class="form-control" name="meta_title" value="{{ old('meta_title', $page->meta_title) }}">
+            <input class="form-control" name="meta_title" value="{{ old('meta_title', $page->meta_title) }}" maxlength="255">
         </div>
         <div class="col-md-6">
             <label class="form-label">Meta description (SEO)</label>
-            <input class="form-control" name="meta_description" value="{{ old('meta_description', $page->meta_description) }}">
+            <input class="form-control" name="meta_description" value="{{ old('meta_description', $page->meta_description) }}" maxlength="500">
+            <div class="form-text">Maks. 500 karakter.</div>
         </div>
     </div>
     <div class="form-check mt-3">

@@ -73,7 +73,7 @@ class PartnerController extends Controller
             'name'         => ['required', 'string', 'max:255'],
             'slug'         => ['nullable', 'string', 'max:255', Rule::unique('partners', 'slug')->ignore($m?->id)],
             'industry'     => ['nullable', 'string', 'max:100'],
-            'website'      => ['nullable', 'string', 'max:500'],
+            'website'      => ['nullable', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'mou_number'   => ['nullable', 'string', 'max:100'],
             'mou_start'    => ['nullable', 'date'],

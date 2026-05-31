@@ -5,8 +5,8 @@
 <form method="post" action="{{ $user->exists ? route('admin.users.update', $user) : route('admin.users.store') }}" class="card border-0 shadow-sm p-4" style="max-width:500px">
     @csrf
     @if($user->exists) @method('put') @endif
-    <div class="mb-2"><label class="form-label">Nama *</label><input class="form-control" name="name" value="{{ old('name', $user->name) }}" required></div>
-    <div class="mb-2"><label class="form-label">Email *</label><input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" required></div>
+    <div class="mb-2"><label class="form-label">Nama *</label><input class="form-control" name="name" value="{{ old('name', $user->name) }}" required maxlength="255"></div>
+    <div class="mb-2"><label class="form-label">Email *</label><input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" required maxlength="255"></div>
     <div class="mb-2">
         <label class="form-label">Role *</label>
         <select name="role" class="form-select" required>

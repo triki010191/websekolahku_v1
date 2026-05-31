@@ -38,4 +38,35 @@
             document.getElementById('adminSidebar')?.classList.toggle('open');
         });
     }
+
+    // Penghitung karakter untuk input dengan maxlength
+    document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach(function (el) {
+        const max = parseInt(el.getAttribute('maxlength'), 10);
+        if (!max || el.dataset.limitInit) return;
+        el.dataset.limitInit = '1';
+
+        let counter = el.parentElement.querySelector('[data-char-counter]');
+        if (!counter) {
+            counter = document.createElement('div');
+            counter.className = 'form-text field-limit-counter text-end';
+            counter.dataset.charCounter = '1';
+            const formText = el.parentElement.querySelector('.form-text:not([data-char-counter])');
+            if (formText) {
+                formText.appendChild(document.createTextNode(' '));
+                formText.appendChild(counter);
+            } else {
+                el.insertAdjacentElement('afterend', counter);
+            }
+        }
+
+        function update() {
+            const len = (el.value || '').length;
+            counter.textContent = '(' + len + ' / ' + max + ' karakter)';
+            counter.classList.toggle('is-near', len >= max * 0.9 && len < max);
+            counter.classList.toggle('is-full', len >= max);
+        }
+
+        el.addEventListener('input', update);
+        update();
+    });
 })();

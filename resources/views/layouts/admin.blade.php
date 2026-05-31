@@ -73,6 +73,7 @@
             <main class="p-3 p-md-4 flex-grow-1">
                 @if(session('success'))<div class="alert alert-success py-2">{{ session('success') }}</div>@endif
                 @if(session('error'))<div class="alert alert-danger py-2">{{ session('error') }}</div>@endif
+                @include('partials.validation-errors')
                 @yield('admin')
             </main>
         </div>

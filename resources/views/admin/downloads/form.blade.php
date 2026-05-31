@@ -5,7 +5,7 @@
 <form method="post" action="{{ $download->exists ? route('admin.downloads.update', $download) : route('admin.downloads.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:700px">
     @csrf @if($download->exists) @method('put') @endif
     <div class="mb-2"><label class="form-label">Judul *</label>
-        <input class="form-control" name="title" value="{{ old('title', $download->title) }}" required></div>
+        <input class="form-control" name="title" value="{{ old('title', $download->title) }}" required maxlength="255"></div>
     <div class="mb-2"><label class="form-label">Kategori</label>
         <select name="category_id" class="form-select">
             <option value="">—</option>
@@ -14,7 +14,8 @@
             @endforeach
         </select></div>
     <div class="mb-2"><label class="form-label">Deskripsi</label>
-        <textarea class="form-control" name="description" rows="2">{{ old('description', $download->description) }}</textarea></div>
+        <textarea class="form-control" name="description" rows="2" maxlength="2000">{{ old('description', $download->description) }}</textarea>
+        <div class="form-text">Maks. 2000 karakter.</div></div>
     <div class="mb-2"><label class="form-label">Berkas * @if($download->exists)<span class="text-secondary">(opsional ganti file)</span>@endif</label>
         <input type="file" name="file" class="form-control" @if(!$download->exists) required @endif>
         @if($download->file_path)

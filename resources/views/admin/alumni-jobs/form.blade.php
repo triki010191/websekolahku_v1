@@ -5,12 +5,12 @@
 <form method="post" action="{{ $job->exists ? route('admin.alumni-jobs.update', $job) : route('admin.alumni-jobs.store') }}" class="card border-0 shadow-sm p-4" style="max-width:800px">
     @csrf @if($job->exists) @method('put') @endif
     <div class="mb-2"><label class="form-label">Judul *</label>
-        <input class="form-control" name="title" value="{{ old('title', $job->title) }}" required></div>
+        <input class="form-control" name="title" value="{{ old('title', $job->title) }}" required maxlength="255"></div>
     <div class="row g-2">
         <div class="col-md-6"><label class="form-label">Perusahaan *</label>
-        <input class="form-control" name="company" value="{{ old('company', $job->company) }}" required></div>
+        <input class="form-control" name="company" value="{{ old('company', $job->company) }}" required maxlength="255"></div>
         <div class="col-md-3"><label class="form-label">Lokasi</label>
-        <input class="form-control" name="location" value="{{ old('location', $job->location) }}"></div>
+        <input class="form-control" name="location" value="{{ old('location', $job->location) }}" maxlength="255"></div>
         <div class="col-md-3"><label class="form-label">Tipe *</label>
         <select class="form-select" name="type" required>
             @foreach(['fulltime'=>'Full time','parttime'=>'Part time','internship'=>'Magang','contract'=>'Kontrak'] as $k=>$l)

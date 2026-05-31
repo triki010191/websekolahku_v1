@@ -5,7 +5,7 @@
 <form method="post" action="{{ $announcement->exists ? route('admin.announcements.update', $announcement) : route('admin.announcements.store') }}" class="card border-0 shadow-sm p-4" style="max-width:800px">
     @csrf
     @if($announcement->exists) @method('put') @endif
-    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $announcement->title) }}" required></div>
+    <div class="mb-2"><label class="form-label">Judul *</label><input class="form-control" name="title" value="{{ old('title', $announcement->title) }}" required maxlength="255"></div>
     <div class="row g-2">
         <div class="col-md-6">
             <label class="form-label">Kategori</label>

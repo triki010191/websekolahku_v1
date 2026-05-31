@@ -47,42 +47,43 @@
         <div class="row g-2">
             <div class="col-md-8">
                 <label class="form-label">Nama Lengkap &amp; Gelar *</label>
-                <input class="form-control" name="name" value="{{ old('name', $teacher->name) }}" required>
+                <input class="form-control" name="name" value="{{ old('name', $teacher->name) }}" required maxlength="255">
             </div>
             <div class="col-md-4">
                 <label class="form-label">NIP / NUPTK</label>
-                <input class="form-control" name="nip" value="{{ old('nip', $teacher->nip) }}">
+                <input class="form-control" name="nip" value="{{ old('nip', $teacher->nip) }}" maxlength="30">
             </div>
         </div>
         <div class="row g-2 mt-1">
             <div class="col-md-6">
                 <label class="form-label">Jabatan *</label>
-                <input class="form-control" name="position" value="{{ old('position', $teacher->position) }}" required>
+                <input class="form-control" name="position" value="{{ old('position', $teacher->position) }}" required maxlength="255">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Mata Pelajaran</label>
-                <input class="form-control" name="subject" value="{{ old('subject', $teacher->subject) }}">
+                <input class="form-control" name="subject" value="{{ old('subject', $teacher->subject) }}" maxlength="255">
             </div>
         </div>
         <div class="row g-2 mt-1">
             <div class="col-md-6">
                 <label class="form-label">Pendidikan Terakhir</label>
-                <input class="form-control" name="education" value="{{ old('education', $teacher->education) }}">
+                <input class="form-control" name="education" value="{{ old('education', $teacher->education) }}" maxlength="255">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Email Sekolah</label>
-                <input type="email" class="form-control" name="email" value="{{ old('email', $teacher->email) }}">
+                <input type="email" class="form-control" name="email" value="{{ old('email', $teacher->email) }}" maxlength="255">
             </div>
         </div>
         <div class="row g-2 mt-1">
             <div class="col-md-6">
                 <label class="form-label">No. HP</label>
-                <input class="form-control" name="phone" value="{{ old('phone', $teacher->phone) }}">
+                <input class="form-control" name="phone" value="{{ old('phone', $teacher->phone) }}" maxlength="32">
             </div>
         </div>
         <div class="mb-2 mt-1">
             <label class="form-label">Moto Hidup / Quote</label>
             <textarea name="motto" class="form-control" rows="2" maxlength="500">{{ old('motto', $teacher->motto) }}</textarea>
+            <div class="form-text">Maks. 500 karakter.</div>
         </div>
         <div class="mb-2">
             <label class="form-label">Bio tambahan</label>

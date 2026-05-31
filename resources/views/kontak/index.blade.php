@@ -20,9 +20,9 @@
                 <form method="post" action="{{ route('kontak.store') }}">
                     @csrf
                     <div class="row g-2">
-                        <div class="col-md-6"><label class="form-label">Nama *</label><input class="form-control" name="name" value="{{ old('name') }}" required></div>
-                        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" class="form-control" name="email" value="{{ old('email') }}" required></div>
-                        <div class="col-md-6"><label class="form-label">No HP</label><input class="form-control" name="phone" value="{{ old('phone') }}"></div>
+                        <div class="col-md-6"><label class="form-label">Nama *</label><input class="form-control" name="name" value="{{ old('name') }}" required maxlength="255"></div>
+                        <div class="col-md-6"><label class="form-label">Email *</label><input type="email" class="form-control" name="email" value="{{ old('email') }}" required maxlength="255"></div>
+                        <div class="col-md-6"><label class="form-label">No HP</label><input class="form-control" name="phone" value="{{ old('phone') }}" maxlength="32"></div>
                         <div class="col-md-6">
                             <label class="form-label">Kategori *</label>
                             <select name="category" class="form-select" required>
@@ -31,8 +31,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-12"><label class="form-label">Subjek *</label><input class="form-control" name="subject" value="{{ old('subject') }}" required></div>
-                        <div class="col-12"><label class="form-label">Pesan *</label><textarea name="message" class="form-control" rows="5" minlength="10" required>{{ old('message') }}</textarea>
+                        <div class="col-12"><label class="form-label">Subjek *</label><input class="form-control" name="subject" value="{{ old('subject') }}" required maxlength="255"></div>
+                        <div class="col-12"><label class="form-label">Pesan *</label><textarea name="message" class="form-control" rows="5" minlength="10" maxlength="5000" required>{{ old('message') }}</textarea>
+                            <div class="form-text">Minimal 10 karakter, maks. 5000 karakter.</div>
                             @error('message')<div class="text-danger small">{{ $message }}</div>@enderror
                         </div>
                     </div>

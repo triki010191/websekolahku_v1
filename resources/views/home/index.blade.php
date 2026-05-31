@@ -161,20 +161,16 @@
                 <h3 class="fw-bold mb-3">Berita Terbaru</h3>
                 <div class="d-flex flex-column gap-3">
                     @forelse($posts->take(4) as $post)
-                    <a href="{{ route('berita.show', $post->slug) }}" class="text-decoration-none text-body">
-                        <div class="card border-0 shadow-sm hover-lift">
-                            <div class="row g-0">
-                                <div class="col-4">
-                                    <div class="card-img-wrap h-100">
-                                        <img src="{{ $post->cover_url }}" class="h-100 w-100" style="object-fit:cover" alt="">
-                                    </div>
+                    <a href="{{ route('berita.show', $post->slug) }}" class="text-decoration-none text-body d-block">
+                        <div class="card border-0 shadow-sm hover-lift home-news-card">
+                            <div class="home-news-card__inner d-flex align-items-stretch">
+                                <div class="home-news-card__thumb flex-shrink-0">
+                                    <img src="{{ $post->cover_url }}" alt="{{ $post->title }}" loading="lazy">
                                 </div>
-                                <div class="col-8">
-                                    <div class="card-body">
-                                        <span class="badge bg-light text-primary mb-1">{{ $post->category?->name ?? 'Berita' }}</span>
-                                        <h6 class="card-title line-clamp-2 mb-1">{{ $post->title }}</h6>
-                                        <small class="text-muted">{{ optional($post->published_at)->translatedFormat('d M Y') }}</small>
-                                    </div>
+                                <div class="home-news-card__body flex-grow-1 min-w-0">
+                                    <span class="badge bg-light text-primary mb-1">{{ $post->category?->name ?? 'Berita' }}</span>
+                                    <h6 class="card-title line-clamp-2 mb-1">{{ $post->title }}</h6>
+                                    <small class="text-muted">{{ optional($post->published_at)->translatedFormat('d M Y') }}</small>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,45 @@
+<?php
+
+return [
+    'required' => ':attribute wajib diisi.',
+    'email'    => ':attribute harus berupa alamat email yang valid.',
+    'url'      => 'Format :attribute tidak valid.',
+    'max'      => [
+        'string' => ':attribute tidak boleh lebih dari :max karakter.',
+        'file'   => ':attribute tidak boleh lebih dari :max KB.',
+        'numeric'=> ':attribute tidak boleh lebih dari :max.',
+    ],
+    'min' => [
+        'string' => ':attribute minimal :min karakter.',
+    ],
+    'unique' => ':attribute sudah digunakan.',
+    'image'  => ':attribute harus berupa gambar.',
+    'mimes'  => ':attribute harus berformat: :values.',
+
+    'attributes' => [
+        'title'       => 'Judul',
+        'subtitle'    => 'Subjudul',
+        'name'        => 'Nama',
+        'email'       => 'Email',
+        'phone'       => 'No. HP',
+        'subject'     => 'Subjek',
+        'message'     => 'Pesan',
+        'content'     => 'Isi konten',
+        'excerpt'     => 'Ringkasan',
+        'description' => 'Deskripsi',
+        'motto'       => 'Moto / quote',
+        'button_text' => 'Teks tombol',
+        'button_url'  => 'Link tombol',
+        'slug'        => 'Slug (URL)',
+        'meta_title'  => 'Meta title',
+        'meta_description' => 'Meta description',
+        'code'        => 'Kode',
+        'tagline'     => 'Tagline',
+        'website'     => 'Website',
+        'schedule'    => 'Jadwal',
+        'photo'       => 'Foto',
+        'image'       => 'Gambar',
+        'cover'       => 'Sampul',
+        'file'        => 'Berkas',
+    ],
+];

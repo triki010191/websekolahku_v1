@@ -20,7 +20,7 @@ class ContactController extends Controller
             'phone'    => ['nullable', 'string', 'max:32'],
             'category' => ['required', 'in:umum,ppdb,alumni,kerjasama,lainnya'],
             'subject'  => ['required', 'string', 'max:255'],
-            'message'  => ['required', 'string', 'min:10'],
+            'message'  => ['required', 'string', 'min:10', 'max:5000'],
         ]);
 
         ContactMessage::create($data + ['status' => 'new']);

@@ -5,22 +5,23 @@
 <form method="post" action="{{ $partner->exists ? route('admin.partners.update', $partner) : route('admin.partners.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:800px">
     @csrf @if($partner->exists) @method('put') @endif
     <div class="mb-2"><label class="form-label">Nama *</label>
-        <input class="form-control" name="name" value="{{ old('name', $partner->name) }}" required></div>
+        <input class="form-control" name="name" value="{{ old('name', $partner->name) }}" required maxlength="255"></div>
     <div class="row g-2">
         <div class="col-md-6"><label class="form-label">Slug</label>
-        <input class="form-control" name="slug" value="{{ old('slug', $partner->slug) }}"></div>
+        <input class="form-control" name="slug" value="{{ old('slug', $partner->slug) }}" maxlength="255"></div>
         <div class="col-md-3"><label class="form-label">Industri</label>
-        <input class="form-control" name="industry" value="{{ old('industry', $partner->industry) }}"></div>
+        <input class="form-control" name="industry" value="{{ old('industry', $partner->industry) }}" maxlength="100"></div>
         <div class="col-md-3"><label class="form-label">Urutan</label>
         <input type="number" class="form-control" name="sort_order" value="{{ old('sort_order', $partner->sort_order) }}"></div>
     </div>
     <div class="mb-2"><label class="form-label">Website</label>
-        <input class="form-control" name="website" value="{{ old('website', $partner->website) }}" placeholder="https://"></div>
+        <input class="form-control" name="website" value="{{ old('website', $partner->website) }}" placeholder="https://" maxlength="255">
+        <div class="form-text">Maks. 255 karakter.</div></div>
     <div class="mb-2"><label class="form-label">Deskripsi (HTML diperbolehkan)</label>
         <textarea class="form-control" name="description" rows="6">{{ old('description', $partner->description) }}</textarea></div>
     <div class="row g-2 mb-2">
         <div class="col-md-4"><label class="form-label">No. MOU</label>
-        <input class="form-control" name="mou_number" value="{{ old('mou_number', $partner->mou_number) }}"></div>
+        <input class="form-control" name="mou_number" value="{{ old('mou_number', $partner->mou_number) }}" maxlength="100"></div>
         <div class="col-md-4"><label class="form-label">MOU mulai</label>
         <input type="date" class="form-control" name="mou_start" value="{{ old('mou_start', $partner->mou_start?->format('Y-m-d')) }}"></div>
         <div class="col-md-4"><label class="form-label">MOU s/d</label>
