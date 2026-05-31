@@ -108,24 +108,25 @@ class PpdbController extends Controller
     public function lookup(Request $request)
     {
         $request->validate([
-            'registration_number' => ['required', 'string', 'max:32'],
-            'spmb_banten_number'  => ['required', 'string', 'max:64'],
+            'nisn'               => ['required', 'string', 'size:10'],
+            'spmb_banten_number' => ['required', 'string', 'max:64'],
         ], [
-            'registration_number.required' => 'No. Daftar Ulang wajib diisi.',
-            'spmb_banten_number.required'  => 'No. Pendaftaran SPMB Banten wajib diisi.',
+            'nisn.required'              => 'NISN wajib diisi.',
+            'nisn.size'                  => 'NISN harus 10 digit.',
+            'spmb_banten_number.required' => 'No. Pendaftaran SPMB Banten wajib diisi.',
         ]);
 
         $reg = PpdbRegistration::query()
-            ->where('registration_number', trim($request->input('registration_number')))
+            ->where('nisn', trim($request->input('nisn')))
             ->where('spmb_banten_number', trim($request->input('spmb_banten_number')))
             ->where('form_status', 'submitted')
             ->first();
 
         if (! $reg) {
             return back()
-                ->withInput($request->only('registration_number', 'spmb_banten_number'))
+                ->withInput($request->only('nisn', 'spmb_banten_number'))
                 ->withErrors([
-                    'lookup' => 'Data tidak ditemukan. Pastikan kedua nomor benar dan formulir Dapodik sudah dikirim.',
+                    'lookup' => 'Data tidak ditemukan. Pastikan NISN dan No. SPMB Banten benar, serta formulir Dapodik sudah dikirim.',
                 ]);
         }
 

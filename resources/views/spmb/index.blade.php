@@ -105,13 +105,13 @@
                         <i class="bi bi-search me-2"></i>Cek Formulir Daftar Ulang
                     </div>
                     <div class="card-body">
-                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan kedua nomor berikut untuk melihat dan mengunduh PDF isian formulir.</p>
+                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan NISN dan No. SPMB Banten untuk melihat dan mengunduh PDF isian formulir.</p>
                         <form method="post" action="{{ route('ppdb.lookup') }}" class="vstack gap-2">
                             @csrf
                             <div>
-                                <label class="form-label small fw-semibold mb-1">No. Daftar Ulang</label>
-                                <input type="text" name="registration_number" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('registration_number') is-invalid @enderror" value="{{ old('registration_number') }}" placeholder="Contoh: DAFTAR-2026-0001" required>
-                                @error('registration_number')<div class="text-danger small">{{ $message }}</div>@enderror
+                                <label class="form-label small fw-semibold mb-1">NISN</label>
+                                <input type="text" name="nisn" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="10 digit NISN" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" required>
+                                @error('nisn')<div class="text-danger small">{{ $message }}</div>@enderror
                             </div>
                             <div>
                                 <label class="form-label small fw-semibold mb-1">No. Pendaftaran SPMB Banten</label>
