@@ -18,7 +18,7 @@ class MajorSeeder extends Seeder
                 'career_prospects' => "Software Engineer|Web Developer|Mobile App Developer|Database Administrator|IT Support|Wirausaha IT",
                 'certifications' => "BNSP Junior Web Developer|Oracle Database|Google Associate Android Developer",
                 'head_teacher' => 'Imran Sumarsa, S.T.', 'color' => 'primary',
-                'student_count' => 288, 'quota' => 72, 'sort_order' => 1,
+                'student_count' => 288, 'quota' => 72, 'spmb_quota' => 36, 'sort_order' => 1,
             ],
             [
                 'code' => 'AKL', 'name' => 'Akuntansi & Keuangan Lembaga', 'slug' => 'akl',
@@ -28,7 +28,7 @@ class MajorSeeder extends Seeder
                 'career_prospects' => "Staff Akuntansi|Staff Pajak|Kasir|Teller Bank|Wirausaha",
                 'certifications' => "BNSP Teknisi Akuntansi Junior|Brevet Pajak A",
                 'head_teacher' => 'Budi Pranoto, M.T.', 'color' => 'success',
-                'student_count' => 216, 'quota' => 72, 'sort_order' => 2,
+                'student_count' => 216, 'quota' => 72, 'spmb_quota' => 36, 'sort_order' => 2,
             ],
             [
                 'code' => 'DKV', 'name' => 'Desain Komunikasi Visual', 'slug' => 'dkv',
@@ -38,7 +38,7 @@ class MajorSeeder extends Seeder
                 'career_prospects' => "Graphic Designer|Illustrator|Motion Designer|Fotografer|Video Editor|Wirausaha Kreatif",
                 'certifications' => "Adobe Certified Associate|BNSP Desainer Grafis Muda",
                 'head_teacher' => 'Maya Sari, S.Ds.', 'color' => 'info',
-                'student_count' => 180, 'quota' => 60, 'sort_order' => 3,
+                'student_count' => 180, 'quota' => 60, 'spmb_quota' => 30, 'sort_order' => 3,
             ],
             [
                 'code' => 'TBSM', 'name' => 'Teknik & Bisnis Sepeda Motor', 'slug' => 'tbsm',
@@ -48,7 +48,7 @@ class MajorSeeder extends Seeder
                 'career_prospects' => "Teknisi Sepeda Motor|Service Advisor|Quality Control|Sales Sparepart|Wirausaha Bengkel",
                 'certifications' => "AHASS Training|Yamaha YES|BNSP Teknisi Kendaraan Ringan",
                 'head_teacher' => 'Rahmat Hidayat, S.T.', 'color' => 'danger',
-                'student_count' => 252, 'quota' => 84, 'sort_order' => 4,
+                'student_count' => 252, 'quota' => 84, 'spmb_quota' => 42, 'sort_order' => 4,
             ],
             [
                 'code' => 'TITL', 'name' => 'Teknik Instalasi Tenaga Listrik', 'slug' => 'titl',
@@ -58,7 +58,7 @@ class MajorSeeder extends Seeder
                 'career_prospects' => "Teknisi Listrik|Operator PLC|Kontraktor Instalasi|Pemeliharaan Gedung|Wirausaha",
                 'certifications' => "LSK-K3 Listrik|BNSP Teknisi Instalasi Listrik",
                 'head_teacher' => 'Dwi Santoso, S.T.', 'color' => 'warning',
-                'student_count' => 216, 'quota' => 72, 'sort_order' => 5,
+                'student_count' => 216, 'quota' => 72, 'spmb_quota' => 36, 'sort_order' => 5,
             ],
         ];
 

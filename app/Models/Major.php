@@ -11,7 +11,7 @@ class Major extends Model
         'code', 'name', 'slug', 'tagline', 'description',
         'curriculum', 'career_prospects', 'certifications',
         'head_teacher', 'cover', 'color',
-        'student_count', 'quota', 'sort_order', 'is_active',
+        'student_count', 'quota', 'spmb_quota', 'sort_order', 'is_active',
     ];
 
     protected $casts = ['is_active' => 'boolean'];

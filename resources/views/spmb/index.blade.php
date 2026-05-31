@@ -83,20 +83,20 @@
                 <div class="alert alert-warning">Konten halaman SPMB belum tersedia. Admin dapat menambahkannya di <strong>Halaman Konten</strong> dengan slug <code>spmb-2026</code>.</div>
                 @endif
 
-                <h2 class="h5 fw-bold mb-3"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota per Jurusan</h2>
+                <h2 class="h5 fw-bold mb-3"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota Penerimaan Kelas X — SPMB {{ $yearLabel }}</h2>
                 <div class="row g-3 mb-2">
                     @foreach($majors as $m)
                     <div class="col-6 col-md-4 col-lg-3">
                         <div class="card border-0 shadow-sm text-center p-3 h-100">
                             <div class="fw-bold text-primary">{{ $m->code }}</div>
                             <div class="small text-secondary mb-1">{{ $m->name }}</div>
-                            <div class="fs-3 fw-bold">{{ $m->quota ?? '—' }}</div>
-                            <div class="small text-muted">kursi</div>
+                            <div class="fs-3 fw-bold">{{ $m->spmb_quota ?? '—' }}</div>
+                            <div class="small text-muted">siswa kelas X</div>
                         </div>
                     </div>
                     @endforeach
                 </div>
-                <p class="small text-secondary">Kuota dapat diubah dari Admin → <strong>Jurusan</strong>.</p>
+                <p class="small text-secondary">Kuota kelas X SPMB diubah dari Admin → <strong>Jurusan</strong> → field <strong>Kuota SPMB Kelas X</strong> (terpisah dari kapasitas jurusan).</p>
             </div>
 
             <div class="col-lg-4">

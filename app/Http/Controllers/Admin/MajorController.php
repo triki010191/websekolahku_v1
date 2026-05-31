@@ -67,6 +67,7 @@ class MajorController extends Controller
             'color'         => ['nullable', 'string', 'max:20'],
             'student_count' => ['nullable', 'integer', 'min:0'],
             'quota'         => ['nullable', 'integer', 'min:0'],
+            'spmb_quota'    => ['nullable', 'integer', 'min:0'],
             'sort_order'    => ['nullable', 'integer', 'min:0'],
             'cover'         => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);

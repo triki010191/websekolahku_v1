@@ -15,8 +15,9 @@
     <div class="mb-2"><label class="form-label">Kurikulum (HTML ok)</label><textarea name="curriculum" class="form-control" rows="4">{{ old('curriculum', $major->curriculum) }}</textarea></div>
     <div class="row g-2">
         <div class="col-md-4"><label class="form-label">Kaprog</label><input class="form-control" name="head_teacher" value="{{ old('head_teacher', $major->head_teacher) }}"></div>
-        <div class="col-md-2"><label class="form-label">Siswa</label><input type="number" class="form-control" name="student_count" value="{{ old('student_count', $major->student_count) }}"></div>
-        <div class="col-md-2"><label class="form-label">Kuota</label><input type="number" class="form-control" name="quota" value="{{ old('quota', $major->quota) }}"></div>
+        <div class="col-md-2"><label class="form-label">Siswa aktif</label><input type="number" class="form-control" name="student_count" value="{{ old('student_count', $major->student_count) }}"></div>
+        <div class="col-md-2"><label class="form-label">Kapasitas jurusan</label><input type="number" class="form-control" name="quota" value="{{ old('quota', $major->quota) }}"><div class="form-text">Total siswa di jurusan (bukan SPMB)</div></div>
+        <div class="col-md-2"><label class="form-label">Kuota SPMB Kelas X *</label><input type="number" class="form-control" name="spmb_quota" value="{{ old('spmb_quota', $major->spmb_quota) }}" min="0"><div class="form-text">Penerimaan siswa baru di halaman SPMB</div></div>
         <div class="col-md-2"><label class="form-label">Urut</label><input type="number" class="form-control" name="sort_order" value="{{ old('sort_order', $major->sort_order) }}"></div>
     </div>
     <div class="form-check mt-2">
