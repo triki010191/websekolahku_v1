@@ -20,9 +20,9 @@
                 </div>
                 <p class="mb-3">{{ setting('site_tagline', 'Pusat Keunggulan & Prestasi Akademik') }}. {{ setting('seo_description') }}</p>
                 <div class="d-flex gap-2">
-                    @if(setting('social_instagram'))<a class="btn btn-sm btn-outline-light rounded-circle" href="https://instagram.com/{{ setting('social_instagram') }}" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>@endif
+                    @if(setting('social_instagram'))<a class="btn btn-sm btn-outline-light rounded-circle" href="{{ instagram_profile_url() }}" target="_blank" rel="noopener" title="Instagram"><i class="bi bi-instagram"></i></a>@endif
                     @if(setting('social_facebook')) <a class="btn btn-sm btn-outline-light rounded-circle" href="https://facebook.com/{{ setting('social_facebook') }}"  target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>@endif
-                    @if(setting('social_youtube'))  <a class="btn btn-sm btn-outline-light rounded-circle" href="https://youtube.com/{{ setting('social_youtube') }}"    target="_blank" title="YouTube"><i class="bi bi-youtube"></i></a>@endif
+                    @if(setting('social_youtube'))<a class="btn btn-sm btn-outline-light rounded-circle" href="{{ youtube_channel_url() }}" target="_blank" rel="noopener" title="YouTube"><i class="bi bi-youtube"></i></a>@endif
                     @if(setting('social_tiktok'))   <a class="btn btn-sm btn-outline-light rounded-circle" href="https://tiktok.com/{{ setting('social_tiktok') }}"      target="_blank" title="TikTok"><i class="bi bi-tiktok"></i></a>@endif
                 </div>
             </div>

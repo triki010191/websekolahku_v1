@@ -21,7 +21,7 @@ class HomeController extends Controller
             'heroSlides' => HeroSlide::active()->get(),
             'banners' => Banner::active()->get(),
             'majors' => Major::where('is_active', true)->orderBy('sort_order')->get(),
-            'posts' => Post::published()->latest('published_at')->take(6)->get(),
+            'posts' => Post::published()->latest('published_at')->take(8)->get(),
             'announcements' => Announcement::active()->orderByDesc('published_at')->take(5)->get(),
             'events' => Event::upcoming()->take(4)->get(),
             'partners' => Partner::where('is_active', true)->orderBy('sort_order')->take(8)->get(),

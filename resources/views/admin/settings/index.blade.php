@@ -19,6 +19,13 @@
         'ppdb_start' => 'Tanggal pembukaan pendaftaran (YYYY-MM-DD)',
         'ppdb_end' => 'Tanggal penutupan pendaftaran (YYYY-MM-DD)',
         'ppdb_announce' => 'Tanggal pengumuman hasil seleksi (YYYY-MM-DD)',
+        'google_maps_url' => 'Link Google Maps lokasi sekolah (tombol Buka Google Maps)',
+        'google_maps_embed_url' => 'URL embed iframe Google Maps (kosongkan = otomatis dari koordinat)',
+        'youtube_channel_url' => 'URL kanal YouTube resmi (contoh: https://www.youtube.com/@SMKN8PANDEGLANG)',
+        'youtube_channel_id' => 'YouTube Channel ID (UC...) — untuk embed preview video di beranda',
+        'youtube_featured_video' => 'URL atau ID video YouTube yang ditampilkan (contoh: https://www.youtube.com/watch?v=maqRd3EeizQ)',
+        'instagram_profile_url' => 'URL profil Instagram resmi (contoh: https://www.instagram.com/smkn8pandeglang_official)',
+        'instagram_post_urls' => 'URL posting Instagram (satu per baris, maks. 9) untuk grid 3 kolom. Kosongkan = embed feed profil otomatis seperti Instagram.',
     ];
 @endphp
 <h1 class="h4 mb-4">Pengaturan Website</h1>
@@ -40,6 +47,9 @@
                     </div>
                 @endif
                 <div class="small text-secondary">Kosongkan bila tidak ingin mengganti. JPG/PNG/WebP, maks. 15MB.</div>
+                @elseif($s->key === 'instagram_post_urls')
+                <textarea class="form-control font-monospace" name="{{ $s->key }}" rows="6" placeholder="https://www.instagram.com/p/...&#10;https://www.instagram.com/reel/...">{{ old($s->key, $s->value) }}</textarea>
+                <div class="small text-secondary">Salin link posting dari Instagram (menu ⋯ → Salin tautan). Maks. 6 baris.</div>
                 @else
                 <input type="text" class="form-control" name="{{ $s->key }}" value="{{ old($s->key, $s->value) }}">
                 @endif

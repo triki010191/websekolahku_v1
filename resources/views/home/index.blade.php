@@ -153,54 +153,60 @@
     </div>
 </section>
 
-{{-- Berita + Pengumuman --}}
+{{-- Berita Terbaru (full width: 4 kiri + 4 kanan) --}}
 <section class="py-5">
     <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+            <h3 class="fw-bold mb-0">Berita Terbaru</h3>
+            <a href="{{ route('berita.index') }}" class="btn btn-outline-primary btn-sm">Arsip Berita</a>
+        </div>
         <div class="row g-4">
-            <div class="col-lg-7">
-                <h3 class="fw-bold mb-3">Berita Terbaru</h3>
-                <div class="d-flex flex-column gap-3">
-                    @forelse($posts->take(4) as $post)
-                    <a href="{{ route('berita.show', $post->slug) }}" class="text-decoration-none text-body d-block">
-                        <div class="card border-0 shadow-sm hover-lift home-news-card">
-                            <div class="home-news-card__inner d-flex align-items-stretch">
-                                <div class="home-news-card__thumb flex-shrink-0">
-                                    <img src="{{ $post->cover_url }}" alt="{{ $post->title }}" loading="lazy">
-                                </div>
-                                <div class="home-news-card__body flex-grow-1 min-w-0">
-                                    <span class="badge bg-light text-primary mb-1">{{ $post->category?->name ?? 'Berita' }}</span>
-                                    <h6 class="card-title line-clamp-2 mb-1">{{ $post->title }}</h6>
-                                    <small class="text-muted">{{ optional($post->published_at)->translatedFormat('d M Y') }}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    @empty
-                    <p class="text-secondary">Belum ada berita.</p>
-                    @endforelse
+            @forelse($posts->chunk(4) as $columnPosts)
+            <div class="col-lg-6">
+                <div class="d-flex flex-column gap-4">
+                    @foreach($columnPosts as $post)
+                    @include('partials.home-news-card', ['post' => $post])
+                    @endforeach
                 </div>
-                <a href="{{ route('berita.index') }}" class="btn btn-outline-primary mt-3">Arsip Berita</a>
             </div>
-            <div class="col-lg-5">
-                <h3 class="fw-bold mb-3">Pengumuman</h3>
-                <div class="list-group list-group-flush shadow-sm rounded-3 overflow-hidden">
-                    @forelse($announcements as $a)
-                    <a href="{{ route('pengumuman.show', $a->slug) }}" class="list-group-item list-group-item-action py-3">
-                        <div class="d-flex gap-2">
-                            <div class="text-center">
-                                <div class="fs-4 fw-bold text-primary">{{ optional($a->published_at)->format('d') }}</div>
-                                <small class="text-uppercase text-muted">{{ optional($a->published_at)->translatedFormat('M') }}</small>
+            @empty
+            <div class="col-12">
+                <p class="text-secondary mb-0">Belum ada berita.</p>
+            </div>
+            @endforelse
+        </div>
+    </div>
+</section>
+
+{{-- Pengumuman (di bawah berita) --}}
+<section class="py-5 bg-body-secondary">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+            <h3 class="fw-bold mb-0">Pengumuman</h3>
+            <a href="{{ route('pengumuman.index') }}" class="btn btn-outline-primary btn-sm">Semua Pengumuman</a>
+        </div>
+        <div class="row g-3">
+            @forelse($announcements as $a)
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ route('pengumuman.show', $a->slug) }}" class="text-decoration-none text-body d-block h-100">
+                    <div class="card border-0 shadow-sm h-100 home-announce-card">
+                        <div class="card-body d-flex gap-3 align-items-start">
+                            <div class="home-announce-card__date text-center flex-shrink-0">
+                                <div class="fs-3 fw-bold text-primary lh-1">{{ optional($a->published_at)->format('d') }}</div>
+                                <small class="text-uppercase text-muted">{{ optional($a->published_at)->translatedFormat('M Y') }}</small>
                             </div>
-                            <div>
+                            <div class="min-w-0">
                                 <div class="fw-semibold line-clamp-2">{{ $a->title }}</div>
                             </div>
                         </div>
-                    </a>
-                    @empty
-                    <div class="list-group-item text-secondary">Tidak ada pengumuman.</div>
-                    @endforelse
-                </div>
+                    </div>
+                </a>
             </div>
+            @empty
+            <div class="col-12">
+                <p class="text-secondary mb-0">Tidak ada pengumuman.</p>
+            </div>
+            @endforelse
         </div>
     </div>
 </section>
