@@ -45,6 +45,11 @@ class PublicPagesSmokeTest extends TestCase
             $this->get($path)->assertOk();
         }
 
+        $teacher = \App\Models\Teacher::where('is_active', true)->whereNotNull('slug')->first();
+        if ($teacher) {
+            $this->get('/guru/'.$teacher->slug)->assertOk();
+        }
+
         $post = Post::published()->first();
         if ($post) {
             $this->get('/berita/'.$post->slug)->assertOk();

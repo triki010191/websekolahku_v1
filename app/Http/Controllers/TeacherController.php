@@ -22,4 +22,11 @@ class TeacherController extends Controller
 
         return view('guru.index', compact('teachers', 'fields'));
     }
+
+    public function show(Teacher $teacher)
+    {
+        abort_unless($teacher->is_active, 404);
+
+        return view('guru.show', compact('teacher'));
+    }
 }

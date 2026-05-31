@@ -46,6 +46,7 @@ Route::get('/profil/{slug}', [PageController::class, 'show'])->name('profil.show
 Route::get('/jurusan', [MajorController::class, 'index'])->name('jurusan.index');
 Route::get('/jurusan/{major:slug}', [MajorController::class, 'show'])->name('jurusan.show');
 Route::get('/guru', [TeacherController::class, 'index'])->name('guru.index');
+Route::get('/guru/{teacher:slug}', [TeacherController::class, 'show'])->name('guru.show');
 Route::get('/galeri', [GalleryController::class, 'index'])->name('galeri.index');
 Route::get('/galeri/{album:slug}', [GalleryController::class, 'show'])->name('galeri.show');
 

@@ -15,6 +15,9 @@
                 <td>{{ $t->position }}</td>
                 <td>{{ $t->subject ?? $t->field }}</td>
                 <td class="text-end">
+                    @if($t->slug)
+                    <a href="{{ route('guru.show', $t) }}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Lihat profil">Profil</a>
+                    @endif
                     <a href="{{ route('admin.teachers.edit', $t) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                     <form class="d-inline" method="post" action="{{ route('admin.teachers.destroy', $t) }}">@csrf @method('delete')
                         <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus?')">Hapus</button>
