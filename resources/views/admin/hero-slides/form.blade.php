@@ -11,7 +11,8 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Subjudul / deskripsi singkat</label>
-        <textarea class="form-control" name="subtitle" rows="2" maxlength="500">{{ old('subtitle', $slide->subtitle) }}</textarea>
+        <textarea class="form-control" name="subtitle" rows="3" maxlength="500">{{ old('subtitle', $slide->subtitle) }}</textarea>
+        <div class="form-text">Maks. 500 karakter — tampil sebagai teks pendek di slide beranda.</div>
     </div>
     <div class="mb-3">
         <label class="form-label">Gambar * @if($slide->exists) <span class="text-secondary fw-normal">(kosongkan jika tidak diganti)</span> @endif</label>

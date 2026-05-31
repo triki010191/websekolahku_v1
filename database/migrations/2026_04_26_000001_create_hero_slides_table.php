@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('hero_slides', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('subtitle')->nullable();
+            $table->text('subtitle')->nullable();
             $table->string('image');
             $table->string('button_text')->nullable();
             $table->string('button_url', 500)->nullable();
