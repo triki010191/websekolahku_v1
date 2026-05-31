@@ -14,8 +14,10 @@ class PpdbController extends Controller
 {
     public function index(Request $request)
     {
+        $formStatus = $request->query('form_status', 'submitted');
+
         $registrations = PpdbRegistration::with('major')
-            ->where('form_status', 'submitted')
+            ->where('form_status', $formStatus)
             ->when($request->status,   fn ($q, $s) => $q->where('status', $s))
             ->when($request->major_id, fn ($q, $m) => $q->where('major_id', $m))
             ->when($request->search,   fn ($q, $s) => $q->where(fn ($q) => $q->where('full_name', 'like', "%$s%")->orWhere('nisn', 'like', "%$s%")->orWhere('registration_number', 'like', "%$s%")->orWhere('spmb_banten_number', 'like', "%$s%")))
@@ -30,9 +32,10 @@ class PpdbController extends Controller
             'verified' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'verified')->count(),
             'accepted' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'accepted')->count(),
             'rejected' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'rejected')->count(),
+            'drafts'   => PpdbRegistration::where('form_status', 'draft')->count(),
         ];
 
-        return view('admin.ppdb.index', compact('registrations', 'majors', 'counts'));
+        return view('admin.ppdb.index', compact('registrations', 'majors', 'counts', 'formStatus'));
     }
 
     public function show(PpdbRegistration $ppdb)

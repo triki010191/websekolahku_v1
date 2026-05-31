@@ -87,8 +87,11 @@ Route::post('/kontak', [ContactController::class, 'store'])->name('kontak.store'
 Route::get('/spmb-2026', [SpmbController::class, 'index'])->name('spmb.index');
 Route::get('/ppdb', [SpmbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
-Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store')->middleware('throttle:10,1');
-Route::post('/ppdb/draft', [PpdbController::class, 'saveDraft'])->name('ppdb.draft')->middleware('throttle:30,1');
+Route::get('/ppdb/csrf-token', [PpdbController::class, 'csrfToken'])->name('ppdb.csrf');
+Route::get('/ppdb/cek-spmb', [PpdbController::class, 'checkSpmb'])->name('ppdb.check-spmb');
+Route::post('/ppdb/cek-formulir', [PpdbController::class, 'lookup'])->name('ppdb.lookup')->middleware('throttle:30,1');
+Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store')->middleware('throttle:60,1');
+Route::post('/ppdb/draft', [PpdbController::class, 'saveDraft'])->name('ppdb.draft')->middleware('throttle:120,1');
 Route::get('/ppdb/sukses/{number}', [PpdbController::class, 'success'])->name('ppdb.success');
 Route::get('/ppdb/bukti/{number}', [PpdbController::class, 'pdf'])->name('ppdb.pdf');
 

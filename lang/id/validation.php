@@ -41,5 +41,7 @@ return [
         'image'       => 'Gambar',
         'cover'       => 'Sampul',
         'file'        => 'Berkas',
+        'nisn'        => 'NISN',
+        'spmb_banten_number' => 'nomor pendaftaran SPMB Banten',
     ],
 ];

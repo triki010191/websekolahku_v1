@@ -28,6 +28,23 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 </section>
 
 <section class="py-4"><div class="container" style="max-width:960px">
+@if(session('error'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-circle-fill me-2"></i>{{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+@if($errors->any())
+<div class="alert alert-danger" role="alert">
+    <strong>Formulir belum dapat dikirim.</strong> Periksa dan lengkapi data berikut:
+    <ul class="mb-0 mt-2 small">
+        @foreach($errors->all() as $message)
+        <li>{{ $message }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+<div id="submitErrors" class="alert alert-danger d-none" role="alert"></div>
 <form id="ppdbWizardForm" method="post" action="{{ route('ppdb.store') }}" novalidate>
     @csrf
     <input type="hidden" name="draft_token" id="draft_token" value="{{ $val('draft_token') }}">
@@ -267,8 +284,12 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 @push('scripts')
 <script>
 window.PPDB_WIZARD = {
+    storeUrl: @json(route('ppdb.store')),
     draftUrl: @json(route('ppdb.draft')),
+    csrfUrl: @json(route('ppdb.csrf')),
+    checkSpmbUrl: @json(route('ppdb.check-spmb')),
     csrf: @json(csrf_token()),
+    hasValidationErrors: @json($errors->any()),
     stepLabels: @json(array_merge(['Identitas SPMB'], O::stepLabels())),
     achievementTypes: @json(O::achievementTypes()),
     achievementLevels: @json(O::achievementLevels()),

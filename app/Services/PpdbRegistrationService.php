@@ -9,6 +9,14 @@ use Illuminate\Validation\Rule;
 
 class PpdbRegistrationService
 {
+    public function messages(): array
+    {
+        return [
+            'spmb_banten_number.unique' => 'Nomor SPMB Banten ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.',
+            'nisn.unique'               => 'NISN ini sudah terdaftar pada formulir daftar ulang yang dikirim.',
+        ];
+    }
+
     public function rules(bool $submit = false, ?int $exceptId = null): array
     {
         $nisnRule = $submit
@@ -16,7 +24,7 @@ class PpdbRegistrationService
             : ['nullable', 'string', 'max:20'];
 
         return [
-            'spmb_banten_number' => $submit ? ['required', 'string', 'max:64'] : ['nullable', 'string', 'max:64'],
+            'spmb_banten_number' => $this->spmbBantenRules($submit, $exceptId),
             'draft_token'        => ['nullable', 'string', 'max:64'],
             'major_id'           => $submit ? ['required', 'exists:majors,id'] : ['nullable', 'exists:majors,id'],
             'full_name'          => $submit ? ['required', 'string', 'max:255'] : ['nullable', 'string', 'max:255'],
@@ -109,9 +117,9 @@ class PpdbRegistrationService
         ];
     }
 
-    public function mapRequest(Request $request): array
+    public function mapRequest(Request $request, bool $submit = false): array
     {
-        $data = $request->only(array_keys($this->rules()));
+        $data = $request->only(array_keys($this->rules(submit: $submit)));
 
         foreach (['kps_pkh_receiver', 'pip_eligible', 'kip_receiver', 'kip_card_received'] as $bool) {
             if ($request->has($bool)) {
@@ -125,6 +133,10 @@ class PpdbRegistrationService
         $data['father_special_needs'] = array_values(array_filter((array) $request->input('father_special_needs', [])));
         $data['mother_special_needs'] = array_values(array_filter((array) $request->input('mother_special_needs', [])));
 
+        if ($request->filled('spmb_banten_number')) {
+            $data['spmb_banten_number'] = trim((string) $request->input('spmb_banten_number'));
+        }
+
         if ($request->boolean('data_declaration') || $request->input('data_declaration') === '1') {
             $data['data_declaration'] = true;
         }
@@ -135,13 +147,19 @@ class PpdbRegistrationService
     public function saveDraft(Request $request): PpdbRegistration
     {
         $data = $this->mapRequest($request);
-        $data['form_status'] = 'draft';
-        $data['status']      = 'pending';
+        $data['status'] = 'pending';
 
         $token = $request->input('draft_token') ?: Str::random(40);
         $data['draft_token'] = $token;
 
         $reg = PpdbRegistration::where('draft_token', $token)->first();
+
+        if ($reg?->isSubmitted()) {
+            return $reg;
+        }
+
+        $data['form_status'] = 'draft';
+        $data = $this->applyDraftDefaults($data);
 
         if ($reg) {
             $reg->update($data);
@@ -155,7 +173,7 @@ class PpdbRegistrationService
 
     public function submit(Request $request): PpdbRegistration
     {
-        $data = $this->mapRequest($request);
+        $data = $this->mapRequest($request, submit: true);
         $data['form_status'] = 'submitted';
         $data['status']      = 'pending';
 
@@ -171,6 +189,41 @@ class PpdbRegistrationService
         }
 
         return $reg->fresh(['major']);
+    }
+
+    /** @param  array<string, mixed>  $data */
+    private function applyDraftDefaults(array $data): array
+    {
+        $data['full_name'] ??= '(Draft)';
+        $data['nisn']      ??= '0000000000';
+        $data['gender']    ??= 'L';
+
+        return $data;
+    }
+
+    /** @return list<mixed> */
+    private function spmbBantenRules(bool $submit, ?int $exceptId): array
+    {
+        $rules = $submit ? ['required', 'string', 'max:64'] : ['nullable', 'string', 'max:64'];
+
+        if ($submit) {
+            $rules[] = Rule::unique('ppdb_registrations', 'spmb_banten_number')
+                ->where('form_status', 'submitted')
+                ->ignore($exceptId);
+
+            return $rules;
+        }
+
+        $rules[] = function (string $attribute, mixed $value, \Closure $fail) use ($exceptId): void {
+            if (blank($value)) {
+                return;
+            }
+            if (PpdbRegistration::spmbAlreadySubmitted((string) $value, $exceptId)) {
+                $fail('Nomor SPMB Banten ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.');
+            }
+        };
+
+        return $rules;
     }
 
     private function cleanRepeater(array $rows, array $keys): array

@@ -16,6 +16,28 @@
     const localReg = document.getElementById('local_reg_number');
     const previewContent = document.getElementById('previewContent');
 
+    function updateCsrf(token) {
+        if (!token) return;
+        cfg.csrf = token;
+        const input = form.querySelector('input[name="_token"]');
+        if (input) input.value = token;
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) meta.content = token;
+    }
+
+    async function refreshCsrfToken() {
+        if (!cfg.csrfUrl) return cfg.csrf;
+        const res = await fetch(cfg.csrfUrl, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error('csrf refresh failed');
+        const json = await res.json();
+        updateCsrf(json.token);
+        return json.token;
+    }
+
     function renderProgress() {
         if (!progress) return;
         progress.innerHTML = (cfg.stepLabels || []).map((label, i) => {
@@ -33,7 +55,10 @@
         btnPrev.disabled = step === 0;
         btnNext.classList.toggle('d-none', step === total);
         btnSubmit.classList.toggle('d-none', step !== total);
-        if (step === total) buildPreview();
+        if (step === total) {
+            buildPreview();
+            refreshCsrfToken().catch(() => {});
+        }
         renderProgress();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         saveLocal();
@@ -78,19 +103,38 @@
         } catch (e) {}
     }
 
-    async function saveDraft(showMsg = true) {
+    async function saveDraft(showMsg = true, retried = false) {
         try {
             const res = await fetch(cfg.draftUrl, {
                 method: 'POST',
-                headers: { 'X-CSRF-TOKEN': cfg.csrf, 'Accept': 'application/json' },
+                credentials: 'same-origin',
+                headers: { 'X-CSRF-TOKEN': cfg.csrf, Accept: 'application/json' },
                 body: formData(),
             });
-            const json = await res.json();
+            if (res.status === 419 && !retried) {
+                await refreshCsrfToken();
+                return saveDraft(showMsg, true);
+            }
+            if (res.status === 429) {
+                if (statusEl) statusEl.textContent = 'Menyimpan draft ditunda — data aman di browser';
+                saveLocal();
+                return;
+            }
+            const json = await res.json().catch(() => ({}));
             if (json.ok) {
+                if (json.csrf_token) updateCsrf(json.csrf_token);
                 draftToken.value = json.draft_token;
                 if (localReg) localReg.value = json.registration_number || localReg.value;
                 if (statusEl) statusEl.textContent = 'Draft tersimpan ' + new Date().toLocaleTimeString('id-ID');
                 saveLocal();
+            } else if (res.status === 422) {
+                const msg = flattenErrors(json.errors).find(m => m.includes('SPMB')) || flattenErrors(json.errors)[0];
+                if (msg && statusEl) statusEl.textContent = msg;
+                const spmb = document.getElementById('spmb_banten_number');
+                if (spmb && msg) {
+                    spmb.classList.add('is-invalid');
+                    showStep(0);
+                }
             } else if (showMsg && statusEl) {
                 statusEl.textContent = 'Gagal menyimpan draft';
             }
@@ -131,8 +175,46 @@
     }
 
     btnPrev?.addEventListener('click', () => showStep(step - 1));
-    btnNext?.addEventListener('click', () => {
+
+    async function checkSpmbAvailable() {
+        const input = document.getElementById('spmb_banten_number');
+        if (!input || !cfg.checkSpmbUrl) return true;
+
+        const number = input.value.trim();
+        if (!number) return true;
+
+        try {
+            const params = new URLSearchParams({
+                spmb_banten_number: number,
+                draft_token: draftToken?.value || '',
+            });
+            const res = await fetch(`${cfg.checkSpmbUrl}?${params}`, {
+                credentials: 'same-origin',
+                headers: { Accept: 'application/json' },
+            });
+            const json = await res.json();
+            if (json.available) {
+                input.classList.remove('is-invalid');
+                return true;
+            }
+            input.classList.add('is-invalid');
+            input.focus();
+            let err = input.parentElement.querySelector('.spmb-check-error');
+            if (!err) {
+                err = document.createElement('div');
+                err.className = 'text-danger small spmb-check-error';
+                input.parentElement.appendChild(err);
+            }
+            err.textContent = json.message || 'Nomor SPMB Banten sudah terdaftar.';
+            return false;
+        } catch (e) {
+            return true;
+        }
+    }
+
+    btnNext?.addEventListener('click', async () => {
         if (!validateCurrent()) return;
+        if (step === 0 && !await checkSpmbAvailable()) return;
         saveDraft(false);
         showStep(step + 1);
     });
@@ -140,7 +222,7 @@
     form.addEventListener('input', () => {
         saveLocal();
         clearTimeout(form._autosaveTimer);
-        form._autosaveTimer = setTimeout(() => saveDraft(false), 8000);
+        form._autosaveTimer = setTimeout(() => saveDraft(false), 25000);
     });
 
     document.getElementById('addAchievement')?.addEventListener('click', () => {
@@ -183,6 +265,113 @@
         }
     });
 
+    function showSubmitErrors(messages) {
+        const box = document.getElementById('submitErrors');
+        if (!box || !messages.length) return;
+        box.innerHTML = '<strong>Formulir belum dapat dikirim.</strong><ul class="mb-0 mt-2 small">' +
+            messages.map(m => `<li>${escapeHtml(m)}</li>`).join('') + '</ul>';
+        box.classList.remove('d-none');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function flattenErrors(errors) {
+        return Object.values(errors || {}).flatMap(v => Array.isArray(v) ? v : [v]);
+    }
+
+    async function submitForm() {
+        const decl = form.querySelector('[name="data_declaration"]');
+        if (decl && !decl.checked) {
+            decl.focus();
+            decl.classList.add('is-invalid');
+            showSubmitErrors(['Anda harus menyetujui pernyataan kebenaran data.']);
+            showStep(total);
+            return;
+        }
+
+        if (!btnSubmit) return;
+        btnSubmit.disabled = true;
+        const originalHtml = btnSubmit.innerHTML;
+        btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengirim...';
+        document.getElementById('submitErrors')?.classList.add('d-none');
+
+        try {
+            await refreshCsrfToken();
+
+            let res = await fetch(cfg.storeUrl || form.action, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'X-CSRF-TOKEN': cfg.csrf,
+                    Accept: 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: formData(),
+            });
+
+            if (res.status === 419) {
+                await refreshCsrfToken();
+                res = await fetch(cfg.storeUrl || form.action, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-CSRF-TOKEN': cfg.csrf,
+                        Accept: 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData(),
+                });
+            }
+
+            const json = await res.json().catch(() => ({}));
+
+            if (res.ok && json.redirect) {
+                localStorage.removeItem('ppdb_dapodik_draft');
+                window.location.href = json.redirect;
+                return;
+            }
+
+            if (res.status === 422) {
+                const messages = flattenErrors(json.errors);
+                showSubmitErrors(messages.length ? messages : ['Periksa kembali data wajib (*) pada setiap langkah.']);
+                showStep(total);
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalHtml;
+                return;
+            }
+
+            if (res.status === 429) {
+                showSubmitErrors([json.message || 'Terlalu banyak percobaan kirim. Tunggu 1 menit lalu tekan Kirim Formulir sekali lagi.']);
+                showStep(total);
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = originalHtml;
+                return;
+            }
+
+            showSubmitErrors([json.message || 'Gagal mengirim formulir. Coba lagi atau muat ulang halaman.']);
+            showStep(total);
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = originalHtml;
+        } catch (err) {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = originalHtml;
+            showSubmitErrors(['Koneksi bermasalah. Periksa internet lalu coba kirim lagi.']);
+            showStep(total);
+        }
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitForm();
+    });
+
+    setInterval(() => {
+        refreshCsrfToken().catch(() => {});
+    }, 4 * 60 * 1000);
+
     loadLocal();
-    showStep(step);
+    if (cfg.hasValidationErrors) {
+        showStep(total);
+    } else {
+        showStep(step);
+    }
 })();

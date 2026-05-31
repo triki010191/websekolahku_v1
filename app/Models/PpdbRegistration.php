@@ -77,4 +77,18 @@ class PpdbRegistration extends Model
 
         return "DAFTAR-{$year}-{$seq}";
     }
+
+    public static function spmbAlreadySubmitted(string $number, ?int $exceptId = null): bool
+    {
+        $number = trim($number);
+        if ($number === '') {
+            return false;
+        }
+
+        return self::query()
+            ->where('spmb_banten_number', $number)
+            ->where('form_status', 'submitted')
+            ->when($exceptId, fn ($q) => $q->where('id', '!=', $exceptId))
+            ->exists();
+    }
 }

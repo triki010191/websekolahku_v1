@@ -8,6 +8,9 @@ use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware as MiddlewareConfig;
+use Illuminate\Http\Request;
+use Illuminate\Session\TokenMismatchException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,5 +38,34 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (TokenMismatchException $e, Request $request) {
+            if (! $request->routeIs('ppdb.store', 'ppdb.draft')) {
+                return null;
+            }
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Sesi formulir habis. Muat ulang halaman lalu coba lagi.',
+                ], 419);
+            }
+
+            return redirect()->route('ppdb.create')
+                ->with('error', 'Sesi formulir habis (Page Expired). Buka kembali halaman formulir — data draft Anda masih tersimpan di browser jika belum ditutup.');
+        });
+
+        $exceptions->render(function (TooManyRequestsHttpException $e, Request $request) {
+            if (! $request->routeIs('ppdb.store', 'ppdb.draft')) {
+                return null;
+            }
+
+            $retryAfter = $e->getHeaders()['Retry-After'] ?? 60;
+            $message = "Terlalu banyak percobaan. Tunggu {$retryAfter} detik lalu coba lagi.";
+
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $message], 429);
+            }
+
+            return redirect()->route('ppdb.create')
+                ->with('error', $message);
+        });
     })->create();

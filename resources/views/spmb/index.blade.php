@@ -100,6 +100,32 @@
             </div>
 
             <div class="col-lg-4">
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-header bg-primary text-white fw-bold">
+                        <i class="bi bi-search me-2"></i>Cek Formulir Daftar Ulang
+                    </div>
+                    <div class="card-body">
+                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan kedua nomor berikut untuk melihat dan mengunduh PDF isian formulir.</p>
+                        <form method="post" action="{{ route('ppdb.lookup') }}" class="vstack gap-2">
+                            @csrf
+                            <div>
+                                <label class="form-label small fw-semibold mb-1">No. Daftar Ulang</label>
+                                <input type="text" name="registration_number" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('registration_number') is-invalid @enderror" value="{{ old('registration_number') }}" placeholder="Contoh: DAFTAR-2026-0001" required>
+                                @error('registration_number')<div class="text-danger small">{{ $message }}</div>@enderror
+                            </div>
+                            <div>
+                                <label class="form-label small fw-semibold mb-1">No. Pendaftaran SPMB Banten</label>
+                                <input type="text" name="spmb_banten_number" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('spmb_banten_number') is-invalid @enderror" value="{{ old('spmb_banten_number') }}" placeholder="Nomor dari SPMB Prov. Banten" required>
+                                @error('spmb_banten_number')<div class="text-danger small">{{ $message }}</div>@enderror
+                            </div>
+                            @error('lookup')
+                            <div class="alert alert-danger small py-2 mb-0">{{ $message }}</div>
+                            @enderror
+                            <button type="submit" class="btn btn-primary btn-sm w-100 mt-1"><i class="bi bi-file-earmark-pdf me-1"></i> Cek &amp; Unduh Formulir</button>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="card border-0 shadow-sm sticky-top" style="top:5.5rem">
                     <div class="card-header bg-white fw-bold"><i class="bi bi-megaphone text-warning me-2"></i>Pengumuman SPMB</div>
                     <div class="list-group list-group-flush">

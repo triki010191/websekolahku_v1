@@ -8,11 +8,22 @@
     </div>
 </div>
 <div class="row g-2 mb-3 small">
-    <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Total: <strong>{{ $counts['total'] }}</strong></div></div>
+    <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Terkirim: <strong>{{ $counts['total'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Pending: <strong class="text-warning">{{ $counts['pending'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Diterima: <strong class="text-success">{{ $counts['accepted'] }}</strong></div></div>
+    @if($counts['drafts'] > 0)
+    <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Draft: <strong class="text-secondary">{{ $counts['drafts'] }}</strong></div></div>
+    @endif
 </div>
+@if(($formStatus ?? 'submitted') === 'submitted' && $counts['total'] === 0 && $counts['drafts'] > 0)
+<div class="alert alert-warning small">Ada {{ $counts['drafts'] }} draft belum dikirim. Data hanya masuk daftar ini setelah siswa menekan <strong>Kirim Formulir</strong>.
+    <a href="{{ route('admin.ppdb.index', ['form_status' => 'draft']) }}">Lihat draft</a></div>
+@endif
 <form method="get" class="row g-2 mb-2">
+    <div class="col-auto"><select name="form_status" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="submitted" @selected(($formStatus ?? 'submitted')==='submitted')>Sudah dikirim</option>
+        <option value="draft" @selected(($formStatus ?? 'submitted')==='draft')>Draft</option>
+    </select></div>
     <div class="col-auto"><select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
         <option value="">Status</option>
         @foreach(['pending','verified','accepted','rejected'] as $s)
