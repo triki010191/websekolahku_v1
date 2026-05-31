@@ -72,5 +72,5 @@ done
 
 echo ""
 echo "==> Cek asset statis (harus ada file):"
-ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
+ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" "$WEB/images/banner-spmb-sekolah.jpg" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
 echo "Jalankan juga: cd $REPO && php artisan optimize:clear && php artisan optimize"

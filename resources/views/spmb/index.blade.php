@@ -9,10 +9,13 @@
     $endDate   = setting('ppdb_end');
     $announce  = setting('ppdb_announce');
     $fmt = fn ($d) => $d ? \Carbon\Carbon::parse($d)->translatedFormat('d F Y') : '—';
+    $spmbBanner = public_asset_url('images/banner-spmb-sekolah.jpg') ?? asset('images/banner-spmb-sekolah.jpg');
 @endphp
 
-<section class="text-white" style="background:linear-gradient(135deg,#0f172a,#1d4ed8)">
-    <div class="container py-5">
+<section class="spmb-hero text-white position-relative overflow-hidden">
+    <div class="spmb-hero__bg" style="background-image:url('{{ $spmbBanner }}')" aria-hidden="true"></div>
+    <div class="spmb-hero__overlay" aria-hidden="true"></div>
+    <div class="container py-5 position-relative">
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-white-50">Beranda</a></li>
@@ -176,5 +179,16 @@
 @endsection
 
 @push('styles')
-<style>.prose img{max-width:100%;height:auto;border-radius:.5rem}</style>
+<style>
+.prose img{max-width:100%;height:auto;border-radius:.5rem}
+.spmb-hero{min-height:min(52vw,320px)}
+.spmb-hero__bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.spmb-hero__overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,.72) 38%,rgba(29,78,216,.35) 68%,rgba(29,78,216,.12) 100%)}
+.spmb-hero .breadcrumb-item+.breadcrumb-item::before{color:rgba(255,255,255,.45)}
+@media (max-width:767.98px){
+    .spmb-hero{min-height:360px}
+    .spmb-hero__bg{background-position:70% center}
+    .spmb-hero__overlay{background:linear-gradient(180deg,rgba(15,23,42,.88) 0%,rgba(15,23,42,.78) 55%,rgba(15,23,42,.55) 100%)}
+}
+</style>
 @endpush
