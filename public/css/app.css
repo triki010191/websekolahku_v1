@@ -179,11 +179,11 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
     background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 45%, #38bdf8 100%);
     box-shadow: 0 6px 20px rgba(29, 78, 216, 0.35);
 }
-.guru-photo-ring img,
-.guru-card-photo__img {
+.guru-photo-ring img {
     display: block;
     width: 100%;
     height: 100%;
+    max-width: none;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
@@ -199,20 +199,23 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
     padding: 3px;
     border-radius: 50%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background:
         radial-gradient(circle at 30% 25%, rgba(147, 197, 253, 0.9), transparent 45%),
         linear-gradient(145deg, #1e3a8a, #1d4ed8 50%, #38bdf8);
     box-shadow: 0 8px 24px rgba(29, 78, 216, 0.28);
 }
-.guru-card-photo .guru-photo-ring {
+.guru-card-photo__img {
+    display: block;
     width: 100%;
     height: 100%;
-    padding: 0;
-    box-shadow: none;
-    background: transparent;
-}
-.guru-card-photo .guru-photo-ring img {
-    border: none;
+    max-width: none;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 2px solid #fff;
 }
 
 .guru-profile-photo {

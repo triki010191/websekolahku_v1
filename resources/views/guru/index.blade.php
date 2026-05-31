@@ -21,9 +21,7 @@
             <a href="{{ route('guru.show', $t) }}" class="text-decoration-none text-body">
                 <div class="card border-0 shadow-sm h-100 text-center p-3 guru-card">
                     <div class="guru-card-photo">
-                        <div class="guru-photo-ring">
-                            <img src="{{ $t->photo_url }}" alt="{{ $t->name }}" loading="lazy" width="80" height="80">
-                        </div>
+                        <img src="{{ $t->photo_url }}" alt="{{ $t->name }}" loading="lazy" class="guru-card-photo__img rounded-circle">
                     </div>
                     <h6 class="mb-0">{{ $t->name }}</h6>
                     <small class="text-secondary">{{ $t->position }}</small>
