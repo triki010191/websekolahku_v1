@@ -4,17 +4,22 @@
 <nav class="mb-2"><a href="{{ route('admin.ppdb.index') }}">← Kembali</a></nav>
 <div class="card border-0 shadow-sm p-4">
     <h1 class="h4">{{ $reg->full_name }} <span class="badge bg-primary">{{ $reg->registration_number }}</span></h1>
+    <p class="small text-secondary">No SPMB Banten: <strong>{{ $reg->spmb_banten_number }}</strong></p>
     <div class="row small">
         <div class="col-md-6">
-            <p><strong>NISN:</strong> {{ $reg->nisn }}</p>
+            <p><strong>NISN / NIK:</strong> {{ $reg->nisn }} / {{ $reg->nik }}</p>
             <p><strong>Jurusan:</strong> {{ $reg->major?->name }}</p>
-            <p><strong>Jalur:</strong> {{ $reg->pathway }}</p>
+            <p><strong>Jenis Pendaftaran:</strong> {{ $reg->registration_type }}</p>
             <p><strong>Status:</strong> {{ $reg->status }}</p>
         </div>
         <div class="col-md-6">
             <p><strong>Asal sekolah:</strong> {{ $reg->previous_school }}</p>
             <p><strong>HP:</strong> {{ $reg->phone }} | <strong>Email:</strong> {{ $reg->email }}</p>
+            <p><strong>Ayah:</strong> {{ $reg->father_name }} | <strong>Ibu:</strong> {{ $reg->mother_name }}</p>
         </div>
+    </div>
+    <div class="mt-2">
+        <a href="{{ route('admin.ppdb.export.pdf', $reg) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
     </div>
     <form method="post" action="{{ route('admin.ppdb.status', $reg) }}" class="row g-2 align-items-end mt-3 p-3 bg-body-secondary rounded">@csrf @method('put')
         <div class="col-md-4">

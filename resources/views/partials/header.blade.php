@@ -61,9 +61,10 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('ppdb.*') ? 'active fw-semibold' : '' }}" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('ppdb.*','spmb.*') ? 'active fw-semibold' : '' }}" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
                     <ul class="dropdown-menu main-nav__dropdown border-0">
-                        <li><a class="dropdown-item" href="{{ route('ppdb.create') }}"><i class="bi bi-person-plus me-1 text-primary"></i> SPMB Online</a></li>
+                        <li><a class="dropdown-item" href="{{ route('spmb.index') }}"><i class="bi bi-info-circle me-1 text-primary"></i> Info SPMB 2026</a></li>
+                        <li><a class="dropdown-item" href="{{ route('ppdb.create') }}"><i class="bi bi-clipboard-data me-1 text-primary"></i> Formulir Daftar Ulang Dapodik</a></li>
                         <li><a class="dropdown-item" href="{{ route('fasilitas.index') }}">Fasilitas</a></li>
                         <li><a class="dropdown-item" href="{{ route('ekstrakurikuler.index') }}">Ekstrakurikuler</a></li>
                         <li><a class="dropdown-item" href="{{ route('alumni.index') }}">Alumni</a></li>

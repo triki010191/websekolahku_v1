@@ -34,6 +34,7 @@
             @endif
             @if($isSuper)
             <a href="{{ route('admin.announcements.index') }}" class="@if(request()->routeIs('admin.announcements.*')) active @endif"><i class="bi bi-megaphone"></i> Pengumuman</a>
+            <a href="{{ route('admin.pages.index') }}" class="@if(request()->routeIs('admin.pages.*')) active @endif"><i class="bi bi-file-earmark-text"></i> Halaman Konten</a>
             <a href="{{ route('admin.majors.index') }}" class="@if(request()->routeIs('admin.majors.*')) active @endif"><i class="bi bi-mortarboard"></i> Jurusan</a>
             <a href="{{ route('admin.teachers.index') }}" class="@if(request()->routeIs('admin.teachers.*')) active @endif"><i class="bi bi-people"></i> Guru &amp; TU</a>
             <a href="{{ route('admin.ppdb.index') }}" class="@if(request()->routeIs('admin.ppdb.*')) active @endif"><i class="bi bi-person-check"></i> SPMB</a>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\PartnerController as AdminPartner;
 use App\Http\Controllers\Admin\GalleryController as AdminGallery;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\Admin\MajorController as AdminMajor;
+use App\Http\Controllers\Admin\PageController as AdminPage;
 use App\Http\Controllers\Admin\PostController as AdminPost;
 use App\Http\Controllers\Admin\PpdbController as AdminPpdb;
 use App\Http\Controllers\Admin\SettingController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PpdbController;
+use App\Http\Controllers\SpmbController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,11 +75,14 @@ Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::get('/kontak', [ContactController::class, 'index'])->name('kontak.index');
 Route::post('/kontak', [ContactController::class, 'store'])->name('kontak.store')->middleware('throttle:20,1');
 
-/* PPDB */
-Route::get('/ppdb', [PpdbController::class, 'index'])->name('ppdb.index');
+/* PPDB / SPMB */
+Route::get('/spmb-2026', [SpmbController::class, 'index'])->name('spmb.index');
+Route::get('/ppdb', [SpmbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store')->middleware('throttle:10,1');
+Route::post('/ppdb/draft', [PpdbController::class, 'saveDraft'])->name('ppdb.draft')->middleware('throttle:30,1');
 Route::get('/ppdb/sukses/{number}', [PpdbController::class, 'success'])->name('ppdb.success');
+Route::get('/ppdb/bukti/{number}', [PpdbController::class, 'pdf'])->name('ppdb.pdf');
 
 /* Autentikasi admin (panel) */
 Route::get('/admin/login', [LoginController::class, 'showLogin'])->name('admin.login');
@@ -106,6 +111,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
     Route::post('gallery/{album}/items', [AdminGallery::class, 'addItem'])->name('gallery.items.store');
     Route::delete('gallery/items/{item}', [AdminGallery::class, 'destroyItem'])->name('gallery.items.destroy');
 
+    Route::get('ppdb/export/excel', [AdminPpdb::class, 'exportExcel'])->name('ppdb.export.excel');
+    Route::get('ppdb/{ppdb}/export/pdf', [AdminPpdb::class, 'exportPdf'])->name('ppdb.export.pdf');
     Route::get('ppdb', [AdminPpdb::class, 'index'])->name('ppdb.index');
     Route::get('ppdb/{ppdb}', [AdminPpdb::class, 'show'])->name('ppdb.show');
     Route::put('ppdb/{ppdb}/status', [AdminPpdb::class, 'updateStatus'])->name('ppdb.status');
@@ -123,6 +130,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
         Route::get('contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::put('contact-messages/{contactMessage}/status', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
         Route::delete('contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+        Route::resource('pages', AdminPage::class)->except('show');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::match(['put', 'post'], 'settings', [SettingController::class, 'update'])->name('settings.update');
     });

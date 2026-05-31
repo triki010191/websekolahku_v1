@@ -1,6 +1,12 @@
 @extends('layouts.admin')
 @section('title', 'SPMB')
 @section('admin')
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h1 class="h4 mb-0">Data Formulir Dapodik</h1>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.ppdb.export.excel', request()->only('status')) }}" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
+    </div>
+</div>
 <div class="row g-2 mb-3 small">
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Total: <strong>{{ $counts['total'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Pending: <strong class="text-warning">{{ $counts['pending'] }}</strong></div></div>
@@ -24,16 +30,20 @@
 </form>
 <div class="table-responsive card border-0 shadow-sm">
     <table class="table table-hover small mb-0">
-        <thead class="table-light"><tr><th>No</th><th>Nama</th><th>NISN</th><th>Jurusan</th><th>Status</th><th></th></tr></thead>
+        <thead class="table-light"><tr><th>No Daftar</th><th>No SPMB Banten</th><th>Nama</th><th>NISN</th><th>Jurusan</th><th>Status</th><th></th></tr></thead>
         <tbody>
             @foreach($registrations as $r)
             <tr>
                 <td class="text-muted">{{ $r->registration_number }}</td>
+                <td>{{ $r->spmb_banten_number }}</td>
                 <td>{{ $r->full_name }}</td>
                 <td>{{ $r->nisn }}</td>
                 <td>{{ $r->major?->code }}</td>
                 <td><span class="badge bg-secondary">{{ $r->status }}</span></td>
-                <td><a href="{{ route('admin.ppdb.show', $r) }}" class="btn btn-sm btn-outline-primary">Detail</a></td>
+                <td class="text-nowrap">
+                    <a href="{{ route('admin.ppdb.show', $r) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+                    <a href="{{ route('admin.ppdb.export.pdf', $r) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
+                </td>
             </tr>
             @endforeach
         </tbody>

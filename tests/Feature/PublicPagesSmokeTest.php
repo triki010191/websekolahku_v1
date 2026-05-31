@@ -35,6 +35,7 @@ class PublicPagesSmokeTest extends TestCase
             '/faq',
             '/kontak',
             '/ppdb',
+            '/spmb-2026',
             '/ppdb/daftar',
             '/profil/sejarah',
             '/profil/sambutan',

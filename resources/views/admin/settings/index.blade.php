@@ -14,6 +14,11 @@
         'sambutan_section_image' => 'Foto sambutan Kepala Sekolah (blok teks sambutan di tengah beranda, kiri)',
         'spmb_banten_url' => 'URL tombol "SPMB Online Prov. Banten" (resmi: https://spmb.bantenprov.go.id/)',
         'spmb_banten_logo' => 'Ganti logo tombol "SPMB Prov. Banten" (kosong = file bawaan `public/images/spmb-banten-official.png`)',
+        'ppdb_year' => 'Tahun ajaran SPMB (contoh: 2026/2027)',
+        'ppdb_is_open' => 'Status pendaftaran (1 = dibuka, 0 = ditutup)',
+        'ppdb_start' => 'Tanggal pembukaan pendaftaran (YYYY-MM-DD)',
+        'ppdb_end' => 'Tanggal penutupan pendaftaran (YYYY-MM-DD)',
+        'ppdb_announce' => 'Tanggal pengumuman hasil seleksi (YYYY-MM-DD)',
     ];
 @endphp
 <h1 class="h4 mb-4">Pengaturan Website</h1>

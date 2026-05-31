@@ -275,6 +275,7 @@
         <h2 class="fw-bold">SPMB {{ setting('ppdb_year', date('Y').'/'.(date('Y')+1)) }}</h2>
         <p class="mb-4 opacity-90">Pendaftaran calon peserta didik baru — cek jadwal &amp; alur, lalu isi formulir online.</p>
         <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+            <a href="{{ route('spmb.index') }}" class="btn btn-light btn-lg">Info SPMB Lengkap</a>
             @include('partials.spmb-banten-button', ['variant' => 'cta'])
         </div>
     </div>

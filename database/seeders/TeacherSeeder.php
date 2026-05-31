@@ -10,7 +10,7 @@ class TeacherSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            ['nip' => '196508101990031004', 'name' => 'Drs. H. Ahmad Fauzi, M.Pd',  'gender' => 'L', 'position' => 'Kepala Sekolah', 'subject' => 'Manajemen Pendidikan', 'employment_status' => 'pns',     'field' => 'struktural'],
+            ['nip' => '196508101990031004', 'name' => 'Ir. ASDIARNITA, M.Pd.',      'gender' => 'P', 'position' => 'Kepala Sekolah', 'subject' => 'Manajemen Pendidikan', 'employment_status' => 'pns',     'field' => 'struktural'],
             ['nip' => '197509202005011003', 'name' => 'Imran Sumarsa, S.T.',         'gender' => 'L', 'position' => 'Waka Kurikulum',  'subject' => 'Pemrograman Web',      'employment_status' => 'pns',     'field' => 'rpl'],
             ['nip' => '198003102010012008', 'name' => 'Siti Maryam, S.Pd.',          'gender' => 'P', 'position' => 'Waka Kesiswaan',  'subject' => 'Bahasa Indonesia',     'employment_status' => 'pns',     'field' => 'normatif'],
             ['nip' => '198506102012011002', 'name' => 'Budi Pranoto, M.T.',          'gender' => 'L', 'position' => 'Kaprog AKL',      'subject' => 'Akuntansi Keuangan',   'employment_status' => 'pppk',    'field' => 'akl'],

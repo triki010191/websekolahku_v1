@@ -8,19 +8,46 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PpdbRegistration extends Model
 {
     protected $fillable = [
-        'registration_number', 'major_id',
-        'full_name', 'nisn', 'gender', 'religion', 'birth_place', 'birth_date',
-        'phone', 'email', 'address', 'city', 'postal_code',
+        'registration_number', 'spmb_banten_number', 'major_id',
+        'full_name', 'nisn', 'nik', 'gender', 'religion', 'birth_place', 'birth_date',
+        'birth_cert_number', 'citizenship', 'country_name', 'special_needs',
+        'phone', 'home_phone', 'email', 'address', 'rt', 'rw', 'hamlet', 'village',
+        'district', 'city', 'postal_code', 'latitude', 'longitude',
+        'residence_type', 'transport_mode',
+        'kks_number', 'child_order', 'kps_pkh_receiver', 'kps_pkh_number',
+        'pip_eligible', 'kip_receiver', 'kip_number', 'kip_name', 'kip_card_received', 'pip_reason',
+        'bank_name', 'bank_account_number', 'bank_account_holder',
         'previous_school', 'graduation_year',
-        'father_name', 'father_job', 'mother_name', 'mother_job', 'parent_phone', 'parent_income',
-        'pathway',
+        'height_cm', 'weight_kg', 'distance_category', 'distance_km',
+        'travel_hours', 'travel_minutes', 'siblings_count',
+        'achievements', 'scholarships',
+        'father_name', 'father_nik', 'father_birth_year', 'father_education', 'father_job', 'father_income', 'father_special_needs',
+        'mother_name', 'mother_nik', 'mother_birth_year', 'mother_education', 'mother_job', 'mother_income', 'mother_special_needs',
+        'guardian_name', 'guardian_nik', 'guardian_birth_year', 'guardian_education', 'guardian_job', 'guardian_income',
+        'parent_phone', 'parent_income',
+        'pathway', 'registration_type', 'nis', 'school_entry_date',
+        'exam_number', 'diploma_serial', 'skhus_serial', 'data_declaration',
         'doc_ijazah', 'doc_kk', 'doc_photo', 'doc_akta',
-        'status', 'note', 'verified_by', 'verified_at',
+        'status', 'form_status', 'draft_token', 'note', 'verified_by', 'verified_at',
     ];
 
     protected $casts = [
-        'birth_date'  => 'date',
-        'verified_at' => 'datetime',
+        'birth_date'        => 'date',
+        'school_entry_date' => 'date',
+        'verified_at'       => 'datetime',
+        'special_needs'     => 'array',
+        'father_special_needs' => 'array',
+        'mother_special_needs' => 'array',
+        'achievements'      => 'array',
+        'scholarships'      => 'array',
+        'kps_pkh_receiver'  => 'boolean',
+        'pip_eligible'      => 'boolean',
+        'kip_receiver'      => 'boolean',
+        'kip_card_received' => 'boolean',
+        'data_declaration'  => 'boolean',
+        'latitude'          => 'float',
+        'longitude'         => 'float',
+        'distance_km'       => 'float',
     ];
 
     public function major(): BelongsTo
@@ -33,10 +60,21 @@ class PpdbRegistration extends Model
         return $this->belongsTo(User::class, 'verified_by');
     }
 
+    public function isSubmitted(): bool
+    {
+        return $this->form_status === 'submitted';
+    }
+
+    public function genderLabel(): string
+    {
+        return $this->gender === 'L' ? 'Laki-laki' : 'Perempuan';
+    }
+
     public static function generateNumber(): string
     {
         $year = date('Y');
         $seq  = str_pad((self::whereYear('created_at', $year)->count() + 1), 4, '0', STR_PAD_LEFT);
-        return "PPDB-{$year}-{$seq}";
+
+        return "DAFTAR-{$year}-{$seq}";
     }
 }

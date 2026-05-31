@@ -18,7 +18,7 @@ class SettingSeeder extends Seeder
             ['key' => 'site_accreditation', 'value' => 'A (Unggul)',                               'group' => 'identity'],
             ['key' => 'site_logo',         'value' => '',                                         'group' => 'identity', 'type' => 'image'],
             ['key' => 'hero_principal_image', 'value' => '',                                    'group' => 'identity', 'type' => 'image'],
-            ['key' => 'hero_principal_caption', 'value' => 'Kepala Sekolah',                    'group' => 'identity'],
+            ['key' => 'hero_principal_caption', 'value' => 'Ir. ASDIARNITA, M.Pd.',              'group' => 'identity'],
             ['key' => 'sambutan_section_image', 'value' => '',                                    'group' => 'identity', 'type' => 'image'],
 
             // theme

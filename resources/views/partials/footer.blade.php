@@ -32,7 +32,7 @@
                     <li class="mb-2"><a class="link-light link-underline link-underline-opacity-0" href="{{ route('profil.show','sejarah') }}">Profil</a></li>
                     <li class="mb-2"><a class="link-light link-underline link-underline-opacity-0" href="{{ route('jurusan.index') }}">Jurusan</a></li>
                     <li class="mb-2"><a class="link-light link-underline link-underline-opacity-0" href="{{ route('berita.index') }}">Berita</a></li>
-                    <li class="mb-2"><a class="link-light link-underline link-underline-opacity-0" href="{{ route('ppdb.index') }}">SPMB</a></li>
+                    <li class="mb-2"><a class="link-light link-underline link-underline-opacity-0" href="{{ route('spmb.index') }}">SPMB 2026</a></li>
                 </ul>
             </div>
             <div class="col-6 col-lg-2">
