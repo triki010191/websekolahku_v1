@@ -20,9 +20,9 @@
         <div class="col-6 col-md-4 col-lg-3">
             <a href="{{ route('guru.show', $t) }}" class="text-decoration-none text-body">
                 <div class="card border-0 shadow-sm h-100 text-center p-3 guru-card">
-                    <div class="guru-card-photo-wrap">
+                    <div class="guru-card-photo">
                         <div class="guru-photo-ring">
-                            <img src="{{ $t->photo_url }}" class="rounded-circle w-100 h-100" style="object-fit:cover" alt="{{ $t->name }}" loading="lazy" width="80" height="80">
+                            <img src="{{ $t->photo_url }}" alt="{{ $t->name }}" loading="lazy" width="80" height="80">
                         </div>
                     </div>
                     <h6 class="mb-0">{{ $t->name }}</h6>

@@ -14,6 +14,7 @@
             <option value="admin_berita" @selected(old('role', $user->role)==='admin_berita')>Admin Berita</option>
             <option value="admin_alumni" @selected(old('role', $user->role)==='admin_alumni')>Admin Alumni</option>
             <option value="alumni" @selected(old('role', $user->role)==='alumni')>Alumni</option>
+            <option value="guru" @selected(old('role', $user->role)==='guru')>Guru / TU</option>
         </select>
     </div>
     <div class="mb-2">

@@ -26,7 +26,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
-            'role'     => ['required', 'in:super_admin,admin_berita,admin_alumni,alumni'],
+            'role'     => ['required', 'in:super_admin,admin_berita,admin_alumni,alumni,guru'],
             'phone'    => ['nullable', 'string', 'max:32'],
             'status'   => ['required', 'in:active,pending,suspended'],
             'password' => ['required', Password::min(6)],
@@ -47,7 +47,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', "unique:users,email,{$user->id}"],
-            'role'     => ['required', 'in:super_admin,admin_berita,admin_alumni,alumni'],
+            'role'     => ['required', 'in:super_admin,admin_berita,admin_alumni,alumni,guru'],
             'phone'    => ['nullable', 'string', 'max:32'],
             'status'   => ['required', 'in:active,pending,suspended'],
             'password' => ['nullable', Password::min(6)],

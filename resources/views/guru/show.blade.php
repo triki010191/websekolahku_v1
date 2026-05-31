@@ -17,8 +17,8 @@
         <div class="row g-0">
             <div class="col-md-4 guru-photo-panel text-center p-4 d-flex flex-column align-items-center justify-content-center">
                 <img src="{{ $teacher->photo_url }}" alt="{{ $teacher->name }}"
-                     class="rounded-circle border border-3 border-white shadow-lg mb-3"
-                     style="width:180px;height:180px;object-fit:cover" width="180" height="180" loading="eager">
+                     class="guru-profile-photo rounded-circle border border-3 border-white shadow-lg mb-3"
+                     width="180" height="180" loading="eager">
                 <span class="badge text-bg-primary">{{ $teacher->position }}</span>
                 @if($teacher->field)
                 <span class="badge text-bg-light text-secondary mt-2">{{ strtoupper($teacher->field) }}</span>

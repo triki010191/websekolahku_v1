@@ -15,6 +15,7 @@ class User extends Authenticatable
     public const ROLE_ADMIN_BERITA  = 'admin_berita';
     public const ROLE_ADMIN_ALUMNI  = 'admin_alumni';
     public const ROLE_ALUMNI        = 'alumni';
+    public const ROLE_GURU          = 'guru';
 
     protected $fillable = [
         'name',
@@ -53,6 +54,11 @@ class User extends Authenticatable
         return $this->role === self::ROLE_SUPER_ADMIN;
     }
 
+    public function isGuru(): bool
+    {
+        return $this->role === self::ROLE_GURU;
+    }
+
     public function hasRole(string|array $role): bool
     {
         return is_array($role) ? in_array($this->role, $role, true) : $this->role === $role;
@@ -61,5 +67,10 @@ class User extends Authenticatable
     public function alumniProfile(): HasOne
     {
         return $this->hasOne(AlumniProfile::class);
+    }
+
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class);
     }
 }

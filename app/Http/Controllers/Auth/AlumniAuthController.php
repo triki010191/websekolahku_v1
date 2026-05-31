@@ -51,6 +51,12 @@ class AlumniAuthController extends Controller
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
+                if ($user->hasRole(User::ROLE_GURU)) {
+                    return redirect()
+                        ->route('guru.login')
+                        ->with('error', 'Akun Guru & TU silakan login melalui Area Guru.');
+                }
+
                 return back()
                     ->withErrors(['email' => 'Akses alumni hanya untuk akun dengan role alumni.'])
                     ->onlyInput('email');

@@ -23,6 +23,7 @@ class PublicPagesSmokeTest extends TestCase
             '/pengumuman',
             '/jurusan',
             '/guru',
+            '/guru/masuk',
             '/galeri',
             '/event',
             '/kalender',

@@ -60,6 +60,8 @@ done
 
 chmod -R u+rwX,go+rX "$UPLOADS" 2>/dev/null || true
 find "$UPLOADS" -type f -exec chmod 644 {} \; 2>/dev/null || true
+mkdir -p "$UPLOADS/teachers"
+chmod 775 "$UPLOADS/teachers" 2>/dev/null || true
 
 echo ""
 echo "==> Cek jumlah file upload:"

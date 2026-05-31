@@ -18,6 +18,9 @@ class LoginController extends Controller
             if (auth()->user()->hasRole(User::ROLE_ALUMNI)) {
                 return redirect()->route('alumni.member.dashboard');
             }
+            if (auth()->user()->hasRole(User::ROLE_GURU)) {
+                return redirect()->route('guru.member.dashboard');
+            }
         }
 
         return view('auth.login');
@@ -41,6 +44,15 @@ class LoginController extends Controller
 
                 return back()
                     ->withErrors(['email' => 'Akun alumni silakan login melalui Area Alumni.'])
+                    ->onlyInput('email');
+            }
+            if (! $user->isAdmin() && $user->hasRole(User::ROLE_GURU)) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()
+                    ->withErrors(['email' => 'Akun Guru & TU silakan login melalui Area Guru.'])
                     ->onlyInput('email');
             }
             if ($user->isAdmin()) {

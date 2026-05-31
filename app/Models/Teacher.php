@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Teacher extends Model
 {
     protected $fillable = [
-        'slug', 'nip', 'name', 'gender', 'position', 'subject', 'education',
+        'user_id', 'slug', 'nip', 'name', 'gender', 'position', 'subject', 'education',
         'employment_status', 'field', 'email', 'phone',
         'photo', 'bio', 'motto', 'sort_order', 'is_active',
     ];
@@ -21,9 +22,11 @@ class Teacher extends Model
 
     public function getPhotoUrlAttribute(): string
     {
-        return $this->photo
-            ? asset('storage/'.$this->photo)
-            : 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1d4ed8&color=ffffff&size=512';
+        if ($this->photo) {
+            return public_storage_url($this->photo) ?? 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1d4ed8&color=ffffff&size=512';
+        }
+
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1d4ed8&color=ffffff&size=512';
     }
 
     public function getEmploymentStatusLabelAttribute(): string
@@ -34,5 +37,10 @@ class Teacher extends Model
             'honorer' => 'Honorer',
             default   => strtoupper((string) $this->employment_status),
         };
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

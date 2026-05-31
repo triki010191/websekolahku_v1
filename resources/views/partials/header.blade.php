@@ -91,7 +91,15 @@
                             <i class="bi bi-person-badge me-1"></i> Akun
                         </a>
                     @endif
+                    @if(auth()->user()->hasRole(\App\Models\User::ROLE_GURU))
+                        <a href="{{ route('guru.member.dashboard') }}" class="btn btn-outline-primary btn-sm text-nowrap">
+                            <i class="bi bi-person-badge me-1"></i> Profil Saya
+                        </a>
+                    @endif
                 @else
+                    <a href="{{ route('guru.login') }}" class="btn btn-outline-primary btn-sm d-none d-md-inline-flex text-nowrap">
+                        <i class="bi bi-person-workspace me-1"></i> Area Guru
+                    </a>
                     <a href="{{ route('alumni.login') }}" class="btn btn-outline-primary btn-sm d-none d-md-inline-flex text-nowrap">
                         <i class="bi bi-people me-1"></i> Area Alumni
                     </a>

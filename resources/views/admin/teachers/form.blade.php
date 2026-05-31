@@ -5,9 +5,8 @@
 @if($teacher->exists && $teacher->slug)
 <p class="small text-secondary mb-3">Profil publik: <a href="{{ route('guru.show', $teacher) }}" target="_blank">{{ route('guru.show', $teacher) }}</a></p>
 @endif
-<form method="post" action="{{ $teacher->exists ? route('admin.teachers.update', $teacher) : route('admin.teachers.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:760px">
+<form method="post" action="{{ $teacher->exists ? route('admin.teachers.update-file', $teacher) : route('admin.teachers.store') }}" enctype="multipart/form-data" class="card border-0 shadow-sm p-4" style="max-width:760px">
     @csrf
-    @if($teacher->exists) @method('put') @endif
 
     <h6 class="fw-bold text-primary mb-3">Informasi Utama (tampil di profil publik)</h6>
     <div class="row g-2">
@@ -46,9 +45,11 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Foto Guru</label>
-        <input type="file" name="photo" class="form-control" accept="image/*">
+        <input type="file" name="photo" class="form-control @error('photo') is-invalid @enderror" accept="image/jpeg,image/png,image/webp">
+        <div class="form-text">Format: JPG, PNG, WEBP. Maks. 5 MB. Disarankan persegi <strong>400×400 px</strong> atau lebih (rasio 1:1 agar bulat rapi).</div>
+        @error('photo')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         @if($teacher->photo)
-        <img src="{{ asset('storage/'.$teacher->photo) }}" class="img-thumbnail mt-2" style="max-height:120px" alt="">
+        <img src="{{ $teacher->photo_url }}" class="img-thumbnail mt-2" style="max-height:120px;width:120px;height:120px;object-fit:cover;border-radius:50%" alt="">
         @endif
     </div>
 
@@ -94,9 +95,47 @@
         <label class="form-check-label" for="ia">Tampilkan di website</label>
     </div>
 
-    <div class="d-flex gap-2">
+    <hr class="my-4">
+    <h6 class="fw-bold text-secondary mb-3">Akun Login Guru / TU</h6>
+    @if($teacher->user)
+    <div class="alert alert-success small py-2">
+        Terhubung ke akun: <strong>{{ $teacher->user->email }}</strong>
+        <input type="hidden" name="user_id" value="{{ $teacher->user_id }}">
+    </div>
+    @else
+    <div class="mb-2">
+        <label class="form-label">Hubungkan akun yang sudah ada</label>
+        <select name="user_id" class="form-select">
+            <option value="">— Pilih akun role Guru —</option>
+            @foreach($linkableUsers ?? [] as $u)
+            <option value="{{ $u->id }}" @selected(old('user_id')==$u->id)>{{ $u->name }} ({{ $u->email }})</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" name="create_login" value="1" id="create_login" @checked(old('create_login'))>
+        <label class="form-check-label" for="create_login">Buat akun login baru</label>
+    </div>
+    <div id="loginFields" class="row g-2 @unless(old('create_login')) d-none @endunless">
+        <div class="col-md-6">
+            <label class="form-label">Email login</label>
+            <input type="email" name="login_email" class="form-control" value="{{ old('login_email', $teacher->email) }}" placeholder="Default: email sekolah di atas">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Password awal</label>
+            <input type="password" name="login_password" class="form-control" placeholder="Kosongkan = guru123456">
+        </div>
+    </div>
+    @endif
+
+    <div class="d-flex gap-2 mt-3">
         <button class="btn btn-primary">Simpan</button>
         <a href="{{ route('admin.teachers.index') }}" class="btn btn-outline-secondary">Batal</a>
     </div>
 </form>
+<script>
+document.getElementById('create_login')?.addEventListener('change', function () {
+    document.getElementById('loginFields')?.classList.toggle('d-none', !this.checked);
+});
+</script>
 @endsection

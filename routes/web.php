@@ -22,6 +22,7 @@ use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\Auth\AlumniAuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\TeacherAuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\EventController;
@@ -46,6 +47,12 @@ Route::get('/profil/{slug}', [PageController::class, 'show'])->name('profil.show
 Route::get('/jurusan', [MajorController::class, 'index'])->name('jurusan.index');
 Route::get('/jurusan/{major:slug}', [MajorController::class, 'show'])->name('jurusan.show');
 Route::get('/guru', [TeacherController::class, 'index'])->name('guru.index');
+Route::get('/guru/masuk', [TeacherAuthController::class, 'showLogin'])->name('guru.login');
+Route::post('/guru/masuk', [TeacherAuthController::class, 'login'])->name('guru.login.post')->middleware('throttle:6,1');
+Route::middleware(['auth', 'teacher.member'])->group(function () {
+    Route::get('/guru/akun', [TeacherAuthController::class, 'dashboard'])->name('guru.member.dashboard');
+    Route::post('/guru/akun', [TeacherAuthController::class, 'updateProfile'])->name('guru.member.profile.update');
+});
 Route::get('/guru/{teacher:slug}', [TeacherController::class, 'show'])->name('guru.show');
 Route::get('/galeri', [GalleryController::class, 'index'])->name('galeri.index');
 Route::get('/galeri/{album:slug}', [GalleryController::class, 'show'])->name('galeri.show');
@@ -101,6 +108,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
     Route::resource('posts', AdminPost::class)->except('show');
     Route::resource('announcements', AdminAnnouncement::class)->except('show');
     Route::resource('majors', AdminMajor::class)->except('show');
+    Route::get('teachers/export/excel', [AdminTeacher::class, 'exportExcel'])->name('teachers.export.excel');
+    Route::get('teachers/export/template', [AdminTeacher::class, 'exportTemplate'])->name('teachers.export.template');
+    Route::post('teachers/import/excel', [AdminTeacher::class, 'importExcel'])->name('teachers.import.excel');
+    Route::post('teachers/{teacher}', [AdminTeacher::class, 'update'])->name('teachers.update-file');
     Route::resource('teachers', AdminTeacher::class)->except('show');
 
     Route::get('alumni-profiles', [AlumniProfileController::class, 'index'])->name('alumni-profiles.index');
