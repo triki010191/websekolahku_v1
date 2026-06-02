@@ -130,7 +130,7 @@
                         <i class="bi bi-search me-2"></i>Cek Formulir Daftar Ulang
                     </div>
                     <div class="card-body">
-                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan NISN dan No. SPMB Banten untuk melihat dan mengunduh PDF isian formulir.</p>
+                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan NISN dan tanggal lahir untuk melihat dan mengunduh PDF isian formulir.</p>
                         <form method="post" action="{{ route('ppdb.lookup') }}" class="vstack gap-2">
                             @csrf
                             <div>
@@ -139,9 +139,9 @@
                                 @error('nisn')<div class="text-danger small">{{ $message }}</div>@enderror
                             </div>
                             <div>
-                                <label class="form-label small fw-semibold mb-1">No. Pendaftaran SPMB Banten</label>
-                                <input type="text" name="spmb_banten_number" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('spmb_banten_number') is-invalid @enderror" value="{{ old('spmb_banten_number') }}" placeholder="Nomor dari SPMB Prov. Banten" required>
-                                @error('spmb_banten_number')<div class="text-danger small">{{ $message }}</div>@enderror
+                                <label class="form-label small fw-semibold mb-1">Tanggal Lahir</label>
+                                <input type="date" name="birth_date" class="form-control form-control-sm @error('lookup') is-invalid @enderror @error('birth_date') is-invalid @enderror" value="{{ old('birth_date') }}" required>
+                                @error('birth_date')<div class="text-danger small">{{ $message }}</div>@enderror
                             </div>
                             @error('lookup')
                             <div class="alert alert-danger small py-2 mb-0">{{ $message }}</div>

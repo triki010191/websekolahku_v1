@@ -124,25 +124,26 @@ class PpdbController extends Controller
     public function lookup(Request $request): RedirectResponse
     {
         $request->validate([
-            'nisn'               => ['required', 'string', 'size:10'],
-            'spmb_banten_number' => ['required', 'string', 'max:64'],
+            'nisn'       => ['required', 'string', 'size:10'],
+            'birth_date' => ['required', 'date'],
         ], [
-            'nisn.required'               => 'NISN wajib diisi.',
-            'nisn.size'                   => 'NISN harus 10 digit.',
-            'spmb_banten_number.required' => 'No. Pendaftaran SPMB Banten wajib diisi.',
+            'nisn.required'       => 'NISN wajib diisi.',
+            'nisn.size'           => 'NISN harus 10 digit.',
+            'birth_date.required' => 'Tanggal lahir wajib diisi.',
+            'birth_date.date'     => 'Format tanggal lahir tidak valid.',
         ]);
 
         $reg = PpdbRegistration::query()
             ->where('nisn', trim($request->input('nisn')))
-            ->where('spmb_banten_number', trim($request->input('spmb_banten_number')))
+            ->whereDate('birth_date', $request->input('birth_date'))
             ->where('form_status', 'submitted')
             ->first();
 
         if (! $reg) {
             return back()
-                ->withInput($request->only('nisn', 'spmb_banten_number'))
+                ->withInput($request->only('nisn', 'birth_date'))
                 ->withErrors([
-                    'lookup' => 'Data tidak ditemukan. Pastikan NISN dan No. SPMB Banten benar, serta formulir Dapodik sudah dikirim.',
+                    'lookup' => 'Data tidak ditemukan. Pastikan NISN dan tanggal lahir benar, serta formulir Dapodik sudah dikirim.',
                 ]);
         }
 
@@ -162,7 +163,7 @@ class PpdbController extends Controller
 
         if (! $this->canAccessPpdb($reg)) {
             return redirect()->route('spmb.index')
-                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan No. SPMB Banten Anda.');
+                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan tanggal lahir Anda.');
         }
 
         return response()->view('ppdb.success', compact('reg'));
@@ -177,7 +178,7 @@ class PpdbController extends Controller
 
         if (! $this->canAccessPpdb($reg)) {
             return redirect()->route('spmb.index')
-                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan No. SPMB Banten Anda.');
+                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan tanggal lahir Anda.');
         }
 
         $pdf = Pdf::loadView('ppdb.pdf.bukti', compact('reg'))->setPaper('a4');
