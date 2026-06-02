@@ -100,10 +100,21 @@
                 <h2 class="h5 fw-bold mb-3"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota Penerimaan Kelas X — SPMB {{ $yearLabel }}</h2>
                 <div class="row g-3 mb-2">
                     @foreach($majors as $m)
+                    @php
+                        $displayCode = $m->code;
+                        $displayName = $m->name;
+                        if ($m->code === 'AKL') {
+                            $displayCode = 'AK';
+                            $displayName = 'Akuntansi';
+                        } elseif ($m->code === 'TBSM') {
+                            $displayCode = 'TSM';
+                            $displayName = 'Teknik Sepeda Motor';
+                        }
+                    @endphp
                     <div class="col-6 col-md-4 col-lg-3">
                         <div class="card border-0 shadow-sm text-center p-3 h-100">
-                            <div class="fw-bold text-primary">{{ $m->code }}</div>
-                            <div class="small text-secondary mb-1">{{ $m->name }}</div>
+                            <div class="fw-bold text-primary">{{ $displayCode }}</div>
+                            <div class="small text-secondary mb-1">{{ $displayName }}</div>
                             <div class="fs-3 fw-bold">{{ $m->spmb_quota ?? '—' }}</div>
                             <div class="small text-muted">siswa kelas X</div>
                         </div>

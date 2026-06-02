@@ -62,9 +62,8 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('ppdb.*','spmb.*') ? 'active fw-semibold' : '' }}" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
+                    <a class="nav-link dropdown-toggle {{ request()->routeIs('ppdb.*') ? 'active fw-semibold' : '' }}" data-bs-toggle="dropdown" data-bs-offset="0,4" href="#" role="button" aria-expanded="false">Lainnya</a>
                     <ul class="dropdown-menu main-nav__dropdown border-0">
-                        <li><a class="dropdown-item" href="{{ route('spmb.index') }}"><i class="bi bi-info-circle me-1 text-primary"></i> Info SPMB 2026</a></li>
                         @if((bool) setting('ppdb_is_open', false))
                         <li><a class="dropdown-item" href="{{ route('ppdb.create') }}"><i class="bi bi-clipboard-data me-1 text-primary"></i> Formulir Daftar Ulang Dapodik</a></li>
                         @endif
@@ -75,6 +74,11 @@
                         <li><a class="dropdown-item" href="{{ route('faq.index') }}">FAQ</a></li>
                         <li><a class="dropdown-item" href="{{ route('kontak.index') }}">Kontak</a></li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('spmb.*') ? 'active fw-semibold' : '' }}" href="{{ route('spmb.index') }}">
+                        <i class="bi bi-info-circle me-1 text-primary"></i> Info SPMB 2026
+                    </a>
                 </li>
             </ul>
             <div class="d-flex align-items-center flex-wrap gap-2">
