@@ -310,3 +310,17 @@ if (! function_exists('google_maps_embed_url')) {
         return 'https://maps.google.com/maps?q='.$query.'@'.$lat.','.$lng.'&hl=id&z=17&output=embed';
     }
 }
+
+if (! function_exists('major_card_class')) {
+    function major_card_class(string $code): string
+    {
+        return match (strtoupper($code)) {
+            'RPL'  => 'major-card--rpl',
+            'DKV'  => 'major-card--dkv',
+            'TBSM' => 'major-card--tsm',
+            'TITL' => 'major-card--titl',
+            'AKL'  => 'major-card--ak',
+            default => 'major-card--default',
+        };
+    }
+}

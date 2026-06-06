@@ -436,3 +436,69 @@ h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display
 .field-limit-counter { font-size: 0.8125rem; }
 .field-limit-counter.is-near { color: #b45309; }
 .field-limit-counter.is-full { color: #dc2626; font-weight: 600; }
+
+/* Kartu jurusan — warna per kompetensi keahlian */
+.major-card {
+    border: 0;
+    border-radius: 0.75rem;
+    color: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 0.35rem 1rem rgba(15, 23, 42, 0.12);
+}
+.major-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.65rem 1.35rem rgba(15, 23, 42, 0.18);
+}
+.major-card__badge {
+    background: rgba(255, 255, 255, 0.22);
+    color: inherit;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+.major-card__title { color: inherit; }
+.major-card__text { opacity: 0.88; }
+.major-card__btn {
+    border-width: 1.5px;
+    font-weight: 600;
+}
+.major-card:not(.major-card--ak) .major-card__btn {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+}
+.major-card:not(.major-card--ak) .major-card__btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
+    border-color: #fff;
+}
+.major-card--ak .major-card__btn {
+    color: #422006;
+    border-color: #422006;
+    background: rgba(255, 255, 255, 0.35);
+}
+.major-card--ak .major-card__btn:hover {
+    color: #422006;
+    background: rgba(255, 255, 255, 0.55);
+    border-color: #422006;
+}
+.major-card--rpl { background: linear-gradient(155deg, #52525b 0%, #3f3f46 55%, #27272a 100%); }
+.major-card--rpl .major-card__badge,
+.major-card--rpl .major-card__title { color: #f4f4f5; }
+.major-card--rpl .major-card__text { color: #d4d4d8; }
+.major-card--dkv { background: linear-gradient(155deg, #2563eb 0%, #1d4ed8 55%, #1e3a8a 100%); }
+.major-card--dkv .major-card__badge,
+.major-card--dkv .major-card__title { color: #eff6ff; }
+.major-card--dkv .major-card__text { color: #bfdbfe; }
+.major-card--tsm { background: linear-gradient(155deg, #ef4444 0%, #dc2626 55%, #991b1b 100%); }
+.major-card--tsm .major-card__badge,
+.major-card--tsm .major-card__title { color: #fef2f2; }
+.major-card--tsm .major-card__text { color: #fecaca; }
+.major-card--titl { background: linear-gradient(155deg, #22c55e 0%, #16a34a 55%, #14532d 100%); }
+.major-card--titl .major-card__badge,
+.major-card--titl .major-card__title { color: #f0fdf4; }
+.major-card--titl .major-card__text { color: #bbf7d0; }
+.major-card--ak { background: linear-gradient(155deg, #facc15 0%, #eab308 45%, #a16207 100%); }
+.major-card--ak .major-card__badge,
+.major-card--ak .major-card__title { color: #422006; }
+.major-card--ak .major-card__text { color: #713f12; }
+.major-card--default { background: linear-gradient(155deg, #64748b 0%, #475569 100%); color: #f8fafc; }

@@ -6,12 +6,12 @@
     <div class="row g-4">
         @foreach($majors as $m)
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <span class="badge bg-primary">{{ $m->code }}</span>
-                    <h5 class="mt-2 fw-bold">{{ $m->name }}</h5>
-                    <p class="text-secondary small">{{ \Illuminate\Support\Str::limit(strip_tags($m->description), 120) }}</p>
-                    <a href="{{ route('jurusan.show', $m) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+            <div class="card h-100 major-card {{ major_card_class($m->code) }}">
+                <div class="card-body d-flex flex-column">
+                    <span class="badge major-card__badge align-self-start">{{ $m->code }}</span>
+                    <h5 class="mt-2 fw-bold major-card__title">{{ $m->name }}</h5>
+                    <p class="small major-card__text flex-grow-1">{{ \Illuminate\Support\Str::limit(strip_tags($m->description), 120) }}</p>
+                    <a href="{{ route('jurusan.show', $m) }}" class="btn btn-sm major-card__btn align-self-start">Detail</a>
                 </div>
             </div>
         </div>

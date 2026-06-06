@@ -110,21 +110,14 @@
                             $displayCode = 'TSM';
                             $displayName = 'Teknik Sepeda Motor';
                         }
-                        $quotaClass = match ($m->code) {
-                            'RPL'  => 'quota-card--rpl',
-                            'DKV'  => 'quota-card--dkv',
-                            'TBSM' => 'quota-card--tsm',
-                            'TITL' => 'quota-card--titl',
-                            'AKL'  => 'quota-card--ak',
-                            default => 'quota-card--default',
-                        };
+                        $quotaClass = major_card_class($m->code);
                     @endphp
                     <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card border-0 shadow-sm text-center p-3 h-100 quota-card {{ $quotaClass }}">
-                            <div class="fw-bold quota-card__code">{{ $displayCode }}</div>
-                            <div class="small quota-card__name mb-1">{{ $displayName }}</div>
-                            <div class="fs-3 fw-bold quota-card__number">{{ $m->spmb_quota ?? '—' }}</div>
-                            <div class="small quota-card__hint">siswa kelas X</div>
+                        <div class="card border-0 shadow-sm text-center p-3 h-100 major-card {{ $quotaClass }}">
+                            <div class="fw-bold major-card__badge d-inline-block px-2 py-1 rounded mb-1">{{ $displayCode }}</div>
+                            <div class="small major-card__text mb-1">{{ $displayName }}</div>
+                            <div class="fs-3 fw-bold major-card__title">{{ $m->spmb_quota ?? '—' }}</div>
+                            <div class="small major-card__text">siswa kelas X</div>
                         </div>
                     </div>
                     @endforeach
@@ -211,28 +204,6 @@
 @push('styles')
 <style>
 .prose img{max-width:100%;height:auto;border-radius:.5rem}
-.quota-card{border:0;border-radius:.75rem;color:#fff;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 .35rem 1rem rgba(15,23,42,.12)}
-.quota-card:hover{transform:translateY(-3px);box-shadow:0 .65rem 1.35rem rgba(15,23,42,.18)}
-.quota-card__code{font-size:1.15rem;letter-spacing:.04em}
-.quota-card__name{opacity:.92}
-.quota-card__hint{opacity:.78}
-.quota-card__number{line-height:1.1;margin:.35rem 0}
-.quota-card--rpl{background:linear-gradient(155deg,#52525b 0%,#3f3f46 55%,#27272a 100%)}
-.quota-card--rpl .quota-card__code,.quota-card--rpl .quota-card__number{color:#f4f4f5}
-.quota-card--rpl .quota-card__name,.quota-card--rpl .quota-card__hint{color:#d4d4d8}
-.quota-card--dkv{background:linear-gradient(155deg,#2563eb 0%,#1d4ed8 55%,#1e3a8a 100%)}
-.quota-card--dkv .quota-card__code,.quota-card--dkv .quota-card__number{color:#eff6ff}
-.quota-card--dkv .quota-card__name,.quota-card--dkv .quota-card__hint{color:#bfdbfe}
-.quota-card--tsm{background:linear-gradient(155deg,#ef4444 0%,#dc2626 55%,#991b1b 100%)}
-.quota-card--tsm .quota-card__code,.quota-card--tsm .quota-card__number{color:#fef2f2}
-.quota-card--tsm .quota-card__name,.quota-card--tsm .quota-card__hint{color:#fecaca}
-.quota-card--titl{background:linear-gradient(155deg,#22c55e 0%,#16a34a 55%,#14532d 100%)}
-.quota-card--titl .quota-card__code,.quota-card--titl .quota-card__number{color:#f0fdf4}
-.quota-card--titl .quota-card__name,.quota-card--titl .quota-card__hint{color:#bbf7d0}
-.quota-card--ak{background:linear-gradient(155deg,#facc15 0%,#eab308 45%,#a16207 100%)}
-.quota-card--ak .quota-card__code,.quota-card--ak .quota-card__number{color:#422006}
-.quota-card--ak .quota-card__name,.quota-card--ak .quota-card__hint{color:#713f12}
-.quota-card--default{background:linear-gradient(155deg,#64748b 0%,#475569 100%);color:#f8fafc}
 .spmb-hero{min-height:min(52vw,320px)}
 .spmb-hero__bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
 .spmb-hero__overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,.72) 38%,rgba(29,78,216,.35) 68%,rgba(29,78,216,.12) 100%)}
