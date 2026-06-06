@@ -15,8 +15,7 @@ class TeacherController extends Controller
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->paginate(12)
-            ->withQueryString();
+            ->get();
 
         $fields = Teacher::where('is_active', true)->whereNotNull('field')->distinct()->orderBy('field')->pluck('field');
 
