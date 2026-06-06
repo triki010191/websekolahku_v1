@@ -73,4 +73,7 @@ done
 echo ""
 echo "==> Cek asset statis (harus ada file):"
 ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" "$WEB/images/banner-spmb-sekolah.jpg" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
+echo ""
+echo "==> PENTING: css/js/images disalin ke public_html. Tanpa script ini, git pull saja"
+echo "    TIDAK memperbarui /css/app.css — tampilan bisa tampak lama/putih."
 echo "Jalankan juga: cd $REPO && php artisan optimize:clear && php artisan optimize"
