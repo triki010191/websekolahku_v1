@@ -164,17 +164,56 @@
         return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
+    function fieldLabel(el) {
+        const wrap = el.closest('.col-12, [class*="col-md-"], [class*="col-lg-"]');
+        const label = wrap?.querySelector('.form-label')?.textContent || el.name || 'Field ini';
+        return label.replace(/\s*\*\s*$/, '').trim();
+    }
+
+    function showRequiredWarning(label) {
+        window.alert(`${label} wajib diisi sebelum lanjut ke tahap berikutnya.`);
+    }
+
+    function markInvalid(el) {
+        el.focus();
+        el.classList.add('is-invalid');
+    }
+
     function validateCurrent() {
         const current = form.querySelector(`.wizard-step[data-step="${step}"]`);
         if (!current) return true;
         const required = current.querySelectorAll('[required]');
         for (const el of required) {
             if (!el.value.trim()) {
-                el.focus();
-                el.classList.add('is-invalid');
+                markInvalid(el);
+                showRequiredWarning(fieldLabel(el));
                 return false;
             }
             el.classList.remove('is-invalid');
+        }
+        const conditionalRequired = current.querySelectorAll('[data-required-if]');
+        for (const el of conditionalRequired) {
+            const [field, expectedValue] = (el.dataset.requiredIf || '').split(':');
+            const trigger = field ? form.querySelector(`[name="${field}"]`) : null;
+            if (trigger?.value === expectedValue && !el.value.trim()) {
+                markInvalid(el);
+                showRequiredWarning(fieldLabel(el));
+                return false;
+            }
+            el.classList.remove('is-invalid');
+        }
+        const requiredGroups = current.querySelectorAll('[data-required-group]');
+        for (const group of requiredGroups) {
+            const name = group.dataset.requiredGroup;
+            const checked = name ? group.querySelectorAll(`[name="${name}"]:checked`).length : 0;
+            if (!checked) {
+                const first = name ? group.querySelector(`[name="${name}"]`) : null;
+                first?.focus();
+                group.classList.add('border', 'border-danger', 'rounded', 'p-2');
+                showRequiredWarning(group.dataset.requiredLabel || 'Pilihan ini');
+                return false;
+            }
+            group.classList.remove('border', 'border-danger', 'rounded', 'p-2');
         }
         return true;
     }

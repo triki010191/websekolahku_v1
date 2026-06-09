@@ -73,7 +73,11 @@ class PpdbController extends Controller
             $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
         }
 
-        $request->validate($this->service->rules(submit: false, exceptId: $draftId), $this->service->messages());
+        $request->validate(
+            $this->service->rules(submit: false, exceptId: $draftId),
+            $this->service->messages(),
+            $this->service->attributes()
+        );
 
         $reg = $this->service->saveDraft($request);
 
@@ -97,7 +101,11 @@ class PpdbController extends Controller
             $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
         }
 
-        $request->validate($this->service->rules(submit: true, exceptId: $draftId), $this->service->messages());
+        $request->validate(
+            $this->service->rules(submit: true, exceptId: $draftId),
+            $this->service->messages(),
+            $this->service->attributes()
+        );
 
         if (! $request->boolean('data_declaration') && $request->input('data_declaration') !== '1') {
             throw ValidationException::withMessages([

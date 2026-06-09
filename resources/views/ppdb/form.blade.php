@@ -71,30 +71,30 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         <h5 class="fw-bold mb-3">1. Data Pribadi</h5>
         <h6 class="text-secondary">Identitas Siswa</h6>
         <div class="row g-2">
-            <div class="col-md-8"><label class="form-label">Nama Lengkap *</label><input class="form-control" name="full_name" value="{{ $val('full_name') }}"></div>
+            <div class="col-md-8"><label class="form-label">Nama Lengkap *</label><input class="form-control" name="full_name" value="{{ $val('full_name') }}" required></div>
             <div class="col-md-4"><label class="form-label">Jenis Kelamin *</label>
-                <select name="gender" class="form-select"><option value="">—</option>
+                <select name="gender" class="form-select" required><option value="">—</option>
                     <option value="L" @selected($val('gender')==='L')>Laki-laki</option>
                     <option value="P" @selected($val('gender')==='P')>Perempuan</option>
                 </select>
             </div>
-            <div class="col-md-4"><label class="form-label">NISN *</label><input class="form-control" name="nisn" maxlength="10" value="{{ $val('nisn') }}">@error('nisn')<div class="text-danger small">{{ $message }}</div>@enderror</div>
-            <div class="col-md-4"><label class="form-label">NIK / No KITAS</label><input class="form-control" name="nik" value="{{ $val('nik') }}"></div>
-            <div class="col-md-4"><label class="form-label">Tempat Lahir</label><input class="form-control" name="birth_place" value="{{ $val('birth_place') }}"></div>
-            <div class="col-md-4"><label class="form-label">Tanggal Lahir</label><input type="date" class="form-control" name="birth_date" value="{{ $val('birth_date') }}"></div>
+            <div class="col-md-4"><label class="form-label">NISN *</label><input class="form-control" name="nisn" maxlength="10" value="{{ $val('nisn') }}" required>@error('nisn')<div class="text-danger small">{{ $message }}</div>@enderror</div>
+            <div class="col-md-4"><label class="form-label">NIK / No KITAS *</label><input class="form-control" name="nik" value="{{ $val('nik') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Tempat Lahir *</label><input class="form-control" name="birth_place" value="{{ $val('birth_place') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Tanggal Lahir *</label><input type="date" class="form-control" name="birth_date" value="{{ $val('birth_date') }}" required></div>
             <div class="col-md-4"><label class="form-label">No. Registrasi Akta Kelahiran</label><input class="form-control" name="birth_cert_number" value="{{ $val('birth_cert_number') }}"></div>
-            <div class="col-md-4"><label class="form-label">Agama / Kepercayaan</label>
-                <select name="religion" class="form-select"><option value="">—</option>
+            <div class="col-md-4"><label class="form-label">Agama / Kepercayaan *</label>
+                <select name="religion" class="form-select" required><option value="">—</option>
                     @foreach(O::religions() as $r)<option value="{{ $r }}" @selected($val('religion')===$r)>{{ $r }}</option>@endforeach
                 </select>
             </div>
-            <div class="col-md-4"><label class="form-label">Kewarganegaraan</label>
-                <select name="citizenship" class="form-select" id="citizenship"><option value="">—</option>
+            <div class="col-md-4"><label class="form-label">Kewarganegaraan *</label>
+                <select name="citizenship" class="form-select" id="citizenship" required><option value="">—</option>
                     @foreach(O::citizenships() as $k=>$v)<option value="{{ $k }}" @selected($val('citizenship')===$k)>{{ $v }}</option>@endforeach
                 </select>
             </div>
-            <div class="col-md-4" id="countryWrap"><label class="form-label">Nama Negara (WNA)</label><input class="form-control" name="country_name" value="{{ $val('country_name') }}"></div>
-            <div class="col-12"><label class="form-label">Berkebutuhan Khusus</label>
+            <div class="col-md-4" id="countryWrap"><label class="form-label">Nama Negara (WNA) *</label><input class="form-control" name="country_name" value="{{ $val('country_name') }}" data-required-if="citizenship:WNA"></div>
+            <div class="col-12" data-required-group="special_needs[]" data-required-label="Berkebutuhan Khusus"><label class="form-label">Berkebutuhan Khusus *</label>
                 <div class="row g-1">@foreach(O::specialNeeds() as $sn)
                     <div class="col-md-4 col-lg-3"><label class="form-check small"><input type="checkbox" class="form-check-input" name="special_needs[]" value="{{ $sn }}" @checked(in_array($sn, $valArr('special_needs')))> {{ $sn }}</label></div>
                 @endforeach</div>
@@ -103,20 +103,20 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         <hr>
         <h6 class="text-secondary">Alamat Tempat Tinggal</h6>
         <div class="row g-2">
-            <div class="col-12"><label class="form-label">Alamat Jalan</label><textarea name="address" class="form-control" rows="2">{{ $val('address') }}</textarea></div>
-            <div class="col-md-2"><label class="form-label">RT</label><input class="form-control" name="rt" value="{{ $val('rt') }}"></div>
-            <div class="col-md-2"><label class="form-label">RW</label><input class="form-control" name="rw" value="{{ $val('rw') }}"></div>
-            <div class="col-md-4"><label class="form-label">Nama Dusun</label><input class="form-control" name="hamlet" value="{{ $val('hamlet') }}"></div>
-            <div class="col-md-4"><label class="form-label">Kelurahan / Desa</label><input class="form-control" name="village" value="{{ $val('village') }}"></div>
-            <div class="col-md-4"><label class="form-label">Kecamatan</label><input class="form-control" name="district" value="{{ $val('district') }}"></div>
-            <div class="col-md-4"><label class="form-label">Kode Pos</label><input class="form-control" name="postal_code" value="{{ $val('postal_code') }}"></div>
+            <div class="col-12"><label class="form-label">Alamat Jalan *</label><textarea name="address" class="form-control" rows="2" required>{{ $val('address') }}</textarea></div>
+            <div class="col-md-2"><label class="form-label">RT *</label><input class="form-control" name="rt" value="{{ $val('rt') }}" required></div>
+            <div class="col-md-2"><label class="form-label">RW *</label><input class="form-control" name="rw" value="{{ $val('rw') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Nama Dusun / Kampung *</label><input class="form-control" name="hamlet" value="{{ $val('hamlet') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Kelurahan / Desa *</label><input class="form-control" name="village" value="{{ $val('village') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Kecamatan *</label><input class="form-control" name="district" value="{{ $val('district') }}" required></div>
+            <div class="col-md-4"><label class="form-label">Kode Pos *</label><input class="form-control" name="postal_code" value="{{ $val('postal_code') }}" required></div>
             <div class="col-md-4"><label class="form-label">Latitude</label><input class="form-control" name="latitude" value="{{ $val('latitude') }}"></div>
             <div class="col-md-4"><label class="form-label">Longitude</label><input class="form-control" name="longitude" value="{{ $val('longitude') }}"></div>
         </div>
         <hr>
         <div class="row g-2">
-            <div class="col-md-6"><label class="form-label">Tempat Tinggal</label><select name="residence_type" class="form-select"><option value="">—</option>@foreach(O::residenceTypes() as $t)<option value="{{ $t }}" @selected($val('residence_type')===$t)>{{ $t }}</option>@endforeach</select></div>
-            <div class="col-md-6"><label class="form-label">Moda Transportasi ke Sekolah</label><select name="transport_mode" class="form-select"><option value="">—</option>@foreach(O::transportModes() as $t)<option value="{{ $t }}" @selected($val('transport_mode')===$t)>{{ $t }}</option>@endforeach</select></div>
+            <div class="col-md-6"><label class="form-label">Tempat Tinggal *</label><select name="residence_type" class="form-select" required><option value="">—</option>@foreach(O::residenceTypes() as $t)<option value="{{ $t }}" @selected($val('residence_type')===$t)>{{ $t }}</option>@endforeach</select></div>
+            <div class="col-md-6"><label class="form-label">Moda Transportasi ke Sekolah *</label><select name="transport_mode" class="form-select" required><option value="">—</option>@foreach(O::transportModes() as $t)<option value="{{ $t }}" @selected($val('transport_mode')===$t)>{{ $t }}</option>@endforeach</select></div>
         </div>
         <hr>
         <h6 class="text-secondary">Program Bantuan Sosial</h6>
@@ -146,13 +146,13 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     <div class="wizard-step card border-0 shadow-sm p-4 mb-3 d-none" data-step="{{ $prefix==='father'?2:3 }}">
         <h5 class="fw-bold mb-3">{{ $prefix==='father'?2:3 }}. Data {{ $label }}</h5>
         <div class="row g-2">
-            <div class="col-md-6"><label class="form-label">Nama {{ $label }}</label><input class="form-control" name="{{ $prefix }}_name" value="{{ $val("{$prefix}_name") }}"></div>
-            <div class="col-md-6"><label class="form-label">NIK</label><input class="form-control" name="{{ $prefix }}_nik" value="{{ $val("{$prefix}_nik") }}"></div>
-            <div class="col-md-4"><label class="form-label">Tahun Lahir</label><input type="number" class="form-control" name="{{ $prefix }}_birth_year" value="{{ $val("{$prefix}_birth_year") }}"></div>
-            <div class="col-md-4"><label class="form-label">Pendidikan Terakhir</label><select name="{{ $prefix }}_education" class="form-select"><option value="">—</option>@foreach(O::educations() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_education")===$e)>{{ $e }}</option>@endforeach</select></div>
-            <div class="col-md-4"><label class="form-label">Pekerjaan</label><select name="{{ $prefix }}_job" class="form-select"><option value="">—</option>@foreach(O::occupations() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_job")===$e)>{{ $e }}</option>@endforeach</select></div>
-            <div class="col-md-6"><label class="form-label">Penghasilan Bulanan</label><select name="{{ $prefix }}_income" class="form-select"><option value="">—</option>@foreach(O::incomes() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_income")===$e)>{{ $e }}</option>@endforeach</select></div>
-            <div class="col-12"><label class="form-label">Berkebutuhan Khusus</label>
+            <div class="col-md-6"><label class="form-label">Nama {{ $label }} *</label><input class="form-control" name="{{ $prefix }}_name" value="{{ $val("{$prefix}_name") }}" required></div>
+            <div class="col-md-6"><label class="form-label">NIK *</label><input class="form-control" name="{{ $prefix }}_nik" value="{{ $val("{$prefix}_nik") }}" required></div>
+            <div class="col-md-4"><label class="form-label">Tahun Lahir *</label><input type="number" class="form-control" name="{{ $prefix }}_birth_year" value="{{ $val("{$prefix}_birth_year") }}" required></div>
+            <div class="col-md-4"><label class="form-label">Pendidikan Terakhir *</label><select name="{{ $prefix }}_education" class="form-select" required><option value="">—</option>@foreach(O::educations() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_education")===$e)>{{ $e }}</option>@endforeach</select></div>
+            <div class="col-md-4"><label class="form-label">Pekerjaan *</label><select name="{{ $prefix }}_job" class="form-select" required><option value="">—</option>@foreach(O::occupations() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_job")===$e)>{{ $e }}</option>@endforeach</select></div>
+            <div class="col-md-6"><label class="form-label">Penghasilan Bulanan *</label><select name="{{ $prefix }}_income" class="form-select" required><option value="">—</option>@foreach(O::incomes() as $e)<option value="{{ $e }}" @selected($val("{$prefix}_income")===$e)>{{ $e }}</option>@endforeach</select></div>
+            <div class="col-12" data-required-group="{{ $prefix }}_special_needs[]" data-required-label="Berkebutuhan Khusus {{ $label }}"><label class="form-label">Berkebutuhan Khusus *</label>
                 <div class="row g-1">@foreach(O::specialNeeds() as $sn)
                     <div class="col-md-4 col-lg-3"><label class="form-check small"><input type="checkbox" class="form-check-input" name="{{ $prefix }}_special_needs[]" value="{{ $sn }}" @checked(in_array($sn, $valArr("{$prefix}_special_needs"))) > {{ $sn }}</label></div>
                 @endforeach</div>
@@ -178,7 +178,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         <h5 class="fw-bold mb-3">5. Data Kontak</h5>
         <div class="row g-2">
             <div class="col-md-4"><label class="form-label">Telepon Rumah</label><input class="form-control" name="home_phone" value="{{ $val('home_phone') }}"></div>
-            <div class="col-md-4"><label class="form-label">Nomor Handphone</label><input class="form-control" name="phone" value="{{ $val('phone') }}"></div>
+            <div class="col-md-4"><label class="form-label">Nomor Handphone *</label><input class="form-control" name="phone" value="{{ $val('phone') }}" required></div>
             <div class="col-md-4"><label class="form-label">Email</label><input type="email" class="form-control" name="email" value="{{ $val('email') }}"></div>
         </div>
     </div>
@@ -187,9 +187,9 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     <div class="wizard-step card border-0 shadow-sm p-4 mb-3 d-none" data-step="6">
         <h5 class="fw-bold mb-3">6. Data Periodik</h5>
         <div class="row g-2">
-            <div class="col-md-3"><label class="form-label">Tinggi Badan (cm)</label><input type="number" class="form-control" name="height_cm" value="{{ $val('height_cm') }}"></div>
-            <div class="col-md-3"><label class="form-label">Berat Badan (kg)</label><input type="number" class="form-control" name="weight_kg" value="{{ $val('weight_kg') }}"></div>
-            <div class="col-md-6"><label class="form-label">Jarak Tempat Tinggal ke Sekolah</label><select name="distance_category" class="form-select"><option value="">—</option>@foreach(O::distanceCategories() as $t)<option value="{{ $t }}" @selected($val('distance_category')===$t)>{{ $t }}</option>@endforeach</select></div>
+            <div class="col-md-3"><label class="form-label">Tinggi Badan (cm) *</label><input type="number" class="form-control" name="height_cm" value="{{ $val('height_cm') }}" required></div>
+            <div class="col-md-3"><label class="form-label">Berat Badan (kg) *</label><input type="number" class="form-control" name="weight_kg" value="{{ $val('weight_kg') }}" required></div>
+            <div class="col-md-6"><label class="form-label">Jarak Tempat Tinggal ke Sekolah *</label><select name="distance_category" class="form-select" required><option value="">—</option>@foreach(O::distanceCategories() as $t)<option value="{{ $t }}" @selected($val('distance_category')===$t)>{{ $t }}</option>@endforeach</select></div>
             <div class="col-md-3"><label class="form-label">Jarak Aktual (km)</label><input type="number" step="0.1" class="form-control" name="distance_km" value="{{ $val('distance_km') }}"></div>
             <div class="col-md-3"><label class="form-label">Waktu Tempuh (Jam)</label><input type="number" min="0" max="23" class="form-control" name="travel_hours" value="{{ $val('travel_hours') }}"></div>
             <div class="col-md-3"><label class="form-label">Waktu Tempuh (Menit)</label><input type="number" min="0" max="59" class="form-control" name="travel_minutes" value="{{ $val('travel_minutes') }}"></div>
@@ -242,16 +242,16 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         <h5 class="fw-bold mb-3">9. Data Registrasi Peserta Didik</h5>
         <div class="row g-2">
             <div class="col-md-6"><label class="form-label">Kompetensi Keahlian *</label>
-                <select name="major_id" class="form-select"><option value="">Pilih jurusan</option>
+                <select name="major_id" class="form-select" required><option value="">Pilih jurusan</option>
                     @foreach($majors as $m)<option value="{{ $m->id }}" @selected((string)$val('major_id')===(string)$m->id)>{{ $m->name }}</option>@endforeach
                 </select>@error('major_id')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-6"><label class="form-label">Jenis Pendaftaran *</label>
-                <select name="registration_type" class="form-select"><option value="">—</option>@foreach(O::registrationTypes() as $k=>$v)<option value="{{ $k }}" @selected($val('registration_type')===$k)>{{ $v }}</option>@endforeach</select>
+                <select name="registration_type" class="form-select" required><option value="">—</option>@foreach(O::registrationTypes() as $k=>$v)<option value="{{ $k }}" @selected($val('registration_type')===$k)>{{ $v }}</option>@endforeach</select>
             </div>
-            <div class="col-md-4"><label class="form-label">NIS</label><input class="form-control" name="nis" value="{{ $val('nis') }}"></div>
+            <div class="col-md-4"><label class="form-label">NIS *</label><input class="form-control" name="nis" value="{{ $val('nis') }}" required></div>
             <div class="col-md-4"><label class="form-label">Tanggal Masuk Sekolah</label><input type="date" class="form-control" name="school_entry_date" value="{{ $val('school_entry_date') }}"></div>
-            <div class="col-md-4"><label class="form-label">Asal Sekolah *</label><input class="form-control" name="previous_school" value="{{ $val('previous_school') }}"></div>
+            <div class="col-md-4"><label class="form-label">Asal Sekolah *</label><input class="form-control" name="previous_school" value="{{ $val('previous_school') }}" required></div>
             <div class="col-md-4"><label class="form-label">Nomor Peserta Ujian</label><input class="form-control" name="exam_number" value="{{ $val('exam_number') }}"></div>
             <div class="col-md-4"><label class="form-label">Nomor Seri Ijazah</label><input class="form-control" name="diploma_serial" value="{{ $val('diploma_serial') }}"></div>
             <div class="col-md-4"><label class="form-label">Nomor Seri SKHUS/SKHUN</label><input class="form-control" name="skhus_serial" value="{{ $val('skhus_serial') }}"></div>
