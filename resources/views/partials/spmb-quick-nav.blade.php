@@ -30,6 +30,13 @@
             'color' => 'success',
         ],
         [
+            'label' => 'Panduan Dapodik',
+            'desc'  => 'Petunjuk pengisian & solusi masalah umum',
+            'icon'  => 'bi-book',
+            'href'  => $spmbUrl('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik'),
+            'color' => 'success',
+        ],
+        [
             'label' => 'Jadwal & Persyaratan Pendaftaran',
             'desc'  => 'Syarat dan ketentuan pendaftaran SPMB',
             'icon'  => 'bi-file-earmark-text',

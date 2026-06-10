@@ -47,16 +47,21 @@
 </section>
 @endif
 
-@if($isOpen)
 <section class="py-4 border-bottom bg-white">
     <div class="container text-center">
+        @if($isOpen)
         <a href="{{ route('ppdb.create') }}" class="btn btn-primary btn-lg px-5 py-3 shadow-sm spmb-cta-dapodik">
             <i class="bi bi-clipboard-data me-2"></i> Isi Formulir Dapodik
         </a>
-        <p class="small text-secondary mt-2 mb-0">Klik tombol di atas untuk mengisi formulir Dapodik secara online.</p>
+        <p class="small text-secondary mt-2 mb-2">Klik tombol di atas untuk mengisi formulir Dapodik secara online.</p>
+        @else
+        <p class="text-secondary mb-2">Pengisian formulir Dapodik saat ini ditutup. Pantau jadwal di bawah untuk pembukaan berikutnya.</p>
+        @endif
+        <a href="{{ route('spmb.panduan-dapodik') }}" class="btn btn-outline-success btn-sm">
+            <i class="bi bi-book me-1"></i> Baca Panduan Pengisian Dapodik
+        </a>
     </div>
 </section>
-@endif
 
 <section class="py-5 bg-body-tertiary border-bottom">
     <div class="container">
@@ -146,7 +151,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm mb-3">
+                <div id="cek-formulir-spmb" class="card border-0 shadow-sm mb-3 scroll-margin-top">
                     <div class="card-header bg-primary text-white fw-bold">
                         <i class="bi bi-search me-2"></i>Cek Formulir Pendaftaran
                     </div>
@@ -201,7 +206,7 @@
                 <div class="card border-0 shadow-sm mt-3">
                     <div class="card-body">
                         <h3 class="h6 fw-bold">Butuh bantuan?</h3>
-                        <p class="small text-secondary mb-2">Hubungi panitia SPMB:</p>
+                        <p class="small text-secondary mb-2">Baca <a href="{{ route('spmb.panduan-dapodik') }}#masalah">panduan troubleshooting</a> atau hubungi panitia SPMB:</p>
                         <ul class="list-unstyled small mb-0">
                             @if(setting('contact_ppdb'))
                             <li class="mb-1"><i class="bi bi-envelope me-1"></i> {{ setting('contact_ppdb') }}</li>

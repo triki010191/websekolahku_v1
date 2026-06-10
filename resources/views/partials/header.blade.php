@@ -67,6 +67,7 @@
                         @if((bool) setting('ppdb_is_open', false))
                         <li><a class="dropdown-item" href="{{ route('ppdb.create') }}"><i class="bi bi-clipboard-data me-1 text-primary"></i> Formulir Daftar Ulang Dapodik</a></li>
                         @endif
+                        <li><a class="dropdown-item" href="{{ route('spmb.panduan-dapodik') }}"><i class="bi bi-book me-1 text-success"></i> Panduan Formulir Dapodik</a></li>
                         <li><a class="dropdown-item" href="{{ route('fasilitas.index') }}">Fasilitas</a></li>
                         <li><a class="dropdown-item" href="{{ route('ekstrakurikuler.index') }}">Ekstrakurikuler</a></li>
                         <li><a class="dropdown-item" href="{{ route('alumni.index') }}">Alumni</a></li>

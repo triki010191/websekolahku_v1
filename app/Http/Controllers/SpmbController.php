@@ -51,4 +51,11 @@ class SpmbController extends Controller
     {
         return view('spmb.daftar-ulang');
     }
+
+    public function panduanDapodik()
+    {
+        $isOpen = (bool) setting('ppdb_is_open', false);
+
+        return view('spmb.panduan-dapodik', compact('isOpen'));
+    }
 }
