@@ -1,15 +1,44 @@
 # Deploy ke Hosting (cPanel)
 
+## Folder mana yang dipakai Laravel?
+
+Di banyak hosting, **document root** = `~/public_html`, tetapi kode Laravel jalan dari **`~/repositories/websekolahku_v1`**.
+
+Cek isi `~/public_html/index.php` — jika ada path `repositories/websekolahku_v1`, maka perintah `php artisan` **wajib** dijalankan di folder repository, bukan di `public_html`.
+
+```bash
+# Cek Laravel root dari index.php
+head -25 ~/public_html/index.php
+```
+
 ## Setelah git pull
 
 ```bash
 cd ~/repositories/websekolahku_v1
+git pull origin main
 php composer.phar install --no-dev --no-scripts
 php artisan migrate --force
 bash deploy/setup-public-html.sh
 php artisan optimize:clear
 php artisan optimize
 ```
+
+Jika repo Anda memang di `public_html` (full Laravel di situ), ganti `cd` ke `~/public_html`.
+
+## Halaman SPMB 404 (mis. `/spmb-2026/panduan-dapodik`)
+
+Biasanya **route cache lama** di folder Laravel root yang salah.
+
+```bash
+cd ~/repositories/websekolahku_v1   # sesuaikan dengan Laravel root Anda
+grep panduan-dapodik routes/web.php
+php artisan route:list | grep spmb
+rm -f bootstrap/cache/routes-v7.php
+php artisan route:clear
+php artisan optimize:clear
+```
+
+Ulangi perintah yang sama di `~/public_html` jika di sana juga ada instalasi Laravel.
 
 ## Gambar tidak muncul?
 

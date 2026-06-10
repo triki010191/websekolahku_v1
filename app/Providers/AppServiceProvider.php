@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\SpmbController;
 use App\Models\Major;
 use App\Models\Post;
 use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -44,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->ensureViewCompiledPathExists();
         $this->ensurePublicStorageLink();
+        $this->registerMissingSpmbRoutes();
 
         Gate::policy(Post::class, PostPolicy::class);
 
@@ -83,6 +86,31 @@ class AppServiceProvider extends ServiceProvider
             }
         } catch (\Throwable) {
             // Abaikan: Windows tanpa izin symlink, dll.
+        }
+    }
+
+    /**
+     * Cadangan jika route cache di hosting belum di-refresh setelah deploy
+     * (sering terjadi bila artisan dijalankan di folder berbeda dari Laravel root).
+     */
+    private function registerMissingSpmbRoutes(): void
+    {
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
+        $routes = [
+            'spmb.tes-bakat-minat'  => ['uri' => '/spmb-2026/tes-bakat-minat', 'action' => 'tesBakatMinat'],
+            'spmb.daftar-ulang'     => ['uri' => '/spmb-2026/daftar-ulang', 'action' => 'daftarUlang'],
+            'spmb.panduan-dapodik'  => ['uri' => '/spmb-2026/panduan-dapodik', 'action' => 'panduanDapodik'],
+        ];
+
+        foreach ($routes as $name => $config) {
+            if (Route::has($name)) {
+                continue;
+            }
+
+            Route::get($config['uri'], [SpmbController::class, $config['action']])->name($name);
         }
     }
 }
