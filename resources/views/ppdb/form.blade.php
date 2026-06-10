@@ -13,10 +13,10 @@ $achievements = old('achievements', $d?->achievements ?? [[]]);
 $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 @endphp
 @extends('layouts.app')
-@section('title', 'Formulir Daftar Ulang Dapodik — '.config('app.name'))
+@section('title', 'Formulir Dapodik — '.config('app.name'))
 @section('content')
 <section class="page-hero"><div class="container">
-    <h1 class="display-6 fw-bold">Formulir Daftar Ulang Dapodik</h1>
+    <h1 class="display-6 fw-bold">Formulir Dapodik</h1>
     <p class="mb-2 opacity-75">Lengkapi data sesuai format Dapodik — SPMB {{ setting('ppdb_year', '2026/2027') }}</p>
     <a href="{{ spmb_route('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik') }}" class="btn btn-sm btn-outline-light">
         <i class="bi bi-book me-1"></i> Panduan Pengisian &amp; Troubleshooting
