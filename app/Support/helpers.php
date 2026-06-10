@@ -324,3 +324,15 @@ if (! function_exists('major_card_class')) {
         };
     }
 }
+
+if (! function_exists('spmb_route')) {
+    /** URL rute SPMB dengan fallback path jika rute belum terdaftar (mis. cache route lama). */
+    function spmb_route(string $name, string $fallbackPath, string $fragment = ''): string
+    {
+        $base = \Illuminate\Support\Facades\Route::has($name)
+            ? route($name)
+            : url($fallbackPath);
+
+        return $fragment !== '' ? $base.$fragment : $base;
+    }
+}

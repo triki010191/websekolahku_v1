@@ -57,7 +57,7 @@
         @else
         <p class="text-secondary mb-2">Pengisian formulir Dapodik saat ini ditutup. Pantau jadwal di bawah untuk pembukaan berikutnya.</p>
         @endif
-        <a href="{{ route('spmb.panduan-dapodik') }}" class="btn btn-outline-success btn-sm">
+        <a href="{{ spmb_route('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik') }}" class="btn btn-outline-success btn-sm">
             <i class="bi bi-book me-1"></i> Baca Panduan Pengisian Dapodik
         </a>
     </div>
@@ -206,7 +206,7 @@
                 <div class="card border-0 shadow-sm mt-3">
                     <div class="card-body">
                         <h3 class="h6 fw-bold">Butuh bantuan?</h3>
-                        <p class="small text-secondary mb-2">Baca <a href="{{ route('spmb.panduan-dapodik') }}#masalah">panduan troubleshooting</a> atau hubungi panitia SPMB:</p>
+                        <p class="small text-secondary mb-2">Baca <a href="{{ spmb_route('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik', '#masalah') }}">panduan troubleshooting</a> atau hubungi panitia SPMB:</p>
                         <ul class="list-unstyled small mb-0">
                             @if(setting('contact_ppdb'))
                             <li class="mb-1"><i class="bi bi-envelope me-1"></i> {{ setting('contact_ppdb') }}</li>

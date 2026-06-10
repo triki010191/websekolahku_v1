@@ -1,67 +1,59 @@
 @php
-    use Illuminate\Support\Facades\Route;
-
-    $spmbUrl = function (string $name, string $fallback, string $fragment = '') {
-        $base = Route::has($name) ? route($name) : url($fallback);
-
-        return $fragment ? $base.$fragment : $base;
-    };
-
     $items = [
         [
             'label' => 'Pra SPMB',
             'desc'  => 'Tahap pra-pendaftaran wajib Provinsi Banten',
             'icon'  => 'bi-clipboard-check',
-            'href'  => $spmbUrl('spmb.pra-spmb', '/spmb-2026/pra-spmb'),
+            'href'  => spmb_route('spmb.pra-spmb', '/spmb-2026/pra-spmb'),
             'color' => 'primary',
         ],
         [
             'label' => 'Kuota SPMB',
             'desc'  => 'Kuota penerimaan kelas X per jurusan',
             'icon'  => 'bi-people',
-            'href'  => $spmbUrl('spmb.index', '/spmb-2026', '#kuota-spmb'),
+            'href'  => spmb_route('spmb.index', '/spmb-2026', '#kuota-spmb'),
             'color' => 'info',
         ],
         [
             'label' => 'Formulir Dapodik Online',
             'desc'  => 'Isi formulir pendaftaran Dapodik secara online',
             'icon'  => 'bi-clipboard-data',
-            'href'  => $spmbUrl('ppdb.create', '/ppdb/daftar'),
+            'href'  => spmb_route('ppdb.create', '/ppdb/daftar'),
             'color' => 'success',
         ],
         [
             'label' => 'Panduan Dapodik',
             'desc'  => 'Petunjuk pengisian & solusi masalah umum',
             'icon'  => 'bi-book',
-            'href'  => $spmbUrl('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik'),
+            'href'  => spmb_route('spmb.panduan-dapodik', '/spmb-2026/panduan-dapodik'),
             'color' => 'success',
         ],
         [
             'label' => 'Jadwal & Persyaratan Pendaftaran',
             'desc'  => 'Syarat dan ketentuan pendaftaran SPMB',
             'icon'  => 'bi-file-earmark-text',
-            'href'  => $spmbUrl('spmb.index', '/spmb-2026', '#persyaratan-spmb'),
+            'href'  => spmb_route('spmb.index', '/spmb-2026', '#persyaratan-spmb'),
             'color' => 'secondary',
         ],
         [
             'label' => 'Tes Bakat Minat',
             'desc'  => 'Informasi Belum Tersedia',
             'icon'  => 'bi-calendar2-week',
-            'href'  => $spmbUrl('spmb.tes-bakat-minat', '/spmb-2026/tes-bakat-minat'),
+            'href'  => spmb_route('spmb.tes-bakat-minat', '/spmb-2026/tes-bakat-minat'),
             'color' => 'warning',
         ],
         [
             'label' => 'Pengumuman Kelulusan',
             'desc'  => 'Hasil seleksi dan pengumuman resmi SPMB',
             'icon'  => 'bi-megaphone',
-            'href'  => $spmbUrl('spmb.index', '/spmb-2026', '#pengumuman-spmb'),
+            'href'  => spmb_route('spmb.index', '/spmb-2026', '#pengumuman-spmb'),
             'color' => 'danger',
         ],
         [
             'label' => 'Daftar Ulang',
             'desc'  => 'Informasi Belum Tersedia',
             'icon'  => 'bi-person-check',
-            'href'  => $spmbUrl('spmb.daftar-ulang', '/spmb-2026/daftar-ulang'),
+            'href'  => spmb_route('spmb.daftar-ulang', '/spmb-2026/daftar-ulang'),
             'color' => 'dark',
         ],
     ];
