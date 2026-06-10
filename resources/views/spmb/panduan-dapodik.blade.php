@@ -25,7 +25,7 @@
     <div class="container">
         <div class="row g-3 align-items-center">
             <div class="col-lg-8">
-                <p class="mb-0 text-secondary">Formulir ini mengumpulkan data peserta didik sesuai format <strong>Dapodik</strong> (Data Pokok Pendidikan) untuk keperluan daftar ulang di {{ config('app.name') }}. Disarankan dibaca sebelum mengisi.</p>
+                <p class="mb-0 text-secondary">Formulir ini mengumpulkan data peserta didik sesuai format <strong>Dapodik</strong> (Data Pokok Pendidikan) untuk keperluan Pendaftaran di {{ config('app.name') }}. Disarankan dibaca sebelum mengisi.</p>
             </div>
             <div class="col-lg-4 d-flex flex-wrap gap-2 justify-content-lg-end">
                 @if($isOpen)
@@ -67,7 +67,7 @@
             <div class="col-lg-9">
                 <article class="card border-0 shadow-sm p-4 p-md-5 mb-4 scroll-margin-top" id="tentang">
                     <h2 class="h5 fw-bold mb-3"><i class="bi bi-info-circle text-primary me-2"></i>Tentang Formulir</h2>
-                    <p>Formulir Dapodik adalah pengisian data peserta didik sesuai format <strong>Data Pokok Pendidikan (Dapodik)</strong> Kemendikbud. Data ini digunakan sekolah untuk proses daftar ulang calon siswa kelas X yang diterima melalui SPMB.</p>
+                    <p>Formulir Dapodik adalah pengisian data peserta didik sesuai format <strong>Data Pokok Pendidikan (Dapodik)</strong> Kemendikbud. Data ini digunakan untuk keperluan pendaftaran SPMB tahun ajaran {{ $yearLabel }}.</p>
                     <p class="mb-0"><strong>Siapa yang mengisi?</strong> Calon siswa bersama orang tua/wali, menggunakan HP atau komputer yang terhubung internet. Estimasi waktu pengisian: <strong>15–30 menit</strong>.</p>
                 </article>
 
