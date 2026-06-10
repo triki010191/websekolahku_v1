@@ -28,6 +28,9 @@
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
             <a href="{{ route('ppdb.pdf', $reg->registration_number) }}" id="btnDownloadPdf" class="btn btn-primary btn-lg"><i class="bi bi-file-earmark-pdf"></i> Unduh PDF Formulir</a>
+            @if($reg->allowsCorrection())
+            <a href="{{ route('ppdb.create') }}" class="btn btn-warning btn-lg"><i class="bi bi-pencil-square"></i> Perbaiki Formulir</a>
+            @endif
             <a href="{{ route('spmb.index') }}" class="btn btn-outline-primary">Info SPMB</a>
             <a href="{{ route('home') }}" class="btn btn-outline-secondary">Beranda</a>
         </div>

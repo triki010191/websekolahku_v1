@@ -19,17 +19,14 @@ class PpdbController extends Controller
 
     public function create(Request $request): Response|RedirectResponse
     {
-        if ($closed = $this->ensurePpdbOpen()) {
+        $draft = $this->resolveEditableRegistration($request);
+
+        if (! $draft && ($closed = $this->ensurePpdbOpen())) {
             return $closed;
         }
 
         $majors  = Major::where('is_active', true)->orderBy('sort_order')->get();
         $options = PpdbFormOptions::class;
-        $draft   = null;
-
-        if ($token = $request->query('draft')) {
-            $draft = PpdbRegistration::where('draft_token', $token)->where('form_status', 'draft')->first();
-        }
 
         return response()->view('ppdb.form', compact('majors', 'options', 'draft'));
     }
@@ -42,7 +39,7 @@ class PpdbController extends Controller
     public function checkSpmb(Request $request)
     {
         $request->validate([
-            'spmb_banten_number' => ['required', 'string', 'max:64'],
+            'spmb_banten_number' => ['required', 'string', 'size:10', 'regex:/^\d{10}$/'],
             'draft_token'        => ['nullable', 'string', 'max:64'],
         ]);
 
@@ -64,13 +61,10 @@ class PpdbController extends Controller
 
     public function saveDraft(Request $request): JsonResponse|RedirectResponse
     {
-        if ($closed = $this->ensurePpdbOpen()) {
-            return $closed;
-        }
+        $draftId = $this->resolveRegistrationId($request->input('draft_token'));
 
-        $draftId = null;
-        if ($token = $request->input('draft_token')) {
-            $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
+        if (! $this->isCorrectionRequest($request) && ($closed = $this->ensurePpdbOpen())) {
+            return $closed;
         }
 
         $request->validate(
@@ -92,13 +86,10 @@ class PpdbController extends Controller
 
     public function store(Request $request): JsonResponse|RedirectResponse
     {
-        if ($closed = $this->ensurePpdbOpen()) {
-            return $closed;
-        }
+        $draftId = $this->resolveRegistrationId($request->input('draft_token'));
 
-        $draftId = null;
-        if ($token = $request->input('draft_token')) {
-            $draftId = PpdbRegistration::where('draft_token', $token)->value('id');
+        if (! $this->isCorrectionRequest($request) && ($closed = $this->ensurePpdbOpen())) {
+            return $closed;
         }
 
         $request->validate(
@@ -156,6 +147,12 @@ class PpdbController extends Controller
         }
 
         $this->grantPpdbAccess($reg);
+
+        if ($reg->allowsCorrection()) {
+            return redirect()
+                ->route('ppdb.create')
+                ->with('info', 'Admin telah mengizinkan perbaikan data. Silakan periksa dan kirim ulang formulir Anda.');
+        }
 
         return redirect()
             ->route('ppdb.success', $reg->registration_number)
@@ -217,5 +214,46 @@ class PpdbController extends Controller
         }
 
         return redirect()->route('spmb.index')->with('error', $message);
+    }
+
+    private function resolveEditableRegistration(Request $request): ?PpdbRegistration
+    {
+        if ($token = $request->query('draft')) {
+            $reg = PpdbRegistration::where('draft_token', $token)->first();
+            if ($reg && ($reg->form_status === 'draft' || $reg->allowsCorrection())) {
+                return $reg;
+            }
+        }
+
+        if ($number = session('ppdb_access')) {
+            return PpdbRegistration::query()
+                ->where('registration_number', $number)
+                ->where('form_status', 'submitted')
+                ->where('status', 'verified')
+                ->first();
+        }
+
+        return null;
+    }
+
+    private function resolveRegistrationId(?string $token): ?int
+    {
+        if (! $token) {
+            return null;
+        }
+
+        return PpdbRegistration::where('draft_token', $token)->value('id');
+    }
+
+    private function isCorrectionRequest(Request $request): bool
+    {
+        $token = $request->input('draft_token');
+        if (! $token) {
+            return false;
+        }
+
+        $reg = PpdbRegistration::where('draft_token', $token)->first();
+
+        return $reg?->allowsCorrection() ?? false;
     }
 }

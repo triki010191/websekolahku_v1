@@ -31,4 +31,14 @@ class SpmbController extends Controller
 
         return view('spmb.index', compact('page', 'majors', 'announcements', 'isOpen'));
     }
+
+    public function praSpmb()
+    {
+        return view('spmb.pra-spmb');
+    }
+
+    public function jadwalTes()
+    {
+        return view('spmb.jadwal-tes');
+    }
 }

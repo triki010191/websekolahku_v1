@@ -17,7 +17,7 @@ class PpdbAccessTest extends TestCase
         $reg = PpdbRegistration::factory()->create([
             'registration_number' => 'DAFTAR-2026-0001',
             'nisn'                => '1234567890',
-            'spmb_banten_number'  => 'SPMB-TEST-001',
+            'spmb_banten_number'  => '1234567890',
             'form_status'         => 'submitted',
             'full_name'           => 'Siswa Test',
             'gender'              => 'L',
@@ -37,15 +37,16 @@ class PpdbAccessTest extends TestCase
         $reg = PpdbRegistration::factory()->create([
             'registration_number' => 'DAFTAR-2026-0002',
             'nisn'                => '9876543210',
-            'spmb_banten_number'  => 'SPMB-TEST-002',
+            'spmb_banten_number'  => '9876543210',
+            'birth_date'          => '2011-06-18',
             'form_status'         => 'submitted',
             'full_name'           => 'Siswa Dua',
             'gender'              => 'P',
         ]);
 
         $this->post(route('ppdb.lookup'), [
-            'nisn'               => '9876543210',
-            'spmb_banten_number' => 'SPMB-TEST-002',
+            'nisn'       => '9876543210',
+            'birth_date' => $reg->birth_date->format('Y-m-d'),
         ])->assertRedirect(route('ppdb.success', $reg->registration_number));
 
         $this->get(route('ppdb.success', $reg->registration_number))->assertOk();

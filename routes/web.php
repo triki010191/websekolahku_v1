@@ -85,6 +85,8 @@ Route::post('/kontak', [ContactController::class, 'store'])->name('kontak.store'
 
 /* PPDB / SPMB */
 Route::get('/spmb-2026', [SpmbController::class, 'index'])->name('spmb.index');
+Route::get('/spmb-2026/pra-spmb', [SpmbController::class, 'praSpmb'])->name('spmb.pra-spmb');
+Route::get('/spmb-2026/jadwal-tes', [SpmbController::class, 'jadwalTes'])->name('spmb.jadwal-tes');
 Route::get('/ppdb', [SpmbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
 Route::get('/ppdb/csrf-token', [PpdbController::class, 'csrfToken'])->name('ppdb.csrf');

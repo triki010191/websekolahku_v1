@@ -15,7 +15,7 @@ class PpdbRegistrationFactory extends Factory
     {
         return [
             'registration_number' => PpdbRegistration::generateNumber(),
-            'spmb_banten_number'  => fake()->unique()->numerify('360##########'),
+            'spmb_banten_number'  => fake()->unique()->numerify('##########'),
             'major_id'            => Major::query()->value('id'),
             'full_name'           => fake()->name(),
             'nisn'                => fake()->unique()->numerify('##########'),

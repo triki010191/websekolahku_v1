@@ -21,7 +21,8 @@
     <div class="mt-2">
         <a href="{{ route('admin.ppdb.export.pdf', $reg) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
     </div>
-    <form method="post" action="{{ route('admin.ppdb.status', $reg) }}" class="row g-2 align-items-end mt-3 p-3 bg-body-secondary rounded">@csrf @method('put')
+    <p class="small text-secondary mb-0 mt-3"><i class="bi bi-info-circle me-1"></i>Status <strong>verified</strong> mengizinkan siswa memperbaiki dan mengirim ulang formulir Dapodik melalui menu Cek Formulir di halaman SPMB.</p>
+    <form method="post" action="{{ route('admin.ppdb.status', $reg) }}" class="row g-2 align-items-end mt-2 p-3 bg-body-secondary rounded">@csrf @method('put')
         <div class="col-md-4">
             <label class="form-label">Ubah status</label>
             <select name="status" class="form-select" required>

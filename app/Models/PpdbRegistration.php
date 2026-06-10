@@ -69,6 +69,11 @@ class PpdbRegistration extends Model
         return $this->form_status === 'submitted';
     }
 
+    public function allowsCorrection(): bool
+    {
+        return $this->isSubmitted() && $this->status === 'verified';
+    }
+
     public function genderLabel(): string
     {
         return $this->gender === 'L' ? 'Laki-laki' : 'Perempuan';

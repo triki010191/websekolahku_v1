@@ -5,7 +5,6 @@
 @section('content')
 @php
     $yearLabel = setting('ppdb_year', date('Y').'/'.(date('Y')+1));
-    $startDate = setting('ppdb_start');
     $endDate   = setting('ppdb_end');
     $announce  = setting('ppdb_announce');
     $fmt = fn ($d) => $d ? \Carbon\Carbon::parse($d)->translatedFormat('d F Y') : '—';
@@ -31,9 +30,6 @@
                 <p class="lead opacity-90 mb-0">Informasi resmi Penerimaan Peserta Didik Baru SMKN 8 Pandeglang — jadwal, kuota, pengumuman, dan alur pendaftaran.</p>
             </div>
             <div class="col-lg-4 d-flex flex-wrap gap-2 justify-content-lg-end">
-                @if($isOpen)
-                    <a href="{{ route('ppdb.create') }}" class="btn btn-light btn-lg"><i class="bi bi-clipboard-data me-1"></i> Isi Formulir Dapodik</a>
-                @endif
                 @include('partials.spmb-banten-button', ['variant' => 'sm'])
             </div>
         </div>
@@ -51,6 +47,17 @@
 </section>
 @endif
 
+@if($isOpen)
+<section class="py-4 border-bottom bg-white">
+    <div class="container text-center">
+        <a href="{{ route('ppdb.create') }}" class="btn btn-primary btn-lg px-5 py-3 shadow-sm spmb-cta-dapodik">
+            <i class="bi bi-clipboard-data me-2"></i> Isi Formulir Dapodik
+        </a>
+        <p class="small text-secondary mt-2 mb-0">Klik tombol di atas untuk mengisi formulir daftar ulang Dapodik secara online.</p>
+    </div>
+</section>
+@endif
+
 <section class="py-5 bg-body-tertiary border-bottom">
     <div class="container">
         <h2 class="h5 fw-bold mb-4"><i class="bi bi-calendar-event text-primary me-2"></i>Jadwal Penting</h2>
@@ -58,8 +65,8 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
-                        <div class="text-primary small fw-semibold text-uppercase">Pembukaan</div>
-                        <div class="fs-5 fw-bold">{{ $fmt($startDate) }}</div>
+                        <div class="text-primary small fw-semibold text-uppercase">Pendaftaran</div>
+                        <div class="fs-5 fw-bold">16 s.d 20 Juni 2026</div>
                     </div>
                 </div>
             </div>
@@ -80,7 +87,14 @@
                 </div>
             </div>
         </div>
-        <p class="small text-secondary mt-3 mb-0">Jadwal di atas dapat diubah dari Admin → <strong>Pengaturan</strong> (grup PPDB).</p>
+        <p class="small text-secondary mt-3 mb-0">Jadwal penutupan dan pengumuman dapat diubah dari Admin → <strong>Pengaturan</strong> (grup PPDB).</p>
+    </div>
+</section>
+
+<section class="py-5 bg-white border-bottom">
+    <div class="container">
+        <h2 class="h5 fw-bold mb-4"><i class="bi bi-grid-3x3-gap text-primary me-2"></i>Informasi SPMB</h2>
+        @include('partials.spmb-quick-nav')
     </div>
 </section>
 
@@ -89,15 +103,15 @@
         <div class="row g-4">
             <div class="col-lg-8">
                 @if($page)
-                <article class="card border-0 shadow-sm p-4 p-md-5 mb-4">
+                <article id="persyaratan-spmb" class="card border-0 shadow-sm p-4 p-md-5 mb-4 scroll-margin-top">
                     <h2 class="h4 fw-bold mb-3">{{ $page->title }}</h2>
                     <div class="prose">{!! $page->content !!}</div>
                 </article>
                 @else
-                <div class="alert alert-warning">Konten halaman SPMB belum tersedia. Admin dapat menambahkannya di <strong>Halaman Konten</strong> dengan slug <code>spmb-2026</code>.</div>
+                <div id="persyaratan-spmb" class="alert alert-warning scroll-margin-top">Konten halaman SPMB belum tersedia. Admin dapat menambahkannya di <strong>Halaman Konten</strong> dengan slug <code>spmb-2026</code>.</div>
                 @endif
 
-                <h2 class="h5 fw-bold mb-3"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota Penerimaan Kelas X — SPMB {{ $yearLabel }}</h2>
+                <h2 id="kuota-spmb" class="h5 fw-bold mb-3 scroll-margin-top"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota Penerimaan Kelas X — SPMB {{ $yearLabel }}</h2>
                 <div class="row g-3 mb-2">
                     @foreach($majors as $m)
                     @php
@@ -152,7 +166,7 @@
                     </div>
                 </div>
 
-                <div class="card border-0 shadow-sm sticky-top" style="top:5.5rem">
+                <div id="pengumuman-spmb" class="card border-0 shadow-sm sticky-top scroll-margin-top" style="top:5.5rem">
                     <div class="card-header bg-white fw-bold"><i class="bi bi-megaphone text-warning me-2"></i>Pengumuman SPMB</div>
                     <div class="list-group list-group-flush">
                         @forelse($announcements as $a)
@@ -208,10 +222,15 @@
 .spmb-hero__bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
 .spmb-hero__overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(15,23,42,.92) 0%,rgba(15,23,42,.72) 38%,rgba(29,78,216,.35) 68%,rgba(29,78,216,.12) 100%)}
 .spmb-hero .breadcrumb-item+.breadcrumb-item::before{color:rgba(255,255,255,.45)}
+.spmb-cta-dapodik{font-size:1.2rem;font-weight:600}
+.scroll-margin-top{scroll-margin-top:5.5rem}
+.spmb-quick-nav__btn{transition:transform .15s ease,box-shadow .15s ease;border-width:1.5px}
+.spmb-quick-nav__btn:hover{transform:translateY(-2px);box-shadow:0 .35rem 1rem rgba(15,23,42,.1)}
 @media (max-width:767.98px){
     .spmb-hero{min-height:360px}
     .spmb-hero__bg{background-position:70% center}
     .spmb-hero__overlay{background:linear-gradient(180deg,rgba(15,23,42,.88) 0%,rgba(15,23,42,.78) 55%,rgba(15,23,42,.55) 100%)}
+    .spmb-cta-dapodik{width:100%;font-size:1.1rem}
 }
 </style>
 @endpush

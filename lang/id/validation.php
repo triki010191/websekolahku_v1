@@ -42,6 +42,6 @@ return [
         'cover'       => 'Sampul',
         'file'        => 'Berkas',
         'nisn'        => 'NISN',
-        'spmb_banten_number' => 'nomor pendaftaran SPMB Banten',
+        'spmb_banten_number' => 'nomor pendaftaran SPMB Banten / NISN',
     ],
 ];

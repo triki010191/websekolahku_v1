@@ -85,11 +85,13 @@
 
     function loadLocal() {
         const raw = localStorage.getItem('ppdb_dapodik_draft');
-        if (!raw || draftToken.value) return;
+        if (!raw) return;
         try {
             const data = JSON.parse(raw);
+            const hasServerDraft = Boolean(draftToken.value);
             Object.keys(data).forEach(k => {
                 if (k.startsWith('__')) return;
+                if (!hasServerDraft && k !== 'spmb_banten_number' && k !== 'draft_token') return;
                 const els = form.querySelectorAll(`[name="${k}"], [name="${k}[]"]`);
                 if (!els.length) return;
                 if (els[0].type === 'checkbox') {
@@ -99,7 +101,9 @@
                     els[0].value = data[k];
                 }
             });
-            if (data.__step) step = parseInt(data.__step, 10) || 0;
+            if (hasServerDraft && data.__step) {
+                step = parseInt(data.__step, 10) || 0;
+            }
         } catch (e) {}
     }
 
@@ -118,12 +122,12 @@
             if (res.status === 429) {
                 if (statusEl) statusEl.textContent = 'Menyimpan draft ditunda — data aman di browser';
                 saveLocal();
-                return;
+                return true;
             }
             if (res.status === 403) {
                 const json403 = await res.json().catch(() => ({}));
                 if (statusEl) statusEl.textContent = json403.message || 'Pendaftaran formulir ditutup';
-                return;
+                return false;
             }
             const json = await res.json().catch(() => ({}));
             if (json.ok) {
@@ -132,20 +136,24 @@
                 if (localReg) localReg.value = json.registration_number || localReg.value;
                 if (statusEl) statusEl.textContent = 'Draft tersimpan ' + new Date().toLocaleTimeString('id-ID');
                 saveLocal();
-            } else if (res.status === 422) {
-                const msg = flattenErrors(json.errors).find(m => m.includes('SPMB')) || flattenErrors(json.errors)[0];
-                if (msg && statusEl) statusEl.textContent = msg;
-                const spmb = document.getElementById('spmb_banten_number');
-                if (spmb && msg) {
-                    spmb.classList.add('is-invalid');
-                    showStep(0);
-                }
-            } else if (showMsg && statusEl) {
-                statusEl.textContent = 'Gagal menyimpan draft';
+                return true;
             }
+            if (res.status === 422) {
+                const errors = flattenErrors(json.errors);
+                const spmbMsg = errors.find(m => /SPMB|NISN/i.test(m));
+                if (statusEl) statusEl.textContent = spmbMsg || errors[0] || 'Data belum dapat disimpan';
+                const spmb = document.getElementById('spmb_banten_number');
+                if (spmb && spmbMsg) {
+                    spmb.classList.add('is-invalid');
+                }
+                return false;
+            }
+            if (showMsg && statusEl) statusEl.textContent = 'Gagal menyimpan draft';
+            return false;
         } catch (e) {
             if (showMsg && statusEl) statusEl.textContent = 'Offline — draft disimpan lokal';
             saveLocal();
+            return step === 0;
         }
     }
 
@@ -226,6 +234,18 @@
 
         const number = input.value.trim();
         if (!number) return true;
+        if (!/^\d{10}$/.test(number)) {
+            input.classList.add('is-invalid');
+            let err = input.parentElement.querySelector('.spmb-check-error');
+            if (!err) {
+                err = document.createElement('div');
+                err.className = 'text-danger small spmb-check-error';
+                input.parentElement.appendChild(err);
+            }
+            err.textContent = 'NISN harus 10 digit angka.';
+            input.focus();
+            return false;
+        }
 
         try {
             const params = new URLSearchParams({
@@ -259,10 +279,17 @@
     btnNext?.addEventListener('click', async () => {
         if (!validateCurrent()) return;
         if (step === 0 && !await checkSpmbAvailable()) return;
-        saveDraft(false);
+        const saved = await saveDraft(false);
+        if (!saved) return;
         showStep(step + 1);
     });
     btnSaveDraft?.addEventListener('click', () => saveDraft(true));
+    document.getElementById('spmb_banten_number')?.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+        e.target.classList.remove('is-invalid');
+        e.target.parentElement.querySelector('.spmb-check-error')?.remove();
+    });
+
     form.addEventListener('input', () => {
         saveLocal();
         clearTimeout(form._autosaveTimer);

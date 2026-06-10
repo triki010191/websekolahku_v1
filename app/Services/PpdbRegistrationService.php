@@ -13,7 +13,9 @@ class PpdbRegistrationService
     public function messages(): array
     {
         return [
-            'spmb_banten_number.unique' => 'Nomor SPMB Banten ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.',
+            'spmb_banten_number.unique' => 'Nomor SPMB Banten / NISN ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.',
+            'spmb_banten_number.size'   => 'Nomor SPMB Banten / NISN harus 10 digit.',
+            'spmb_banten_number.regex'  => 'Nomor SPMB Banten / NISN harus berupa 10 digit angka.',
             'nisn.unique'               => 'NISN ini sudah terdaftar pada formulir daftar ulang yang dikirim.',
             'required'                  => ':attribute wajib diisi.',
             'required_if'               => ':attribute wajib diisi.',
@@ -28,7 +30,7 @@ class PpdbRegistrationService
     public function attributes(): array
     {
         return [
-            'spmb_banten_number' => 'Nomor Pendaftaran SPMB Banten',
+            'spmb_banten_number' => 'Nomor Pendaftaran SPMB Banten / NISN',
             'major_id' => 'Kompetensi Keahlian',
             'full_name' => 'Nama Lengkap',
             'nisn' => 'NISN',
@@ -198,6 +200,8 @@ class PpdbRegistrationService
             $data['spmb_banten_number'] = trim((string) $request->input('spmb_banten_number'));
         }
 
+        $data['school_entry_date'] = $request->input('school_entry_date') ?: '2026-07-13';
+
         if ($request->boolean('data_declaration') || $request->input('data_declaration') === '1') {
             $data['data_declaration'] = true;
         }
@@ -215,10 +219,17 @@ class PpdbRegistrationService
 
         $reg = PpdbRegistration::where('draft_token', $token)->first();
 
-        if ($reg?->isSubmitted()) {
+        if ($reg?->isSubmitted() && ! $reg->allowsCorrection()) {
             throw ValidationException::withMessages([
                 'draft' => 'Formulir sudah dikirim. Data tidak dapat disimpan sebagai draft lagi.',
             ]);
+        }
+
+        if ($reg?->allowsCorrection()) {
+            unset($data['form_status'], $data['status']);
+            $reg->update($data);
+
+            return $reg->fresh();
         }
 
         $data['form_status'] = 'draft';
@@ -243,7 +254,10 @@ class PpdbRegistrationService
         $token = $request->input('draft_token');
         $reg   = $token ? PpdbRegistration::where('draft_token', $token)->first() : null;
 
-        if ($reg) {
+        if ($reg?->allowsCorrection()) {
+            $data['status'] = 'pending';
+            $reg->update($data);
+        } elseif ($reg) {
             $reg->update($data);
         } else {
             $data['registration_number'] = PpdbRegistration::generateNumber();
@@ -267,7 +281,9 @@ class PpdbRegistrationService
     /** @return list<mixed> */
     private function spmbBantenRules(bool $submit, ?int $exceptId): array
     {
-        $rules = $submit ? ['required', 'string', 'max:64'] : ['nullable', 'string', 'max:64'];
+        $rules = $submit
+            ? ['required', 'string', 'size:10', 'regex:/^\d{10}$/']
+            : ['nullable', 'string', 'regex:/^\d{10}$/'];
 
         if ($submit) {
             $rules[] = Rule::unique('ppdb_registrations', 'spmb_banten_number')
@@ -282,7 +298,7 @@ class PpdbRegistrationService
                 return;
             }
             if (PpdbRegistration::spmbAlreadySubmitted((string) $value, $exceptId)) {
-                $fail('Nomor SPMB Banten ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.');
+                $fail('Nomor SPMB Banten / NISN ini sudah terdaftar. Formulir daftar ulang tidak dapat diisi ulang.');
             }
         };
 

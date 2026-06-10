@@ -34,6 +34,12 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 @endif
+@if(session('info'))
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    <i class="bi bi-info-circle-fill me-2"></i>{{ session('info') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
 @if($errors->any())
 <div class="alert alert-danger" role="alert">
     <strong>Formulir belum dapat dikirim.</strong> Periksa dan lengkapi data berikut:
@@ -52,11 +58,12 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     {{-- STEP 0: SPMB Banten --}}
     <div class="wizard-step card border-0 shadow-sm p-4 mb-3" data-step="0">
         <h5 class="fw-bold text-primary mb-3"><i class="bi bi-card-checklist me-2"></i>Identitas Pendaftaran</h5>
-        <div class="alert alert-info small">Masukkan nomor pendaftaran yang Anda terima dari sistem <strong>SPMB Provinsi Banten</strong>.</div>
+        <div class="alert alert-info small">Masukkan <strong>NISN</strong> (10 digit) Anda sebagai nomor identitas pendaftaran SPMB Provinsi Banten.</div>
         <div class="row g-3">
             <div class="col-md-8">
-                <label class="form-label">Nomor Pendaftaran SPMB Banten *</label>
-                <input class="form-control form-control-lg" name="spmb_banten_number" id="spmb_banten_number" value="{{ $val('spmb_banten_number') }}" placeholder="Contoh: 3601234567890" required>
+                <label class="form-label">Nomor Pendaftaran SPMB Banten / NISN *</label>
+                <input class="form-control form-control-lg" name="spmb_banten_number" id="spmb_banten_number" value="{{ $val('spmb_banten_number') }}" placeholder="Contoh: 0113804305" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" required>
+                <div class="form-text">Harus 10 digit angka (sesuai NISN Anda).</div>
                 @error('spmb_banten_number')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-4">
@@ -250,7 +257,12 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
                 <select name="registration_type" class="form-select" required><option value="">—</option>@foreach(O::registrationTypes() as $k=>$v)<option value="{{ $k }}" @selected($val('registration_type')===$k)>{{ $v }}</option>@endforeach</select>
             </div>
             <div class="col-md-4"><label class="form-label">NIS *</label><input class="form-control" name="nis" value="{{ $val('nis') }}" required></div>
-            <div class="col-md-4"><label class="form-label">Tanggal Masuk Sekolah</label><input type="date" class="form-control" name="school_entry_date" value="{{ $val('school_entry_date') }}"></div>
+            <div class="col-md-4">
+                <label class="form-label">Tanggal Masuk Sekolah</label>
+                <input type="date" class="form-control bg-body-secondary" value="2026-07-13" readonly tabindex="-1" aria-readonly="true">
+                <input type="hidden" name="school_entry_date" value="2026-07-13">
+                <div class="form-text">Masuk 13 Juli 2026 (otomatis, tidak dapat diubah).</div>
+            </div>
             <div class="col-md-4"><label class="form-label">Asal Sekolah *</label><input class="form-control" name="previous_school" value="{{ $val('previous_school') }}" required></div>
             <div class="col-md-4"><label class="form-label">Nomor Peserta Ujian</label><input class="form-control" name="exam_number" value="{{ $val('exam_number') }}"></div>
             <div class="col-md-4"><label class="form-label">Nomor Seri Ijazah</label><input class="form-control" name="diploma_serial" value="{{ $val('diploma_serial') }}"></div>
