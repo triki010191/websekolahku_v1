@@ -41,4 +41,14 @@ class SpmbController extends Controller
     {
         return view('spmb.jadwal-tes');
     }
+
+    public function tesBakatMinat()
+    {
+        return view('spmb.tes-bakat-minat');
+    }
+
+    public function daftarUlang()
+    {
+        return view('spmb.daftar-ulang');
+    }
 }

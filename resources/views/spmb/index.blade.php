@@ -53,7 +53,7 @@
         <a href="{{ route('ppdb.create') }}" class="btn btn-primary btn-lg px-5 py-3 shadow-sm spmb-cta-dapodik">
             <i class="bi bi-clipboard-data me-2"></i> Isi Formulir Dapodik
         </a>
-        <p class="small text-secondary mt-2 mb-0">Klik tombol di atas untuk mengisi formulir daftar ulang Dapodik secara online.</p>
+        <p class="small text-secondary mt-2 mb-0">Klik tombol di atas untuk mengisi formulir Dapodik secara online.</p>
     </div>
 </section>
 @endif
@@ -112,37 +112,43 @@
                 @endif
 
                 <h2 id="kuota-spmb" class="h5 fw-bold mb-3 scroll-margin-top"><i class="bi bi-mortarboard text-primary me-2"></i>Kuota Penerimaan Kelas X — SPMB {{ $yearLabel }}</h2>
-                <div class="row g-3 mb-2">
-                    @foreach($majors as $m)
-                    @php
-                        $displayCode = $m->code;
-                        $displayName = $m->name;
-                        if ($m->code === 'AKL') {
-                            $displayCode = 'AK';
-                            $displayName = 'Akuntansi';
-                        } elseif ($m->code === 'TBSM') {
-                            $displayCode = 'TSM';
-                            $displayName = 'Teknik Sepeda Motor';
-                        }
-                        $quotaClass = major_card_class($m->code);
-                    @endphp
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <div class="card border-0 shadow-sm text-center p-3 h-100 major-card {{ $quotaClass }}">
-                            <div class="fw-bold major-card__badge d-inline-block px-2 py-1 rounded mb-1">{{ $displayCode }}</div>
-                            <div class="small major-card__text mb-1">{{ $displayName }}</div>
-                            <div class="fs-3 fw-bold major-card__title">{{ $m->spmb_quota ?? '—' }}</div>
-                            <div class="small major-card__text">siswa kelas X</div>
+                <div class="card border-0 shadow-sm mb-2">
+                    <div class="card-header bg-white fw-semibold small text-uppercase text-secondary">
+                        Kuota Rombel &amp; Siswa SPMB {{ $yearLabel }} — SMKN 8 Pandeglang
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><span class="badge bg-success me-2">AK</span>Akuntansi</span>
+                            <span class="fw-semibold">2 Rombel <span class="text-secondary fw-normal">(72 Siswa)</span></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><span class="badge bg-info me-2">DKV</span>Desain Komunikasi Visual</span>
+                            <span class="fw-semibold">1 Rombel <span class="text-secondary fw-normal">(36 Siswa)</span></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><span class="badge bg-primary me-2">RPL</span>Rekayasa Perangkat Lunak</span>
+                            <span class="fw-semibold">2 Rombel <span class="text-secondary fw-normal">(72 Siswa)</span></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><span class="badge bg-warning text-dark me-2">TITL</span>Teknik Instalasi Tenaga Listrik</span>
+                            <span class="fw-semibold">2 Rombel <span class="text-secondary fw-normal">(72 Siswa)</span></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><span class="badge bg-danger me-2">TSM</span>Teknik Sepeda Motor</span>
+                            <span class="fw-semibold">1 Rombel <span class="text-secondary fw-normal">(36 Siswa)</span></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center bg-body-tertiary">
+                            <span class="fw-bold">Total</span>
+                            <span class="fw-bold text-primary">8 Rombel <span class="text-dark">(288 Siswa)</span></span>
                         </div>
                     </div>
-                    @endforeach
                 </div>
-                <p class="small text-secondary">Kuota kelas X SPMB diubah dari Admin → <strong>Jurusan</strong> → field <strong>Kuota SPMB Kelas X</strong> (terpisah dari kapasitas jurusan).</p>
             </div>
 
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-header bg-primary text-white fw-bold">
-                        <i class="bi bi-search me-2"></i>Cek Formulir Daftar Ulang
+                        <i class="bi bi-search me-2"></i>Cek Formulir Pendaftaran
                     </div>
                     <div class="card-body">
                         <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan NISN dan tanggal lahir untuk melihat dan mengunduh PDF isian formulir.</p>
