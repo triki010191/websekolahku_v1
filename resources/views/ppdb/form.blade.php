@@ -283,7 +283,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
             <div class="col-md-6"><label class="form-label">Jenis Pendaftaran *</label>
                 <select name="registration_type" class="form-select" required><option value="">—</option>@foreach(O::registrationTypes() as $k=>$v)<option value="{{ $k }}" @selected($val('registration_type')===$k)>{{ $v }}</option>@endforeach</select>
             </div>
-            <div class="col-md-4"><label class="form-label">NIS *</label><input class="form-control" name="nis" value="{{ $val('nis') }}" required></div>
+            <div class="col-md-4"><label class="form-label">NIS *</label><input class="form-control" name="nis" value="{{ $val('nis') }}" required>@error('nis')<div class="text-danger small">{{ $message }}</div>@enderror<div class="form-text">NIS (Nomor Induk Siswa) dari sekolah asal, <strong>bukan NISN</strong>. Lihat pada Raport SMP/MTs.</div></div>
             <div class="col-md-4">
                 <label class="form-label">Tanggal Masuk Sekolah</label>
                 <input type="date" class="form-control bg-body-secondary" value="2026-07-13" readonly tabindex="-1" aria-readonly="true">
