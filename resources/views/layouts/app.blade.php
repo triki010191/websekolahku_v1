@@ -52,7 +52,7 @@
     @endif
 
     <a href="https://wa.me/{{ str_replace(['+', ' '], '', setting('contact_whatsapp', '6281234567890')) }}"
-       class="btn btn-success position-fixed rounded-circle shadow d-flex align-items-center justify-content-center"
+       class="btn btn-success position-fixed rounded-circle shadow @hasSection('hideWaFloatMobile') d-none d-lg-flex @else d-flex @endif align-items-center justify-content-center"
        style="bottom:24px; right:24px; width:56px; height:56px; z-index:1080;" target="_blank" rel="noopener">
         <i class="bi bi-whatsapp fs-4"></i>
     </a>

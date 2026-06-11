@@ -15,6 +15,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 @extends('layouts.app')
 @section('title', 'Formulir Dapodik — '.config('app.name'))
 @section('hideFooter', 'true')
+@section('hideWaFloatMobile', 'true')
 @section('content')
 <section class="page-hero"><div class="container">
     <h1 class="display-6 fw-bold">Formulir Dapodik</h1>
