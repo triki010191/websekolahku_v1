@@ -60,5 +60,5 @@
         </tbody>
     </table>
 </div>
-{{ $registrations->withQueryString()->links() }}
+<div class="mt-3 d-flex justify-content-center">{{ $registrations->withQueryString()->links() }}</div>
 @endsection

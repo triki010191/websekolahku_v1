@@ -6,6 +6,7 @@ use App\Http\Controllers\SpmbController;
 use App\Models\Major;
 use App\Models\Post;
 use App\Policies\PostPolicy;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Proyek memakai Bootstrap, bukan Tailwind — default Laravel (SVG w-5 h-5) membesar tanpa Tailwind CSS.
+        Paginator::useBootstrapFive();
+
         if (! $this->app->environment('testing')
             && ! $this->app->runningInConsole()
             && $this->app->has('request')) {
