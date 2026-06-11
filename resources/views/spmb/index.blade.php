@@ -156,7 +156,10 @@
                         <i class="bi bi-search me-2"></i>Cek Formulir Pendaftaran
                     </div>
                     <div class="card-body">
-                        <p class="small text-secondary">Sudah mengisi formulir Dapodik? Masukkan NISN dan tanggal lahir untuk melihat dan mengunduh PDF isian formulir.</p>
+                        <p class="small text-secondary mb-2"><strong>Hanya untuk cek formulir yang sudah dikirim.</strong> Masukkan NISN dan tanggal lahir untuk melihat atau mengunduh PDF.</p>
+                        @if($isOpen)
+                        <p class="small text-secondary mb-2">Belum pernah mengisi / mendaftarkan siswa baru? Gunakan tombol <a href="{{ route('ppdb.create') }}">Isi Formulir Dapodik</a> di atas — <em>bukan</em> form ini.</p>
+                        @endif
                         <form method="post" action="{{ route('ppdb.lookup') }}" class="vstack gap-2">
                             @csrf
                             <div>

@@ -84,11 +84,22 @@
     }
 
     function loadLocal() {
+        if (cfg.isCorrectionMode) {
+            localStorage.removeItem('ppdb_dapodik_draft');
+            return;
+        }
+
         const raw = localStorage.getItem('ppdb_dapodik_draft');
         if (!raw) return;
         try {
             const data = JSON.parse(raw);
             const hasServerDraft = Boolean(draftToken.value);
+
+            if (hasServerDraft && data.draft_token && data.draft_token !== draftToken.value) {
+                localStorage.removeItem('ppdb_dapodik_draft');
+                return;
+            }
+
             Object.keys(data).forEach(k => {
                 if (k.startsWith('__')) return;
                 if (!hasServerDraft && k !== 'spmb_banten_number' && k !== 'draft_token') return;
@@ -98,6 +109,9 @@
                     const vals = Array.isArray(data[k]) ? data[k] : [data[k]];
                     els.forEach(el => { el.checked = vals.includes(el.value); });
                 } else if (els.length === 1) {
+                    if (hasServerDraft && !String(data[k] ?? '').trim() && String(els[0].value ?? '').trim()) {
+                        return;
+                    }
                     els[0].value = data[k];
                 }
             });
@@ -231,6 +245,12 @@
     async function checkSpmbAvailable() {
         const input = document.getElementById('spmb_banten_number');
         if (!input || !cfg.checkSpmbUrl) return true;
+
+        if (cfg.isCorrectionMode) {
+            input.classList.remove('is-invalid');
+            input.parentElement?.querySelector('.spmb-check-error')?.remove();
+            return true;
+        }
 
         const number = input.value.trim();
         if (!number) return true;

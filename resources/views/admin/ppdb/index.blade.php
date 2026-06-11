@@ -10,6 +10,7 @@
 <div class="row g-2 mb-3 small">
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Terkirim: <strong>{{ $counts['total'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Pending: <strong class="text-warning">{{ $counts['pending'] }}</strong></div></div>
+    <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Revisi: <strong class="text-info">{{ $counts['revisi'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Diterima: <strong class="text-success">{{ $counts['accepted'] }}</strong></div></div>
     @if($counts['drafts'] > 0)
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Draft: <strong class="text-secondary">{{ $counts['drafts'] }}</strong></div></div>
@@ -26,8 +27,8 @@
     </select></div>
     <div class="col-auto"><select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
         <option value="">Status</option>
-        @foreach(['pending','verified','accepted','rejected'] as $s)
-        <option value="{{ $s }}" @selected(request('status')===$s)>{{ $s }}</option>
+        @foreach(\App\Models\PpdbRegistration::statusLabels() as $value => $label)
+        <option value="{{ $value }}" @selected(request('status')===$value)>{{ $label }}</option>
         @endforeach
     </select></div>
     <div class="col-auto"><select name="major_id" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -50,9 +51,9 @@
                 <td>{{ $r->full_name }}</td>
                 <td>{{ $r->nisn }}</td>
                 <td>{{ $r->major?->code }}</td>
-                <td><span class="badge bg-secondary">{{ $r->status }}</span></td>
+                <td><span class="badge {{ $r->statusBadgeClass() }}">{{ $r->statusLabel() }}</span></td>
                 <td class="text-nowrap">
-                    <a href="{{ route('admin.ppdb.show', $r) }}" class="btn btn-sm btn-outline-primary">Detail</a>
+                    <a href="{{ route('admin.ppdb.show', $r).(request()->getQueryString() ? '?'.request()->getQueryString() : '') }}" class="btn btn-sm btn-outline-primary">Detail</a>
                     <a href="{{ route('admin.ppdb.export.pdf', $r) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
                 </td>
             </tr>

@@ -29,7 +29,7 @@ class PpdbController extends Controller
         $counts = [
             'total'    => PpdbRegistration::where('form_status', 'submitted')->count(),
             'pending'  => PpdbRegistration::where('form_status', 'submitted')->where('status', 'pending')->count(),
-            'verified' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'verified')->count(),
+            'revisi'   => PpdbRegistration::where('form_status', 'submitted')->where('status', 'revisi')->count(),
             'accepted' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'accepted')->count(),
             'rejected' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'rejected')->count(),
             'drafts'   => PpdbRegistration::where('form_status', 'draft')->count(),
@@ -46,7 +46,7 @@ class PpdbController extends Controller
     public function updateStatus(Request $request, PpdbRegistration $ppdb)
     {
         $data = $request->validate([
-            'status' => ['required', 'in:pending,verified,accepted,rejected'],
+            'status' => ['required', 'in:'.implode(',', PpdbRegistration::STATUSES)],
             'note'   => ['nullable', 'string'],
         ]);
         $data['verified_by'] = $request->user()->id;
@@ -55,10 +55,15 @@ class PpdbController extends Controller
         return back()->with('success', 'Status pendaftar diperbarui.');
     }
 
-    public function destroy(PpdbRegistration $ppdb)
+    public function destroy(Request $request, PpdbRegistration $ppdb)
     {
         $ppdb->delete();
-        return back()->with('success', 'Data pendaftar dihapus.');
+
+        $query = array_filter($request->only(['form_status', 'status', 'major_id', 'search', 'page']));
+
+        return redirect()
+            ->route('admin.ppdb.index', $query)
+            ->with('success', 'Data pendaftar berhasil dihapus.');
     }
 
     public function exportExcel(Request $request)

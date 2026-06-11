@@ -23,6 +23,22 @@ class PpdbController extends Controller
     {
         $draft = $this->resolveEditableRegistration($request);
 
+        if (! $draft) {
+            session()->forget('ppdb_access');
+
+            if ($token = $request->query('draft')) {
+                $reg = PpdbRegistration::where('draft_token', $token)->first();
+                if ($reg?->isSubmitted() && ! $reg->allowsCorrection()) {
+                    $this->grantPpdbAccess($reg);
+
+                    return redirect()
+                        ->route('ppdb.success', $reg->registration_number)
+                        ->with('lookup', true)
+                        ->with('info', 'Formulir sudah dikirim (status: '.$reg->statusLabel().'). Data tidak dapat diedit.');
+                }
+            }
+        }
+
         if (! $draft && ($closed = $this->ensurePpdbOpen())) {
             return $closed;
         }
@@ -144,7 +160,7 @@ class PpdbController extends Controller
             return back()
                 ->withInput($request->only('nisn', 'birth_date'))
                 ->withErrors([
-                    'lookup' => 'Data tidak ditemukan. Pastikan NISN dan tanggal lahir benar, serta formulir Dapodik sudah dikirim.',
+                    'lookup' => 'Data tidak ditemukan. Pastikan NISN dan tanggal lahir benar. Jika belum pernah mengisi formulir, gunakan tombol Isi Formulir Dapodik (bukan Cek Formulir).',
                 ]);
         }
 
@@ -153,7 +169,7 @@ class PpdbController extends Controller
         if ($reg->allowsCorrection()) {
             return redirect()
                 ->route('ppdb.create')
-                ->with('info', 'Admin telah mengizinkan perbaikan data. Silakan periksa dan kirim ulang formulir Anda.');
+                ->with('info', 'Status pendaftaran Anda: Revisi. Data lama tetap tersimpan — silakan periksa, perbaiki, lalu kirim ulang formulir.');
         }
 
         return redirect()
@@ -244,11 +260,12 @@ class PpdbController extends Controller
         }
 
         if ($number = session('ppdb_access')) {
-            return PpdbRegistration::query()
+            $reg = PpdbRegistration::query()
                 ->where('registration_number', $number)
                 ->where('form_status', 'submitted')
-                ->where('status', 'verified')
                 ->first();
+
+            return $reg?->allowsCorrection() ? $reg : null;
         }
 
         return null;

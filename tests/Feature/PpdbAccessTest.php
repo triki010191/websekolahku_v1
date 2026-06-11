@@ -77,4 +77,111 @@ class PpdbAccessTest extends TestCase
             ->assertOk()
             ->assertHeader('content-type', 'application/pdf');
     }
+
+    public function test_lookup_with_revisi_status_opens_correction_form(): void
+    {
+        $this->seed();
+
+        $reg = PpdbRegistration::factory()->create([
+            'registration_number' => 'DAFTAR-2026-0004',
+            'nisn'                => '2222222222',
+            'spmb_banten_number'  => '2222222222',
+            'birth_date'          => '2011-01-15',
+            'form_status'         => 'submitted',
+            'status'              => 'revisi',
+            'draft_token'         => 'revision-token-abc',
+            'full_name'           => 'Siswa Revisi',
+            'gender'              => 'L',
+        ]);
+
+        $this->post(route('ppdb.lookup'), [
+            'nisn'       => '2222222222',
+            'birth_date' => $reg->birth_date->format('Y-m-d'),
+        ])->assertRedirect(route('ppdb.create'));
+
+        $this->get(route('ppdb.create'))
+            ->assertOk()
+            ->assertSee('Mode Perbaikan Data')
+            ->assertSee('revision-token-abc')
+            ->assertSee('Siswa Revisi');
+    }
+
+    public function test_stale_session_allows_new_registration_form(): void
+    {
+        $this->seed();
+
+        $reg = PpdbRegistration::factory()->create([
+            'registration_number' => 'DAFTAR-2026-0006',
+            'nisn'                => '4444444444',
+            'spmb_banten_number'  => '4444444444',
+            'birth_date'          => '2011-03-20',
+            'form_status'         => 'submitted',
+            'status'              => 'pending',
+            'draft_token'         => 'pending-token-abc',
+            'full_name'           => 'Siswa Pending',
+            'gender'              => 'L',
+        ]);
+
+        $this->post(route('ppdb.lookup'), [
+            'nisn'       => '4444444444',
+            'birth_date' => $reg->birth_date->format('Y-m-d'),
+        ])->assertRedirect(route('ppdb.success', $reg->registration_number));
+
+        $this->withSession(['ppdb_access' => $reg->registration_number])
+            ->get(route('ppdb.create'))
+            ->assertOk()
+            ->assertDontSee('Siswa Pending', false);
+    }
+
+    public function test_revisi_form_keeps_submitted_data(): void
+    {
+        $this->seed();
+
+        $reg = PpdbRegistration::factory()->create([
+            'registration_number' => 'DAFTAR-2026-0007',
+            'nisn'                => '5555555555',
+            'spmb_banten_number'  => '5555555555',
+            'birth_date'          => '2011-04-10',
+            'form_status'         => 'submitted',
+            'status'              => 'revisi',
+            'draft_token'         => 'revision-token-data',
+            'full_name'           => 'Siswa Data Lengkap',
+            'nik'                 => '3201010101010001',
+            'gender'              => 'L',
+            'address'             => 'Jl. Merdeka No. 10',
+        ]);
+
+        $this->withSession(['ppdb_access' => $reg->registration_number])
+            ->get(route('ppdb.create'))
+            ->assertOk()
+            ->assertSee('Mode Perbaikan Data')
+            ->assertSee('5555555555', false)
+            ->assertSee('Siswa Data Lengkap', false)
+            ->assertSee('Jl. Merdeka No. 10', false)
+            ->assertSee('revision-token-data', false);
+    }
+
+    public function test_check_spmb_allows_own_number_during_revision(): void
+    {
+        $this->seed();
+
+        $reg = PpdbRegistration::factory()->create([
+            'registration_number' => 'DAFTAR-2026-0005',
+            'nisn'                => '3333333333',
+            'spmb_banten_number'  => '3333333333',
+            'form_status'         => 'submitted',
+            'status'              => 'revisi',
+            'draft_token'         => 'revision-token-xyz',
+            'full_name'           => 'Siswa Cek Spmb',
+            'gender'              => 'L',
+        ]);
+
+        $this->withSession(['ppdb_access' => $reg->registration_number])
+            ->get(route('ppdb.check-spmb', [
+                'spmb_banten_number' => '3333333333',
+                'draft_token'        => 'revision-token-xyz',
+            ]))
+            ->assertOk()
+            ->assertJson(['available' => true]);
+    }
 }

@@ -58,6 +58,7 @@
                         <a href="#langkah" class="list-group-item list-group-item-action">Langkah Pengisian</a>
                         <a href="#tips" class="list-group-item list-group-item-action">Tips Penting</a>
                         <a href="#setelah-kirim" class="list-group-item list-group-item-action">Setelah Kirim</a>
+                        <a href="#status-pendaftar" class="list-group-item list-group-item-action">Status Pendaftar</a>
                         <a href="#masalah" class="list-group-item list-group-item-action">Masalah &amp; Solusi</a>
                         <a href="#checklist" class="list-group-item list-group-item-action">Checklist</a>
                     </div>
@@ -151,7 +152,7 @@
                     <ul class="mb-0">
                         <li class="mb-2"><strong>NISN harus 10 digit angka</strong> — tanpa spasi, tanpa huruf.</li>
                         <li class="mb-2"><strong>Nomor SPMB Banten = NISN Anda</strong> — jangan pakai nomor orang lain.</li>
-                        <li class="mb-2"><strong>Satu NISN hanya bisa dikirim sekali</strong> — tidak bisa isi ulang kecuali sekolah mengizinkan perbaikan.</li>
+                        <li class="mb-2"><strong>Satu NISN hanya bisa dikirim sekali</strong> — tidak bisa isi ulang kecuali admin mengubah status Anda ke <em>Revisi</em>.</li>
                         <li class="mb-2"><strong>Berkebutuhan Khusus wajib dipilih</strong> — minimal centang <em>Tidak ada</em> jika tidak ada kebutuhan khusus.</li>
                         <li class="mb-2">Field bertanda bintang (<strong>*</strong>) wajib diisi sebelum bisa lanjut.</li>
                         <li class="mb-2">Data harus <strong>sama dengan dokumen resmi</strong> (KK, ijazah, kartu NISN).</li>
@@ -176,14 +177,57 @@
                     </ol>
                 </article>
 
+                <article class="card border-0 shadow-sm p-4 p-md-5 mb-4 scroll-margin-top" id="status-pendaftar">
+                    <h2 class="h5 fw-bold mb-3"><i class="bi bi-flag text-primary me-2"></i>Status Pendaftar</h2>
+                    <p class="small text-secondary">Setelah formulir dikirim, panitia sekolah meninjau data Anda. Status dapat dilihat oleh admin; siswa merasakan efeknya lewat fitur Cek Formulir.</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered mb-3">
+                            <thead class="table-light">
+                                <tr><th>Status</th><th>Arti</th><th>Yang Bisa Dilakukan Siswa</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-semibold">Pending</td>
+                                    <td>Formulir sudah masuk, menunggu peninjauan panitia.</td>
+                                    <td>Cek &amp; unduh PDF lewat NISN + tanggal lahir.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">Revisi</td>
+                                    <td>Ada data yang perlu diperbaiki. Admin/operator mengizinkan perbaikan.</td>
+                                    <td>Masuk lewat <strong>Cek Formulir Pendaftaran</strong> → data lama tetap tampil → edit → kirim ulang.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">Diterima</td>
+                                    <td>Data disetujui / pendaftar diterima.</td>
+                                    <td>Cek &amp; unduh PDF.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">Ditolak</td>
+                                    <td>Pendaftaran tidak lolos peninjauan.</td>
+                                    <td>Cek &amp; unduh PDF. Hubungi panitia untuk informasi lebih lanjut.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3 class="h6 fw-bold mb-2">Alur Perbaikan Data (Status Revisi)</h3>
+                    <ol class="mb-0 small">
+                        <li class="mb-1">Hubungi operator/admin sekolah jika ada kesalahan data setelah formulir dikirim.</li>
+                        <li class="mb-1">Admin mengubah status pendaftar menjadi <strong>Revisi</strong>.</li>
+                        <li class="mb-1">Siswa buka <a href="{{ route('spmb.index') }}#cek-formulir-spmb">Cek Formulir Pendaftaran</a>, masukkan NISN dan tanggal lahir.</li>
+                        <li class="mb-1">Formulir terbuka dengan data lama yang sudah tersimpan — perbaiki bagian yang salah.</li>
+                        <li>Setelah <strong>Kirim Formulir</strong>, status kembali ke <em>Pending</em> untuk ditinjau ulang oleh panitia.</li>
+                    </ol>
+                </article>
+
                 <article class="card border-0 shadow-sm p-4 p-md-5 mb-4 scroll-margin-top" id="masalah">
                     <h2 class="h5 fw-bold mb-4"><i class="bi bi-wrench text-danger me-2"></i>Masalah Umum &amp; Cara Mengatasinya</h2>
                     <div class="accordion accordion-flush" id="panduanAccordion">
                         @foreach([
                             ['Tombol "Isi Formulir Dapodik" tidak muncul', 'Jadwal pengisian sudah ditutup.', 'Cek jadwal di halaman SPMB. Hubungi panitia jika melewati batas waktu karena kendala teknis.'],
                             ['"NISN harus 10 digit angka"', 'NISN kurang/lebih dari 10 digit, atau ada huruf/spasi.', 'Ketik ulang NISN dari kartu NISN. Hanya angka, tanpa titik atau strip.'],
-                            ['"Nomor SPMB Banten ini sudah terdaftar"', 'NISN tersebut sudah pernah mengirim formulir.', 'Gunakan fitur Cek Formulir (NISN + tanggal lahir) untuk unduh PDF. Jika data salah, hubungi panitia SPMB agar status diverifikasi untuk perbaikan data.'],
-                            ['Tidak bisa lanjut ke tahap berikutnya', 'Ada field wajib (*) yang belum diisi.', 'Isi semua yang bertanda bintang. Periksa Berkebutuhan Khusus (wajib centang minimal satu opsi) dan Nama Negara jika kewarganegaraan WNA.'],
+                            ['"Nomor SPMB Banten ini sudah terdaftar"', 'NISN tersebut sudah pernah mengirim formulir (bukan mode revisi).', 'Gunakan fitur Cek Formulir (NISN + tanggal lahir) untuk unduh PDF. Jika data salah, hubungi panitia agar status diubah ke <strong>Revisi</strong>.'],
+                            ['Tidak bisa lanjut ke tahap berikutnya', 'Ada field wajib (*) yang belum diisi, atau NISN ditolak sistem.', 'Isi semua yang bertanda bintang. Periksa Berkebutuhan Khusus (wajib centang minimal satu opsi) dan Nama Negara jika kewarganegaraan WNA. Jika sedang perbaikan data, pastikan admin sudah mengubah status ke Revisi lalu masuk lewat Cek Formulir.'],
+                            ['Tidak bisa lanjut saat status Revisi', 'Belum masuk lewat Cek Formulir atau status belum diubah admin.', 'Buka SPMB → Cek Formulir Pendaftaran → masukkan NISN &amp; tanggal lahir. Jangan buka formulir baru dari menu Isi Formulir. Data lama akan muncul otomatis.'],
                             ['"Formulir belum dapat dikirim" / daftar error merah', 'Ada data yang tidak valid di salah satu tahap.', 'Baca pesan error, kembali ke tahap terkait, perbaiki, lalu kirim ulang dari tahap Preview.'],
                             ['Belum centang pernyataan kebenaran data', 'Checkbox di tahap Preview belum dicentang.', 'Centang pernyataan kebenaran data, lalu klik Kirim Formulir.'],
                             ['"Data tidak ditemukan" saat Cek Formulir', 'NISN/tanggal lahir salah, atau formulir belum pernah dikirim (masih draft).', 'Pastikan NISN dan tanggal lahir persis seperti saat mengisi. Pastikan sudah menekan Kirim Formulir (bukan hanya Simpan Draft).'],
@@ -191,7 +235,7 @@
                             ['"Koneksi bermasalah" / gagal kirim', 'Internet putus atau lemah.', 'Cek koneksi WiFi/data. Klik Simpan Draft dulu, muat ulang halaman, lalu coba Kirim Formulir lagi.'],
                             ['"Terlalu banyak percobaan kirim"', 'Tombol kirim ditekan berulang kali dalam waktu singkat.', 'Tunggu 1 menit, lalu tekan Kirim Formulir sekali saja.'],
                             ['PDF tidak terunduh', 'Browser memblokir unduhan otomatis.', 'Klik tombol Unduh PDF Formulir di halaman sukses, atau gunakan fitur Cek Formulir lalu unduh dari sana.'],
-                            ['Ingin mengubah data setelah dikirim', 'Formulir yang sudah dikirim tidak bisa diedit sendiri.', 'Hubungi panitia SPMB. Jika admin mengizinkan, status diubah ke verified dan Anda bisa masuk lewat Cek Formulir untuk memperbaiki dan kirim ulang.'],
+                            ['Ingin mengubah data setelah dikirim', 'Formulir yang sudah dikirim tidak bisa diedit sendiri.', 'Hubungi operator/admin sekolah. Jika diizinkan, status diubah ke <strong>Revisi</strong>. Masuk lewat Cek Formulir Pendaftaran (NISN + tanggal lahir), perbaiki data yang tersimpan, lalu kirim ulang.'],
                         ] as $i => [$title, $cause, $solution])
                         <div class="accordion-item">
                             <h3 class="accordion-header">

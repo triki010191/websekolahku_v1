@@ -11,6 +11,9 @@ class PpdbRegistration extends Model
 {
     use HasFactory;
 
+    /** @var list<string> */
+    public const STATUSES = ['pending', 'revisi', 'accepted', 'rejected'];
+
     protected $fillable = [
         'registration_number', 'spmb_banten_number', 'major_id',
         'full_name', 'nisn', 'nik', 'gender', 'religion', 'birth_place', 'birth_date',
@@ -71,7 +74,34 @@ class PpdbRegistration extends Model
 
     public function allowsCorrection(): bool
     {
-        return $this->isSubmitted() && $this->status === 'verified';
+        return $this->isSubmitted() && $this->status === 'revisi';
+    }
+
+    /** @return array<string, string> */
+    public static function statusLabels(): array
+    {
+        return [
+            'pending'  => 'Menunggu Review',
+            'revisi'   => 'Perlu Revisi',
+            'accepted' => 'Diterima',
+            'rejected' => 'Ditolak',
+        ];
+    }
+
+    public function statusLabel(): string
+    {
+        return self::statusLabels()[$this->status] ?? (string) $this->status;
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'pending'  => 'bg-warning text-dark',
+            'revisi'   => 'bg-info text-dark',
+            'accepted' => 'bg-success',
+            'rejected' => 'bg-danger',
+            default    => 'bg-secondary',
+        };
     }
 
     public function genderLabel(): string

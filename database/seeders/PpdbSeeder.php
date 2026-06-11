@@ -18,7 +18,7 @@ class PpdbSeeder extends Seeder
 
         $data = [
             ['full_name' => 'Ahmad Fauzi Ramadhan', 'nisn' => '0081234567', 'gender' => 'L', 'previous_school' => 'SMPN 1 Pandeglang', 'major_id' => $majorRpl?->id,  'pathway' => 'zonasi',   'status' => 'pending'],
-            ['full_name' => 'Siti Nurhaliza',       'nisn' => '0081234568', 'gender' => 'P', 'previous_school' => 'MTs Al-Hidayah',    'major_id' => $majorAkl?->id,  'pathway' => 'prestasi', 'status' => 'verified'],
+            ['full_name' => 'Siti Nurhaliza',       'nisn' => '0081234568', 'gender' => 'P', 'previous_school' => 'MTs Al-Hidayah',    'major_id' => $majorAkl?->id,  'pathway' => 'prestasi', 'status' => 'revisi'],
             ['full_name' => 'Rendi Prasetya',       'nisn' => '0081234569', 'gender' => 'L', 'previous_school' => 'SMPN 2 Pandeglang', 'major_id' => $majorDkv?->id,  'pathway' => 'zonasi',   'status' => 'accepted'],
             ['full_name' => 'Bagus Wicaksono',      'nisn' => '0081234570', 'gender' => 'L', 'previous_school' => 'SMPN 3 Pandeglang', 'major_id' => $majorTbsm?->id, 'pathway' => 'afirmasi', 'status' => 'pending'],
             ['full_name' => 'Dewi Lestari',         'nisn' => '0081234571', 'gender' => 'P', 'previous_school' => 'MTs Mathla\'ul Anwar', 'major_id' => $majorTitl?->id, 'pathway' => 'zonasi', 'status' => 'rejected'],

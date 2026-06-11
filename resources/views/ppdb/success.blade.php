@@ -18,8 +18,18 @@
                 <div class="col-sm-6"><span class="text-secondary">No. SPMB Banten</span><div class="fw-bold">{{ $reg->spmb_banten_number }}</div></div>
                 <div class="col-sm-6"><span class="text-secondary">Nama</span><div class="fw-semibold">{{ $reg->full_name }}</div></div>
                 <div class="col-sm-6"><span class="text-secondary">Jurusan</span><div class="fw-semibold">{{ $reg->major?->name }}</div></div>
+                <div class="col-12"><span class="text-secondary">Status</span><div><span class="badge {{ $reg->statusBadgeClass() }}">{{ $reg->statusLabel() }}</span></div></div>
             </div>
         </div>
+
+        @if(session('info'))
+        <div class="alert alert-info small text-start">{{ session('info') }}</div>
+        @elseif(!$reg->allowsCorrection())
+        <div class="alert alert-secondary small text-start">
+            <i class="bi bi-lock me-1"></i>
+            Formulir sudah terkunci dan tidak dapat diedit pada status ini. Hubungi panitia jika ada kesalahan data.
+        </div>
+        @endif
 
         <div class="alert alert-info small text-start">
             <i class="bi bi-info-circle me-1"></i>
@@ -30,6 +40,9 @@
             <a href="{{ $pdfUrl }}" id="btnDownloadPdf" class="btn btn-primary btn-lg" download="formulir-dapodik-{{ $reg->registration_number }}.pdf"><i class="bi bi-file-earmark-pdf"></i> Unduh PDF Formulir</a>
             @if($reg->allowsCorrection())
             <a href="{{ route('ppdb.create') }}" class="btn btn-warning btn-lg"><i class="bi bi-pencil-square"></i> Perbaiki Formulir</a>
+            @endif
+            @if(setting('ppdb_is_open', false))
+            <a href="{{ route('ppdb.create') }}" class="btn btn-outline-success"><i class="bi bi-person-plus"></i> Isi Formulir Siswa Lain</a>
             @endif
             <a href="{{ route('spmb.index') }}" class="btn btn-outline-primary">Info SPMB</a>
             <a href="{{ route('home') }}" class="btn btn-outline-secondary">Beranda</a>

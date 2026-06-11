@@ -43,6 +43,13 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 @endif
+@if($d?->allowsCorrection())
+<div class="alert alert-warning" role="alert">
+    <i class="bi bi-pencil-square me-2"></i>
+    <strong>Mode Perbaikan Data (Status: Revisi).</strong>
+    Data yang sudah Anda kirim tetap tampil di formulir ini. Periksa setiap tahap, perbaiki jika perlu, lalu kirim ulang dari tahap Preview.
+</div>
+@endif
 @if($errors->any())
 <div class="alert alert-danger" role="alert">
     <strong>Formulir belum dapat dikirim.</strong> Periksa dan lengkapi data berikut:
@@ -304,6 +311,8 @@ window.PPDB_WIZARD = {
     csrfUrl: @json(route('ppdb.csrf')),
     checkSpmbUrl: @json(route('ppdb.check-spmb')),
     csrf: @json(csrf_token()),
+    isCorrectionMode: @json((bool) ($d?->allowsCorrection())),
+    serverDraftToken: @json($d?->draft_token),
     hasValidationErrors: @json($errors->any()),
     stepLabels: @json(array_merge(['Identitas SPMB'], O::stepLabels())),
     achievementTypes: @json(O::achievementTypes()),
