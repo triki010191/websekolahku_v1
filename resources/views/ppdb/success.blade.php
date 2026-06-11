@@ -27,7 +27,7 @@
         </div>
 
         <div class="d-flex flex-wrap justify-content-center gap-2">
-            <a href="{{ route('ppdb.pdf', $reg->registration_number) }}" id="btnDownloadPdf" class="btn btn-primary btn-lg"><i class="bi bi-file-earmark-pdf"></i> Unduh PDF Formulir</a>
+            <a href="{{ $pdfUrl }}" id="btnDownloadPdf" class="btn btn-primary btn-lg" download="formulir-dapodik-{{ $reg->registration_number }}.pdf"><i class="bi bi-file-earmark-pdf"></i> Unduh PDF Formulir</a>
             @if($reg->allowsCorrection())
             <a href="{{ route('ppdb.create') }}" class="btn btn-warning btn-lg"><i class="bi bi-pencil-square"></i> Perbaiki Formulir</a>
             @endif
@@ -41,10 +41,21 @@
 @push('scripts')
 <script>
 (function () {
-    const pdfUrl = @json(route('ppdb.pdf', $reg->registration_number));
-    setTimeout(function () {
-        window.location.assign(pdfUrl);
-    }, 800);
+    const pdfUrl = @json($pdfUrl);
+    const filename = @json('formulir-dapodik-'.$reg->registration_number.'.pdf');
+
+    function triggerDownload() {
+        const link = document.createElement('a');
+        link.href = pdfUrl;
+        link.download = filename;
+        link.rel = 'noopener';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    setTimeout(triggerDownload, 800);
 })();
 </script>
 @endpush

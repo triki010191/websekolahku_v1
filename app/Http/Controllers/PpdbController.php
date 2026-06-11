@@ -11,7 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PpdbController extends Controller
 {
@@ -112,7 +114,7 @@ class PpdbController extends Controller
                 'ok'                  => true,
                 'registration_number' => $reg->registration_number,
                 'redirect'            => route('ppdb.success', $reg->registration_number),
-                'pdf_url'             => route('ppdb.pdf', $reg->registration_number),
+                'pdf_url'             => $this->pdfDownloadUrl($reg),
             ]);
         }
 
@@ -171,24 +173,40 @@ class PpdbController extends Controller
                 ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan tanggal lahir Anda.');
         }
 
-        return response()->view('ppdb.success', compact('reg'));
+        return response()->view('ppdb.success', [
+            'reg'    => $reg,
+            'pdfUrl' => $this->pdfDownloadUrl($reg),
+        ]);
     }
 
-    public function pdf(string $number)
+    public function pdf(Request $request, string $number): HttpResponse
     {
         $reg = PpdbRegistration::with('major')
             ->where('registration_number', $number)
             ->where('form_status', 'submitted')
             ->firstOrFail();
 
-        if (! $this->canAccessPpdb($reg)) {
-            return redirect()->route('spmb.index')
-                ->with('error', 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan tanggal lahir Anda.');
+        if (! $request->hasValidSignature() && ! $this->canAccessPpdb($reg)) {
+            abort(403, 'Akses ditolak. Gunakan fitur Cek Formulir Daftar Ulang di halaman SPMB dengan NISN dan tanggal lahir Anda.');
         }
 
-        $pdf = Pdf::loadView('ppdb.pdf.bukti', compact('reg'))->setPaper('a4');
+        $filename = 'formulir-dapodik-'.$reg->registration_number.'.pdf';
+        $pdf      = Pdf::loadView('ppdb.pdf.bukti', compact('reg'))->setPaper('a4');
 
-        return $pdf->download('formulir-dapodik-'.$reg->registration_number.'.pdf');
+        return response($pdf->output(), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+            'Cache-Control'       => 'private, max-age=0, must-revalidate',
+        ]);
+    }
+
+    private function pdfDownloadUrl(PpdbRegistration $reg): string
+    {
+        return URL::temporarySignedRoute(
+            'ppdb.pdf',
+            now()->addDays(7),
+            ['number' => $reg->registration_number]
+        );
     }
 
     private function grantPpdbAccess(PpdbRegistration $reg): void
