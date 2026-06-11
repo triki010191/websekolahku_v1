@@ -14,6 +14,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 @endphp
 @extends('layouts.app')
 @section('title', 'Formulir Dapodik — '.config('app.name'))
+@section('hideFooter', 'true')
 @section('content')
 <section class="page-hero"><div class="container">
     <h1 class="display-6 fw-bold">Formulir Dapodik</h1>
@@ -27,6 +28,11 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     <div class="container" style="max-width:960px">
         <div id="wizardProgress" class="d-flex flex-wrap gap-1 justify-content-center small"></div>
         <div id="autosaveStatus" class="text-center small text-secondary mt-2">Draft belum disimpan</div>
+        <div class="text-center mt-2">
+            <button type="button" id="btnResetForm" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Mulai Formulir Baru (isi untuk siswa lain)
+            </button>
+        </div>
     </div>
 </section>
 
@@ -60,6 +66,15 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
     </ul>
 </div>
 @endif
+<div id="restoreBanner" class="alert alert-info d-none" role="alert">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span><i class="bi bi-clock-history me-1"></i> Ditemukan isian formulir yang belum dikirim di perangkat ini.</span>
+        <span class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary" id="btnRestoreYes">Lanjutkan Isian</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btnRestoreNo">Mulai Baru</button>
+        </span>
+    </div>
+</div>
 <div id="submitErrors" class="alert alert-danger d-none" role="alert"></div>
 <form id="ppdbWizardForm" method="post" action="{{ route('ppdb.store') }}" novalidate>
     @csrf
@@ -74,6 +89,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
                 <label class="form-label">Nomor Pendaftaran SPMB Banten / NISN *</label>
                 <input class="form-control form-control-lg" name="spmb_banten_number" id="spmb_banten_number" value="{{ $val('spmb_banten_number') }}" placeholder="Contoh: 0113804305" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" required>
                 <div class="form-text">Harus 10 digit angka (sesuai NISN Anda).</div>
+                <div id="spmbCheckStatus" class="small mt-1 d-none" aria-live="polite"></div>
                 @error('spmb_banten_number')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-4">
@@ -291,6 +307,8 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         @error('data_declaration')<div class="text-danger small mb-2">{{ $message }}</div>@enderror
     </div>
 
+    <div id="stepWarning" class="alert alert-warning d-none py-2 small mb-2" role="alert"></div>
+
     <div class="d-flex justify-content-between gap-2 sticky-bottom bg-body border-top py-3 px-2 mt-2" style="bottom:0;z-index:10">
         <button type="button" class="btn btn-outline-secondary" id="btnPrev" disabled>Kembali</button>
         <div class="d-flex gap-2">
@@ -308,6 +326,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
 window.PPDB_WIZARD = {
     storeUrl: @json(route('ppdb.store')),
     draftUrl: @json(route('ppdb.draft')),
+    createUrl: @json(route('ppdb.create')),
     csrfUrl: @json(route('ppdb.csrf')),
     checkSpmbUrl: @json(route('ppdb.check-spmb')),
     csrf: @json(csrf_token()),

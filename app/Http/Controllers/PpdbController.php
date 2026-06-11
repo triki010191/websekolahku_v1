@@ -46,7 +46,10 @@ class PpdbController extends Controller
         $majors  = Major::where('is_active', true)->orderBy('sort_order')->get();
         $options = PpdbFormOptions::class;
 
-        return response()->view('ppdb.form', compact('majors', 'options', 'draft'));
+        return response()
+            ->view('ppdb.form', compact('majors', 'options', 'draft'))
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache');
     }
 
     public function csrfToken()

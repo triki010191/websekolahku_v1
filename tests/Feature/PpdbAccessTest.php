@@ -161,6 +161,19 @@ class PpdbAccessTest extends TestCase
             ->assertSee('revision-token-data', false);
     }
 
+    public function test_fresh_form_renders_helper_controls(): void
+    {
+        $this->seed();
+
+        $this->get(route('ppdb.create'))
+            ->assertOk()
+            ->assertSee('Mulai Formulir Baru', false)
+            ->assertSee('restoreBanner', false)
+            ->assertSee('stepWarning', false)
+            ->assertSee('createUrl', false)
+            ->assertDontSee('<footer', false);
+    }
+
     public function test_check_spmb_allows_own_number_during_revision(): void
     {
         $this->seed();

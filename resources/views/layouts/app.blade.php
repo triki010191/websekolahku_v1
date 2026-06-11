@@ -46,7 +46,10 @@
         @yield('content')
     </main>
 
-    @include('partials.footer')
+    @hasSection('hideFooter')
+    @else
+        @include('partials.footer')
+    @endif
 
     <a href="https://wa.me/{{ str_replace(['+', ' '], '', setting('contact_whatsapp', '6281234567890')) }}"
        class="btn btn-success position-fixed rounded-circle shadow d-flex align-items-center justify-content-center"

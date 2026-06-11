@@ -3,11 +3,13 @@
     const form = document.getElementById('ppdbWizardForm');
     if (!form) return;
 
+    const STORAGE_KEY = 'ppdb_dapodik_draft';
     let step = 0;
     const total = 10;
     const steps = form.querySelectorAll('.wizard-step');
     const progress = document.getElementById('wizardProgress');
     const statusEl = document.getElementById('autosaveStatus');
+    const stepWarning = document.getElementById('stepWarning');
     const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
     const btnSubmit = document.getElementById('btnSubmit');
@@ -47,6 +49,13 @@
         }).join('');
     }
 
+    function hideStepWarning() {
+        if (stepWarning) {
+            stepWarning.textContent = '';
+            stepWarning.classList.add('d-none');
+        }
+    }
+
     function showStep(n) {
         step = Math.max(0, Math.min(total, n));
         steps.forEach(el => {
@@ -55,6 +64,7 @@
         btnPrev.disabled = step === 0;
         btnNext.classList.toggle('d-none', step === total);
         btnSubmit.classList.toggle('d-none', step !== total);
+        hideStepWarning();
         if (step === total) {
             buildPreview();
             refreshCsrfToken().catch(() => {});
@@ -80,45 +90,54 @@
             }
         });
         data.__step = step;
-        localStorage.setItem('ppdb_dapodik_draft', JSON.stringify(data));
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {}
     }
 
-    function loadLocal() {
-        if (cfg.isCorrectionMode) {
-            localStorage.removeItem('ppdb_dapodik_draft');
-            return;
-        }
-
-        const raw = localStorage.getItem('ppdb_dapodik_draft');
-        if (!raw) return;
+    function readLocal() {
         try {
-            const data = JSON.parse(raw);
-            const hasServerDraft = Boolean(draftToken.value);
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        } catch (e) {
+            return null;
+        }
+    }
 
-            if (hasServerDraft && data.draft_token && data.draft_token !== draftToken.value) {
-                localStorage.removeItem('ppdb_dapodik_draft');
-                return;
-            }
-
-            Object.keys(data).forEach(k => {
-                if (k.startsWith('__')) return;
-                if (!hasServerDraft && k !== 'spmb_banten_number' && k !== 'draft_token') return;
-                const els = form.querySelectorAll(`[name="${k}"], [name="${k}[]"]`);
-                if (!els.length) return;
-                if (els[0].type === 'checkbox') {
-                    const vals = Array.isArray(data[k]) ? data[k] : [data[k]];
-                    els.forEach(el => { el.checked = vals.includes(el.value); });
-                } else if (els.length === 1) {
-                    if (hasServerDraft && !String(data[k] ?? '').trim() && String(els[0].value ?? '').trim()) {
-                        return;
-                    }
-                    els[0].value = data[k];
-                }
-            });
-            if (hasServerDraft && data.__step) {
-                step = parseInt(data.__step, 10) || 0;
-            }
+    function clearLocal() {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
         } catch (e) {}
+    }
+
+    function hasMeaningfulData(data) {
+        if (!data) return false;
+        return Object.keys(data).some(k => {
+            if (k.startsWith('__') || k === '_token' || k === 'draft_token') return false;
+            const v = data[k];
+            return Array.isArray(v) ? v.length > 0 : String(v ?? '').trim() !== '';
+        });
+    }
+
+    // Isi field formulir dari objek data. skipEmptyOverServer: jangan timpa nilai server yang sudah terisi dengan nilai kosong lokal.
+    function applyData(data, opts) {
+        opts = opts || {};
+        const skipEmptyOverServer = opts.skipEmptyOverServer || false;
+        Object.keys(data).forEach(k => {
+            if (k.startsWith('__') || k === '_token') return;
+            const els = form.querySelectorAll(`[name="${k}"], [name="${k}[]"]`);
+            if (!els.length) return;
+            if (els[0].type === 'checkbox') {
+                const vals = Array.isArray(data[k]) ? data[k] : [data[k]];
+                els.forEach(el => { el.checked = vals.includes(el.value); });
+            } else if (els[0].type === 'radio') {
+                els.forEach(el => { el.checked = el.value === data[k]; });
+            } else if (els.length === 1) {
+                if (skipEmptyOverServer && !String(data[k] ?? '').trim() && String(els[0].value ?? '').trim()) {
+                    return;
+                }
+                els[0].value = data[k];
+            }
+        });
     }
 
     async function saveDraft(showMsg = true, retried = false) {
@@ -134,7 +153,7 @@
                 return saveDraft(showMsg, true);
             }
             if (res.status === 429) {
-                if (statusEl) statusEl.textContent = 'Menyimpan draft ditunda — data aman di browser';
+                if (statusEl) statusEl.textContent = 'Menyimpan draft ditunda — data aman di perangkat ini';
                 saveLocal();
                 return true;
             }
@@ -155,19 +174,20 @@
             if (res.status === 422) {
                 const errors = flattenErrors(json.errors);
                 const spmbMsg = errors.find(m => /SPMB|NISN/i.test(m));
-                if (statusEl) statusEl.textContent = spmbMsg || errors[0] || 'Data belum dapat disimpan';
+                if (statusEl) statusEl.textContent = spmbMsg || errors[0] || 'Sebagian data belum valid (cek saat kirim)';
                 const spmb = document.getElementById('spmb_banten_number');
                 if (spmb && spmbMsg) {
                     spmb.classList.add('is-invalid');
                 }
                 return false;
             }
-            if (showMsg && statusEl) statusEl.textContent = 'Gagal menyimpan draft';
+            if (showMsg && statusEl) statusEl.textContent = 'Draft belum tersimpan ke server — data aman di perangkat ini';
+            saveLocal();
             return false;
         } catch (e) {
-            if (showMsg && statusEl) statusEl.textContent = 'Offline — draft disimpan lokal';
+            if (showMsg && statusEl) statusEl.textContent = 'Offline — draft disimpan di perangkat ini';
             saveLocal();
-            return step === 0;
+            return false;
         }
     }
 
@@ -193,7 +213,14 @@
     }
 
     function showRequiredWarning(label) {
-        window.alert(`${label} wajib diisi sebelum lanjut ke tahap berikutnya.`);
+        const msg = `${label} wajib diisi sebelum lanjut ke tahap berikutnya.`;
+        if (stepWarning) {
+            stepWarning.textContent = msg;
+            stepWarning.classList.remove('d-none');
+            stepWarning.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            window.alert(msg);
+        }
     }
 
     function markInvalid(el) {
@@ -242,13 +269,49 @@
 
     btnPrev?.addEventListener('click', () => showStep(step - 1));
 
+    function setSpmbStatus(type, msg) {
+        const el = document.getElementById('spmbCheckStatus');
+        if (!el) return;
+        if (!msg) {
+            el.classList.add('d-none');
+            el.innerHTML = '';
+            return;
+        }
+        const color = type === 'success' ? 'text-success'
+            : type === 'error' ? 'text-danger'
+            : 'text-primary';
+        const icon = type === 'checking'
+            ? '<span class="spinner-border spinner-border-sm me-1" style="width:.85rem;height:.85rem"></span>'
+            : type === 'success' ? '<i class="bi bi-check-circle-fill me-1"></i>'
+            : type === 'error' ? '<i class="bi bi-exclamation-triangle-fill me-1"></i>'
+            : '<i class="bi bi-info-circle me-1"></i>';
+        el.className = 'small mt-1 fw-semibold ' + color;
+        el.innerHTML = icon + escapeHtml(msg);
+        el.classList.remove('d-none');
+    }
+
+    function setBtnLoading(btn, loading, loadingHtml) {
+        if (!btn) return;
+        if (loading) {
+            if (btn.dataset.originalHtml === undefined) btn.dataset.originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = loadingHtml;
+        } else {
+            btn.disabled = false;
+            if (btn.dataset.originalHtml !== undefined) {
+                btn.innerHTML = btn.dataset.originalHtml;
+                delete btn.dataset.originalHtml;
+            }
+        }
+    }
+
     async function checkSpmbAvailable() {
         const input = document.getElementById('spmb_banten_number');
         if (!input || !cfg.checkSpmbUrl) return true;
 
         if (cfg.isCorrectionMode) {
             input.classList.remove('is-invalid');
-            input.parentElement?.querySelector('.spmb-check-error')?.remove();
+            setSpmbStatus(null, '');
             return true;
         }
 
@@ -256,17 +319,15 @@
         if (!number) return true;
         if (!/^\d{10}$/.test(number)) {
             input.classList.add('is-invalid');
-            let err = input.parentElement.querySelector('.spmb-check-error');
-            if (!err) {
-                err = document.createElement('div');
-                err.className = 'text-danger small spmb-check-error';
-                input.parentElement.appendChild(err);
-            }
-            err.textContent = 'NISN harus 10 digit angka.';
+            setSpmbStatus('error', 'NISN harus 10 digit angka.');
             input.focus();
             return false;
         }
 
+        setSpmbStatus('checking', 'Memeriksa ketersediaan NISN ke server, mohon tunggu...');
+
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 15000);
         try {
             const params = new URLSearchParams({
                 spmb_banten_number: number,
@@ -275,45 +336,69 @@
             const res = await fetch(`${cfg.checkSpmbUrl}?${params}`, {
                 credentials: 'same-origin',
                 headers: { Accept: 'application/json' },
+                signal: controller.signal,
             });
-            const json = await res.json();
+            clearTimeout(timer);
+            const json = await res.json().catch(() => ({}));
             if (json.available) {
                 input.classList.remove('is-invalid');
+                setSpmbStatus('success', 'NISN tersedia. Melanjutkan ke tahap berikutnya...');
                 return true;
             }
             input.classList.add('is-invalid');
             input.focus();
-            let err = input.parentElement.querySelector('.spmb-check-error');
-            if (!err) {
-                err = document.createElement('div');
-                err.className = 'text-danger small spmb-check-error';
-                input.parentElement.appendChild(err);
-            }
-            err.textContent = json.message || 'Nomor SPMB Banten sudah terdaftar.';
+            setSpmbStatus('error', json.message || 'Nomor NISN ini sudah terdaftar. Gunakan menu Cek Formulir bila ingin perbaikan.');
             return false;
         } catch (e) {
+            clearTimeout(timer);
+            // Timeout/jaringan: jangan blokir user. Validasi final tetap dilakukan server saat kirim.
+            setSpmbStatus('info', 'Server lambat merespons. Anda tetap dapat melanjutkan — NISN akan dicek ulang saat formulir dikirim.');
             return true;
         }
     }
 
+    // Navigasi TIDAK pernah diblokir oleh kegagalan simpan draft.
+    // Draft disimpan di latar belakang; data juga selalu aman di perangkat (localStorage).
     btnNext?.addEventListener('click', async () => {
+        hideStepWarning();
         if (!validateCurrent()) return;
-        if (step === 0 && !await checkSpmbAvailable()) return;
-        const saved = await saveDraft(false);
-        if (!saved) return;
-        showStep(step + 1);
+
+        if (step === 0) {
+            setBtnLoading(btnNext, true, '<span class="spinner-border spinner-border-sm me-1"></span> Memeriksa NISN...');
+            let ok = false;
+            try {
+                ok = await checkSpmbAvailable();
+            } finally {
+                setBtnLoading(btnNext, false);
+            }
+            if (!ok) return;
+            showStep(step + 1);
+            saveDraft(false).catch(() => {});
+            return;
+        }
+
+        btnNext.disabled = true;
+        try {
+            showStep(step + 1);
+            saveDraft(false).catch(() => {});
+        } finally {
+            btnNext.disabled = false;
+        }
     });
+
     btnSaveDraft?.addEventListener('click', () => saveDraft(true));
+
     document.getElementById('spmb_banten_number')?.addEventListener('input', (e) => {
         e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
         e.target.classList.remove('is-invalid');
-        e.target.parentElement.querySelector('.spmb-check-error')?.remove();
+        setSpmbStatus(null, '');
     });
 
     form.addEventListener('input', () => {
+        hideStepWarning();
         saveLocal();
         clearTimeout(form._autosaveTimer);
-        form._autosaveTimer = setTimeout(() => saveDraft(false), 25000);
+        form._autosaveTimer = setTimeout(() => saveDraft(false).catch(() => {}), 25000);
     });
 
     document.getElementById('addAchievement')?.addEventListener('click', () => {
@@ -416,7 +501,7 @@
             const json = await res.json().catch(() => ({}));
 
             if (res.ok && json.redirect) {
-                localStorage.removeItem('ppdb_dapodik_draft');
+                clearLocal();
                 window.location.href = json.redirect;
                 return;
             }
@@ -463,14 +548,71 @@
         submitForm();
     });
 
+    // Tombol "Mulai Formulir Baru" — bersihkan cache perangkat & buka formulir kosong (untuk isi siswa lain).
+    document.getElementById('btnResetForm')?.addEventListener('click', () => {
+        if (!window.confirm('Mulai formulir baru? Isian yang belum dikirim di perangkat ini akan dihapus.')) return;
+        clearLocal();
+        window.location.href = cfg.createUrl || form.action;
+    });
+
+    function setupRestoreBanner(data) {
+        const banner = document.getElementById('restoreBanner');
+        if (!banner) return;
+        banner.classList.remove('d-none');
+        document.getElementById('btnRestoreYes')?.addEventListener('click', () => {
+            applyData(data);
+            banner.classList.add('d-none');
+            const targetStep = parseInt(data.__step, 10);
+            showStep(Number.isFinite(targetStep) ? targetStep : 0);
+        });
+        document.getElementById('btnRestoreNo')?.addEventListener('click', () => {
+            clearLocal();
+            banner.classList.add('d-none');
+        });
+    }
+
     setInterval(() => {
         refreshCsrfToken().catch(() => {});
     }, 4 * 60 * 1000);
 
-    loadLocal();
-    if (cfg.hasValidationErrors) {
-        showStep(total);
-    } else {
-        showStep(step);
+    function init() {
+        const stored = readLocal();
+
+        // Mode perbaikan (revisi): data dari server adalah sumber kebenaran.
+        if (cfg.isCorrectionMode) {
+            clearLocal();
+            return finishInit();
+        }
+
+        const hasServerDraft = Boolean(draftToken.value);
+
+        if (hasServerDraft) {
+            // Melanjutkan draft server: pulihkan lokal hanya jika token-nya sama.
+            if (stored && stored.draft_token && stored.draft_token === draftToken.value) {
+                applyData(stored, { skipEmptyOverServer: true });
+                const s = parseInt(stored.__step, 10);
+                if (Number.isFinite(s)) step = s;
+            } else if (stored) {
+                clearLocal();
+            }
+            return finishInit();
+        }
+
+        // Formulir baru: jangan timpa diam-diam (cegah tercampur data siswa lain).
+        // Tawarkan pemulihan eksplisit jika ada isian lama yang belum dikirim.
+        if (hasMeaningfulData(stored)) {
+            setupRestoreBanner(stored);
+        }
+        return finishInit();
     }
+
+    function finishInit() {
+        if (cfg.hasValidationErrors) {
+            showStep(total);
+        } else {
+            showStep(step);
+        }
+    }
+
+    init();
 })();
