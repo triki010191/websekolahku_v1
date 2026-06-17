@@ -19,10 +19,17 @@
             <p><strong>Ayah:</strong> {{ $reg->father_name }} | <strong>Ibu:</strong> {{ $reg->mother_name }}</p>
         </div>
     </div>
-    <div class="mt-2">
-        <a href="{{ route('admin.ppdb.export.pdf', $reg) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+    <div class="mt-2 d-flex flex-wrap gap-2">
+        <a href="{{ route('admin.ppdb.export.pdf', $reg) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-pdf"></i> Export PDF Dapodik</a>
+        @if($reg->allowsKartuTes())
+        <a href="{{ route('admin.ppdb.kartu-tes', $reg) }}" class="btn btn-sm btn-primary"><i class="bi bi-printer"></i> Cetak Kartu TES</a>
+        @endif
     </div>
-    <p class="small text-secondary mb-0 mt-3"><i class="bi bi-info-circle me-1"></i>Status <strong>revisi</strong> mengizinkan siswa memperbaiki data yang sudah dikirim tanpa menghapus isian lama. Siswa masuk lewat <em>Cek Formulir Pendaftaran</em> (NISN + tanggal lahir), lalu kirim ulang. Setelah dikirim ulang, status otomatis kembali ke <strong>pending</strong>.</p>
+    @if($reg->status === 'valid' && $reg->exam_number)
+    <p class="small text-primary mb-0 mt-2"><i class="bi bi-ticket-perforated me-1"></i>Nomor Peserta TES: <strong>{{ $reg->exam_number }}</strong></p>
+    @endif
+    <p class="small text-secondary mb-0 mt-3"><i class="bi bi-info-circle me-1"></i>Status <strong>Perlu Revisi</strong> mengizinkan siswa memperbaiki data yang sudah dikirim tanpa menghapus isian lama. Siswa masuk lewat <em>Cek Formulir Pendaftaran</em> (NISN + tanggal lahir), lalu kirim ulang. Setelah dikirim ulang, status otomatis kembali ke <strong>Menunggu Review</strong>.</p>
+    <p class="small text-secondary mb-0 mt-2"><i class="bi bi-info-circle me-1"></i>Status <strong>Data Sudah Valid</strong> berarti data formulir Dapodik sudah diverifikasi. Admin dapat mencetak <strong>Kartu TES</strong> untuk peserta. Nomor peserta tes otomatis dibuat jika belum ada.</p>
     <form method="post" action="{{ route('admin.ppdb.status', $reg) }}" class="row g-2 align-items-end mt-2 p-3 bg-body-secondary rounded">@csrf @method('put')
         <div class="col-md-4">
             <label class="form-label">Ubah status</label>

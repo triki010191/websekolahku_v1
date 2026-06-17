@@ -187,14 +187,19 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="fw-semibold">Pending</td>
+                                    <td class="fw-semibold">Menunggu Review</td>
                                     <td>Formulir sudah masuk, menunggu peninjauan panitia.</td>
                                     <td>Cek &amp; unduh PDF lewat NISN + tanggal lahir.</td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-semibold">Revisi</td>
+                                    <td class="fw-semibold">Perlu Revisi</td>
                                     <td>Ada data yang perlu diperbaiki. Admin/operator mengizinkan perbaikan.</td>
                                     <td>Masuk lewat <strong>Cek Formulir Pendaftaran</strong> → data lama tetap tampil → edit → kirim ulang.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold">Data Sudah Valid</td>
+                                    <td>Data formulir Dapodik sudah diverifikasi dan dinyatakan benar.</td>
+                                    <td>Cek &amp; unduh PDF. Kartu TES dicetak oleh panitia sekolah.</td>
                                 </tr>
                                 <tr>
                                     <td class="fw-semibold">Diterima</td>
@@ -215,7 +220,7 @@
                         <li class="mb-1">Admin mengubah status pendaftar menjadi <strong>Revisi</strong>.</li>
                         <li class="mb-1">Siswa buka <a href="{{ route('spmb.index') }}#cek-formulir-spmb">Cek Formulir Pendaftaran</a>, masukkan NISN dan tanggal lahir.</li>
                         <li class="mb-1">Formulir terbuka dengan data lama yang sudah tersimpan — perbaiki bagian yang salah.</li>
-                        <li>Setelah <strong>Kirim Formulir</strong>, status kembali ke <em>Pending</em> untuk ditinjau ulang oleh panitia.</li>
+                        <li>Setelah <strong>Kirim Formulir</strong>, status kembali ke <em>Menunggu Review</em> untuk ditinjau ulang oleh panitia.</li>
                     </ol>
                 </article>
 

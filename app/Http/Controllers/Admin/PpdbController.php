@@ -30,6 +30,7 @@ class PpdbController extends Controller
             'total'    => PpdbRegistration::where('form_status', 'submitted')->count(),
             'pending'  => PpdbRegistration::where('form_status', 'submitted')->where('status', 'pending')->count(),
             'revisi'   => PpdbRegistration::where('form_status', 'submitted')->where('status', 'revisi')->count(),
+            'valid'    => PpdbRegistration::where('form_status', 'submitted')->where('status', 'valid')->count(),
             'accepted' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'accepted')->count(),
             'rejected' => PpdbRegistration::where('form_status', 'submitted')->where('status', 'rejected')->count(),
             'drafts'   => PpdbRegistration::where('form_status', 'draft')->count(),
@@ -51,7 +52,13 @@ class PpdbController extends Controller
         ]);
         $data['verified_by'] = $request->user()->id;
         $data['verified_at'] = now();
+
+        if ($data['status'] === 'valid' && blank($ppdb->exam_number)) {
+            $data['exam_number'] = PpdbRegistration::generateExamNumber();
+        }
+
         $ppdb->update($data);
+
         return back()->with('success', 'Status pendaftar diperbarui.');
     }
 
@@ -80,5 +87,17 @@ class PpdbController extends Controller
         $pdf = Pdf::loadView('ppdb.pdf.bukti', ['reg' => $reg])->setPaper('a4');
 
         return $pdf->download('dapodik-'.$reg->registration_number.'.pdf');
+    }
+
+    public function exportKartuTes(PpdbRegistration $ppdb)
+    {
+        abort_unless($ppdb->allowsKartuTes(), 403, 'Kartu TES hanya dapat dicetak untuk pendaftar dengan status Data Sudah Valid.');
+
+        $reg = $ppdb->load('major');
+        $pdf = Pdf::loadView('ppdb.pdf.kartu-tes', ['reg' => $reg])->setPaper('a4', 'portrait');
+
+        $filename = 'kartu-tes-'.($reg->exam_number ?: $reg->registration_number).'.pdf';
+
+        return $pdf->download($filename);
     }
 }

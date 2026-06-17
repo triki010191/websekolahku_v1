@@ -133,6 +133,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
 
     Route::get('ppdb/export/excel', [AdminPpdb::class, 'exportExcel'])->name('ppdb.export.excel');
     Route::get('ppdb/{ppdb}/export/pdf', [AdminPpdb::class, 'exportPdf'])->name('ppdb.export.pdf');
+    Route::get('ppdb/{ppdb}/kartu-tes', [AdminPpdb::class, 'exportKartuTes'])->name('ppdb.kartu-tes');
     Route::get('ppdb', [AdminPpdb::class, 'index'])->name('ppdb.index');
     Route::get('ppdb/{ppdb}', [AdminPpdb::class, 'show'])->name('ppdb.show');
     Route::put('ppdb/{ppdb}/status', [AdminPpdb::class, 'updateStatus'])->name('ppdb.status');

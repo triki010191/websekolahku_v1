@@ -12,7 +12,7 @@ class PpdbRegistration extends Model
     use HasFactory;
 
     /** @var list<string> */
-    public const STATUSES = ['pending', 'revisi', 'accepted', 'rejected'];
+    public const STATUSES = ['pending', 'revisi', 'valid', 'accepted', 'rejected'];
 
     protected $fillable = [
         'registration_number', 'spmb_banten_number', 'major_id',
@@ -77,12 +77,18 @@ class PpdbRegistration extends Model
         return $this->isSubmitted() && $this->status === 'revisi';
     }
 
+    public function allowsKartuTes(): bool
+    {
+        return $this->isSubmitted() && $this->status === 'valid';
+    }
+
     /** @return array<string, string> */
     public static function statusLabels(): array
     {
         return [
             'pending'  => 'Menunggu Review',
             'revisi'   => 'Perlu Revisi',
+            'valid'    => 'Data Sudah Valid',
             'accepted' => 'Diterima',
             'rejected' => 'Ditolak',
         ];
@@ -98,10 +104,31 @@ class PpdbRegistration extends Model
         return match ($this->status) {
             'pending'  => 'bg-warning text-dark',
             'revisi'   => 'bg-info text-dark',
+            'valid'    => 'bg-primary',
             'accepted' => 'bg-success',
             'rejected' => 'bg-danger',
             default    => 'bg-secondary',
         };
+    }
+
+    public static function generateExamNumber(): string
+    {
+        $year = date('Y');
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($year) {
+            $last = self::query()
+                ->where('exam_number', 'like', "TES-{$year}-%")
+                ->lockForUpdate()
+                ->orderByDesc('exam_number')
+                ->value('exam_number');
+
+            $seq = 1;
+            if ($last && preg_match('/-(\d+)$/', $last, $m)) {
+                $seq = ((int) $m[1]) + 1;
+            }
+
+            return sprintf('TES-%s-%04d', $year, $seq);
+        });
     }
 
     public function genderLabel(): string

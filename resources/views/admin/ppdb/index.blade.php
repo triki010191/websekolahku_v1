@@ -11,6 +11,7 @@
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Terkirim: <strong>{{ $counts['total'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Pending: <strong class="text-warning">{{ $counts['pending'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Revisi: <strong class="text-info">{{ $counts['revisi'] }}</strong></div></div>
+    <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Valid: <strong class="text-primary">{{ $counts['valid'] }}</strong></div></div>
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Diterima: <strong class="text-success">{{ $counts['accepted'] }}</strong></div></div>
     @if($counts['drafts'] > 0)
     <div class="col-auto"><div class="card p-2 border-0 shadow-sm">Draft: <strong class="text-secondary">{{ $counts['drafts'] }}</strong></div></div>
@@ -55,6 +56,9 @@
                 <td class="text-nowrap">
                     <a href="{{ route('admin.ppdb.show', $r).(request()->getQueryString() ? '?'.request()->getQueryString() : '') }}" class="btn btn-sm btn-outline-primary">Detail</a>
                     <a href="{{ route('admin.ppdb.export.pdf', $r) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
+                    @if($r->allowsKartuTes())
+                    <a href="{{ route('admin.ppdb.kartu-tes', $r) }}" class="btn btn-sm btn-primary"><i class="bi bi-printer"></i> Kartu TES</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

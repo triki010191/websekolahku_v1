@@ -73,7 +73,7 @@ class PpdbRegistrationsExport implements FromCollection, WithHeadings, WithMappi
             $r->exam_number,
             $r->diploma_serial,
             $r->skhus_serial,
-            $r->status,
+            $r->statusLabel(),
             $r->updated_at?->format('Y-m-d H:i'),
         ];
     }
