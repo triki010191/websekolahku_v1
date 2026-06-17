@@ -40,6 +40,31 @@ php artisan optimize:clear
 
 Ulangi perintah yang sama di `~/public_html` jika di sana juga ada instalasi Laravel.
 
+## Error status `valid` / cetak Kartu TES gagal
+
+Pesan: `Data truncated for column 'status'` saat mengubah status ke **Data Sudah Valid**.
+
+Penyebab: migration database belum dijalankan setelah `git pull`.
+
+**Opsi A — lewat SSH (disarankan):**
+
+```bash
+cd ~/repositories/websekolahku_v1   # sesuaikan Laravel root
+php artisan migrate --force
+php artisan optimize:clear
+```
+
+**Opsi B — lewat phpMyAdmin** (jika tidak ada SSH):
+
+Jalankan SQL dari file `deploy/fix-ppdb-valid-status.sql`:
+
+```sql
+ALTER TABLE `ppdb_registrations`
+    MODIFY `status` VARCHAR(20) NOT NULL DEFAULT 'pending';
+```
+
+Setelah itu, ubah status pendaftar ke **Data Sudah Valid** lalu cetak Kartu TES lagi.
+
 ## Gambar tidak muncul?
 
 1. Jalankan `bash deploy/setup-public-html.sh` (perbaiki symlink + restore backup).
