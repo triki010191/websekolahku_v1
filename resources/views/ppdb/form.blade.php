@@ -277,7 +277,7 @@ $scholarships = old('scholarships', $d?->scholarships ?? [[]]);
         <div class="row g-2">
             <div class="col-md-6"><label class="form-label">Kompetensi Keahlian *</label>
                 <select name="major_id" class="form-select" required><option value="">Pilih jurusan</option>
-                    @foreach($majors as $m)<option value="{{ $m->id }}" @selected((string)$val('major_id')===(string)$m->id)>{{ $m->name }}</option>@endforeach
+                    @foreach($majors as $m)<option value="{{ $m->id }}" @selected((string)$val('major_id')===(string)$m->id)>{{ $m->code }}</option>@endforeach
                 </select>@error('major_id')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-6"><label class="form-label">Jenis Pendaftaran *</label>

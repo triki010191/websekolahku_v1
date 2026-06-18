@@ -2,245 +2,247 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Kartu TES — {{ $reg->exam_number ?? $reg->registration_number }}</title>
+    <title>Bukti Validasi — {{ $reg->registration_number }}</title>
     <style>
-        @page {
-            size: A4 portrait;
-            margin: 18mm 16mm;
-        }
+        @page { size: A4 portrait; margin: 12mm 14mm; }
         * { box-sizing: border-box; }
         html, body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
-            color: #000;
+            font-size: 10px;
+            color: #111;
             margin: 0;
             padding: 0;
-            width: 100%;
+            line-height: 1.35;
+        }
+        table { border-collapse: collapse; width: 100%; }
+        .doc { border: 1.5px solid #111; }
+        .hdr td {
+            vertical-align: middle;
+            padding: 10px 12px;
+            border-bottom: 1px solid #111;
+        }
+        .hdr-logo { width: 80px; text-align: left; padding-right: 4px; }
+        .hdr-logo img { width: 64px; height: 64px; object-fit: contain; }
+        .hdr-center { text-align: left; padding-left: 4px; }
+        .hdr-center .school { font-size: 15px; font-weight: bold; margin: 0 0 3px; }
+        .hdr-center .title { font-size: 12px; font-weight: bold; margin: 0 0 3px; letter-spacing: 0.3px; }
+        .hdr-center .year { font-size: 9.5px; margin: 0; }
+        .doc-bar {
+            text-align: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #111;
+        }
+        .doc-bar .main { font-size: 11px; font-weight: bold; margin: 0 0 2px; }
+        .doc-bar .sub { font-size: 9px; margin: 0; }
+        .section-hdr {
+            background: #e6e6e6;
+            border-bottom: 1px solid #111;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .info-grid td {
+            border-right: 1px solid #111;
+            border-bottom: 1px solid #111;
+            padding: 6px 10px;
+            vertical-align: top;
+            width: 33.33%;
+        }
+        .info-grid td:last-child { border-right: none; }
+        .info-grid .lbl { font-weight: bold; font-size: 9px; margin-bottom: 2px; }
+        .info-grid .val { font-size: 10px; }
+        .data-row td {
+            border-bottom: 1px dotted #999;
+            padding: 5px 10px;
+            vertical-align: top;
+            font-size: 10px;
+        }
+        .data-row td.lbl {
+            width: 28%;
+            background: #f3f3f3;
+            font-weight: bold;
+        }
+        .data-row.alt td.lbl { background: #ececec; }
+        .data-row.alt td.val { background: #fafafa; }
+        .extra td {
+            border-bottom: 1px solid #111;
+            padding: 5px 10px;
+            font-size: 10px;
+        }
+        .extra td.lbl {
+            width: 50%;
+            background: #e6e6e6;
+            font-weight: bold;
+            border-right: 1px solid #111;
+        }
+        .sign-box td {
+            border-bottom: 1px solid #111;
+            width: 33.33%;
+            vertical-align: top;
+            padding: 10px 8px 12px;
+            font-size: 9.5px;
+            line-height: 1.45;
+        }
+        .sign-box td + td { border-left: 1px solid #111; }
+        .sign-space { height: 52px; }
+        .sign-line { text-align: center; margin-top: 4px; }
+        .sign-name { text-align: center; font-weight: bold; margin-top: 4px; }
+        .footer td {
+            padding: 8px 10px;
+            vertical-align: middle;
+            font-size: 8px;
             line-height: 1.4;
         }
-        .card {
-            border: 2px solid #000;
-            border-radius: 6px;
-            overflow: hidden;
-            width: 100%;
-            background: #fff;
-        }
-        .header {
-            background: #fff;
-            padding: 14px 16px 12px;
-            border-bottom: 1px solid #000;
-        }
-        .header-layout {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .header-layout td {
-            vertical-align: middle;
-        }
-        .header-logo {
-            width: 76px;
-            padding-right: 14px;
-        }
-        .header-logo img {
-            width: 68px;
-            height: 68px;
-            object-fit: contain;
-        }
-        .header-text {
-            text-align: left;
-        }
-        .header .school {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 0 0 3px;
-            color: #000;
-        }
-        .header h1 {
-            font-size: 14px;
-            margin: 0 0 3px;
-            letter-spacing: 0.5px;
-            color: #000;
-            font-weight: bold;
-        }
-        .header .year {
-            font-size: 10px;
-            margin: 0;
-            color: #000;
-        }
-        .title-bar {
-            background: #fff;
-            border-bottom: 1px solid #000;
+        .footer-left { width: 72%; }
+        .footer-right {
+            width: 28%;
+            border-left: 1px solid #111;
             text-align: center;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            color: #000;
         }
-        .body {
-            padding: 14px 16px 16px;
-        }
-        .exam-no {
-            margin: 0 0 14px;
-            text-align: center;
-            border: 1px dashed #000;
-            background: #fff;
-            padding: 10px 12px;
-            border-radius: 4px;
-        }
-        .exam-no .label {
-            font-size: 10px;
-            color: #000;
-            margin-bottom: 3px;
-        }
-        .exam-no .number {
-            font-size: 20px;
-            font-weight: bold;
-            color: #000;
-            letter-spacing: 1px;
-        }
-        .identity-layout {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 0;
-        }
-        .identity-layout td {
-            vertical-align: top;
-            padding: 0;
-        }
-        .photo-box {
-            width: 90px;
-            height: 115px;
-            border: 1px solid #000;
-            text-align: center;
-            font-size: 9px;
-            color: #000;
-            padding-top: 46px;
-            background: #fff;
-        }
-        .info {
-            padding-left: 14px;
-        }
-        .info table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .info td {
-            padding: 6px 0;
-            vertical-align: top;
-            border-bottom: 1px dotted #000;
-            color: #000;
-            font-size: 11px;
-        }
-        .info td.label {
-            width: 38%;
-            font-weight: bold;
-        }
-        .schedule {
-            margin-top: 12px;
-            border-top: 1px solid #000;
-            padding-top: 10px;
-        }
-        .schedule table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .schedule td {
-            padding: 5px 0;
-            vertical-align: top;
-            color: #000;
-            font-size: 11px;
-        }
-        .schedule td.label {
-            width: 30%;
-            font-weight: bold;
-        }
-        .note {
-            margin-top: 14px;
-            padding: 10px 12px;
-            background: #fff;
-            border: 1px solid #000;
-            border-radius: 4px;
-            font-size: 10px;
-            line-height: 1.45;
-            color: #000;
-        }
+        .footer-right img { height: 42px; object-fit: contain; }
     </style>
 </head>
 <body>
 @php
     use App\Support\PpdbFieldLabels as L;
+
     $schoolName = setting('site_name', config('app.name'));
     $yearLabel = setting('ppdb_year', date('Y').'/'.(date('Y')+1));
-    $testDate = setting('ppdb_test_date', 'Akan diumumkan');
-    $testLocation = setting('ppdb_test_location', setting('contact_address', '-'));
-    $testTime = setting('ppdb_test_time', '07.00 WIB');
+    $spmbUrl = 'https://spmb.bantenprov.go.id/';
+    $schoolUrl = 'https://smkn8pandeglang.sch.id';
+    $printCity = 'Pandeglang';
+    $printDate = now()->translatedFormat('d F Y');
+    $operatorName = $operator?->name ?? 'Administrator';
+    $jenjang = setting('ppdb_jenjang', 'Sekolah Menengah Kejuruan Negeri');
+    $regDate = ($reg->verified_at ?? $reg->updated_at)?->translatedFormat('d F Y H:i:s') ?? '-';
+
     $siteLogoPath = setting('site_logo');
     $schoolLogoFile = storage_file_exists($siteLogoPath)
         ? storage_path('app/public/'.ltrim($siteLogoPath, '/'))
-        : null;
+        : (is_file(public_path('images/spmb-banten-official.png')) ? public_path('images/spmb-banten-official.png') : null);
+
+    $spmbLogoPath = setting('spmb_banten_logo');
+    $spmbLogoFile = storage_file_exists($spmbLogoPath)
+        ? storage_path('app/public/'.ltrim($spmbLogoPath, '/'))
+        : (is_file(public_path('images/spmb-banten-official.png')) ? public_path('images/spmb-banten-official.png') : null);
+
+    $alamat = strtoupper(collect([
+        $reg->address,
+        ($reg->rt || $reg->rw) ? 'RT '.L::dash($reg->rt).' / RW '.L::dash($reg->rw) : null,
+        $reg->hamlet,
+        $reg->village,
+        $reg->district,
+        $reg->city,
+        $reg->postal_code,
+    ])->filter(fn ($v) => filled($v) && $v !== '-')->implode(', '));
+
+    $specialNeeds = array_values(array_filter((array) $reg->special_needs));
+    $disabilitas = (empty($specialNeeds) || $specialNeeds === ['Tidak']) ? 'Tidak' : 'Ya';
+
+    $dataRows = [
+        ['NISN', L::dash($reg->nisn)],
+        ['NIK', L::dash($reg->nik)],
+        ['Nama Lengkap', strtoupper(L::dash($reg->full_name))],
+        ['Jenis Kelamin', $reg->gender ? $reg->genderLabel() : '-'],
+        ['Tempat, Tgl Lahir', strtoupper(L::dash($reg->birth_place)).', '.L::date($reg->birth_date)],
+        ['Alamat', $alamat !== '' ? $alamat : '-'],
+        ['Sekolah Asal', strtoupper(L::dash($reg->previous_school))],
+        ['Pilih Jurusan', L::dash($reg->major?->name)],
+    ];
 @endphp
 
-<div class="card">
-    <div class="header">
-        <table class="header-layout">
-            <tr>
-                @if($schoolLogoFile)
-                <td class="header-logo">
-                    <img src="{{ $schoolLogoFile }}" alt="Logo {{ $schoolName }}">
-                </td>
-                @endif
-                <td class="header-text">
-                    <p class="school">{{ $schoolName }}</p>
-                    <h1>KARTU PESERTA TES</h1>
-                    <p class="year">Seleksi Penerimaan Murid Baru (SPMB) Tahun Ajaran {{ $yearLabel }}</p>
-                </td>
-            </tr>
-        </table>
-    </div>
+<table class="doc">
+    <tr class="hdr">
+        <td class="hdr-logo">
+            @if($schoolLogoFile)
+            <img src="{{ $schoolLogoFile }}" alt="Logo">
+            @endif
+        </td>
+        <td class="hdr-center">
+            <p class="school">{{ $schoolName }}</p>
+            <p class="title">TANDA BUKTI PENDAFTARAN</p>
+            <p class="year">Seleksi Penerimaan Murid Baru (SPMB) Tahun {{ $yearLabel }}</p>
+        </td>
+    </tr>
+</table>
 
-    <div class="title-bar">BUKTI VALIDASI DATA PENDAFTAR</div>
-
-    <div class="body">
-        <div class="exam-no">
-            <div class="label">NOMOR PESERTA TES</div>
-            <div class="number">{{ L::dash($reg->exam_number) }}</div>
-        </div>
-
-        <table class="identity-layout">
-            <tr>
-                <td style="width: 96px">
-                    <div class="photo-box">Foto<br>3×4</div>
-                </td>
-                <td class="info">
-                    <table>
-                        <tr><td class="label">Nama Lengkap</td><td>{{ L::dash($reg->full_name) }}</td></tr>
-                        <tr><td class="label">NISN</td><td>{{ L::dash($reg->nisn) }}</td></tr>
-                        <tr><td class="label">NIK</td><td>{{ L::dash($reg->nik) }}</td></tr>
-                        <tr><td class="label">Jenis Kelamin</td><td>{{ $reg->gender ? $reg->genderLabel() : '-' }}</td></tr>
-                        <tr><td class="label">Tempat, Tgl Lahir</td><td>{{ L::dash($reg->birth_place) }}, {{ L::date($reg->birth_date) }}</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-
-        <div class="schedule">
-            <table>
-                <tr><td class="label">No. Daftar Ulang</td><td>{{ $reg->registration_number }}</td></tr>
-                <tr><td class="label">No. SPMB Banten</td><td>{{ L::dash($reg->spmb_banten_number) }}</td></tr>
-                <tr><td class="label">Asal Sekolah</td><td>{{ L::dash($reg->previous_school) }}</td></tr>
-                <tr><td class="label">Pilihan Jurusan</td><td>{{ L::dash($reg->major?->name) }} ({{ L::dash($reg->major?->code) }})</td></tr>
-                <tr><td class="label">Tanggal Tes</td><td>{{ $testDate }}</td></tr>
-                <tr><td class="label">Waktu</td><td>{{ $testTime }}</td></tr>
-                <tr><td class="label">Lokasi</td><td>{{ $testLocation }}</td></tr>
-            </table>
-        </div>
-
-        <div class="note">
-            <strong>Catatan:</strong> Kartu ini dicetak setelah data formulir Dapodik dinyatakan valid oleh panitia.
-            Peserta wajib membawa kartu ini saat tes seleksi. Pastikan identitas sesuai dengan dokumen asli.
-        </div>
-    </div>
+<div class="doc doc-bar">
+    <p class="main">TANDA BUKTI VALIDASI DATA PENDAFTAR</p>
+    <p class="sub">SISTEM PENERIMAAN MURID BARU — Tahun ajaran {{ $yearLabel }}</p>
 </div>
+
+<div class="doc section-hdr" style="border-top: none;">Info Pendaftaran</div>
+<table class="doc" style="border-top: none;">
+    <tr class="info-grid">
+        <td>
+            <div class="lbl">Nomor Pendaftaran</div>
+            <div class="val">{{ L::dash($reg->registration_number) }}</div>
+        </td>
+        <td>
+            <div class="lbl">Jenjang</div>
+            <div class="val">{{ $jenjang }}</div>
+        </td>
+        <td>
+            <div class="lbl">Tanggal</div>
+            <div class="val">{{ $regDate }}</div>
+        </td>
+    </tr>
+</table>
+
+<table class="doc" style="border-top: none;">
+    @foreach($dataRows as $i => $row)
+    <tr class="data-row {{ $i % 2 ? 'alt' : '' }}">
+        <td class="lbl">{{ $row[0] }}</td>
+        <td class="val">{{ $row[1] }}</td>
+    </tr>
+    @endforeach
+</table>
+
+<div class="doc section-hdr" style="border-top: none;">Data Tambahan</div>
+<table class="doc extra" style="border-top: none;">
+    <tr>
+        <td class="lbl">Status anak Penyandang Disabilitas</td>
+        <td>{{ $disabilitas }}</td>
+    </tr>
+</table>
+
+<table class="doc sign-box" style="border-top: none;">
+    <tr>
+        <td>
+            a/n {{ strtoupper(L::dash($reg->full_name)) }}<br>
+            Menyetujui data diatas,<br>
+            Ortu/Wali Murid terdaftar **)
+            <div class="sign-space"></div>
+            <div class="sign-line">(......................................)</div>
+        </td>
+        <td>
+            Menyetujui data diatas,<br>
+            Murid terdaftar
+            <div class="sign-space"></div>
+            <div class="sign-name">{{ L::dash($reg->full_name) }}</div>
+        </td>
+        <td>
+            {{ $printCity }}, {{ $printDate }}<br>
+            Operator SPMB
+            <div class="sign-space"></div>
+            <div class="sign-name">({{ $operatorName }})</div>
+        </td>
+    </tr>
+</table>
+
+<table class="doc footer" style="border-top: none;">
+    <tr>
+        <td class="footer-left">
+            Pantau hasil seleksi Sistem Penerimaan Murid Baru Anda melalui Website {{ $spmbUrl }} atau {{ $schoolUrl }}
+        </td>
+        <td class="footer-right">
+            @if($spmbLogoFile)
+            <img src="{{ $spmbLogoFile }}" alt="SPMB Online">
+            @else
+            <strong>SPMB online</strong>
+            @endif
+        </td>
+    </tr>
+</table>
 </body>
 </html>

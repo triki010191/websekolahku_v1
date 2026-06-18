@@ -57,7 +57,7 @@
                     <a href="{{ route('admin.ppdb.show', $r).(request()->getQueryString() ? '?'.request()->getQueryString() : '') }}" class="btn btn-sm btn-outline-primary">Detail</a>
                     <a href="{{ route('admin.ppdb.export.pdf', $r) }}" class="btn btn-sm btn-outline-secondary">PDF</a>
                     @if($r->allowsKartuTes())
-                    <a href="{{ route('admin.ppdb.kartu-tes', $r) }}" class="btn btn-sm btn-primary"><i class="bi bi-printer"></i> Kartu TES</a>
+                    <a href="{{ route('admin.ppdb.kartu-tes', $r) }}" class="btn btn-sm btn-primary"><i class="bi bi-printer"></i> Bukti Validasi</a>
                     @endif
                 </td>
             </tr>

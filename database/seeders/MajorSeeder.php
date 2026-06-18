@@ -21,9 +21,9 @@ class MajorSeeder extends Seeder
                 'student_count' => 288, 'quota' => 72, 'spmb_quota' => 36, 'sort_order' => 1,
             ],
             [
-                'code' => 'AKL', 'name' => 'Akuntansi & Keuangan Lembaga', 'slug' => 'akl',
+                'code' => 'AK', 'name' => 'Akuntansi', 'slug' => 'ak',
                 'tagline' => 'Pembekalan akuntansi, audit, dan keuangan sesuai standar industri.',
-                'description' => 'Kompetensi AKL mempersiapkan lulusan menjadi tenaga akuntansi yang profesional, jujur, dan berintegritas.',
+                'description' => 'Kompetensi Akuntansi mempersiapkan lulusan menjadi tenaga akuntansi yang profesional, jujur, dan berintegritas.',
                 'curriculum' => "Akuntansi Dasar|Akuntansi Keuangan|Komputer Akuntansi (MYOB, Accurate)|Perpajakan|Administrasi Perkantoran|Praktik Kerja Industri",
                 'career_prospects' => "Staff Akuntansi|Staff Pajak|Kasir|Teller Bank|Wirausaha",
                 'certifications' => "BNSP Teknisi Akuntansi Junior|Brevet Pajak A",
@@ -31,7 +31,7 @@ class MajorSeeder extends Seeder
                 'student_count' => 216, 'quota' => 72, 'spmb_quota' => 36, 'sort_order' => 2,
             ],
             [
-                'code' => 'DKV', 'name' => 'Desain Komunikasi Visual', 'slug' => 'dkv',
+                'code' => 'DKV', 'name' => 'Disain Komunikasi Visual', 'slug' => 'dkv',
                 'tagline' => 'Melatih desainer visual, motion graphic, dan multimedia profesional.',
                 'description' => 'Kompetensi DKV mempersiapkan siswa menjadi desainer kreatif untuk industri grafis, advertising, dan digital media.',
                 'curriculum' => "Dasar Desain Grafis|Typography|Illustrasi Digital|Fotografi|Videografi & Editing|Motion Graphic|Praktik Kerja Industri",
@@ -41,9 +41,9 @@ class MajorSeeder extends Seeder
                 'student_count' => 180, 'quota' => 60, 'spmb_quota' => 30, 'sort_order' => 3,
             ],
             [
-                'code' => 'TBSM', 'name' => 'Teknik & Bisnis Sepeda Motor', 'slug' => 'tbsm',
+                'code' => 'TSM', 'name' => 'Teknik Sepeda Motor', 'slug' => 'tsm',
                 'tagline' => 'Membentuk teknisi sepeda motor bersertifikasi industri.',
-                'description' => 'Kompetensi TBSM fokus pada perawatan, perbaikan, dan diagnosis sepeda motor modern dengan teknologi injeksi.',
+                'description' => 'Kompetensi TSM fokus pada perawatan, perbaikan, dan diagnosis sepeda motor modern dengan teknologi injeksi.',
                 'curriculum' => "Dasar Teknik Otomotif|Sistem Engine Sepeda Motor|Sistem Kelistrikan|Injeksi Bahan Bakar|Manajemen Bengkel|Praktik Kerja Industri",
                 'career_prospects' => "Teknisi Sepeda Motor|Service Advisor|Quality Control|Sales Sparepart|Wirausaha Bengkel",
                 'certifications' => "AHASS Training|Yamaha YES|BNSP Teknisi Kendaraan Ringan",

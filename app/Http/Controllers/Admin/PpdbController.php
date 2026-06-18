@@ -91,12 +91,15 @@ class PpdbController extends Controller
 
     public function exportKartuTes(PpdbRegistration $ppdb)
     {
-        abort_unless($ppdb->allowsKartuTes(), 403, 'Kartu TES hanya dapat dicetak untuk pendaftar dengan status Data Sudah Valid.');
+        abort_unless($ppdb->allowsKartuTes(), 403, 'Bukti validasi hanya dapat dicetak untuk pendaftar dengan status Data Sudah Valid.');
 
         $reg = $ppdb->load('major');
-        $pdf = Pdf::loadView('ppdb.pdf.kartu-tes', ['reg' => $reg])->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('ppdb.pdf.kartu-tes', [
+            'reg'      => $reg,
+            'operator' => auth()->user(),
+        ])->setPaper('a4', 'portrait');
 
-        $filename = 'kartu-tes-'.($reg->exam_number ?: $reg->registration_number).'.pdf';
+        $filename = 'bukti-validasi-'.$reg->registration_number.'.pdf';
 
         return $pdf->download($filename);
     }

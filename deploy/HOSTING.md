@@ -11,6 +11,37 @@ Cek isi `~/public_html/index.php` — jika ada path `repositories/websekolahku_v
 head -25 ~/public_html/index.php
 ```
 
+## Setup database pertama kali (hosting baru)
+
+1. **cPanel → MySQL Databases** — buat database, user, dan beri **All Privileges**.
+2. **Import skema** (jika database masih kosong):
+   - phpMyAdmin → pilih database → Import → file `database/schema_mysql.sql`
+   - Atau lewat SSH: `mysql -u USER -p NAMA_DB < database/schema_mysql.sql`
+3. **Salin `.env` di server** dari template `deploy/env.hosting.example`:
+   ```bash
+   cd ~/repositories/websekolahku_v1
+   cp deploy/env.hosting.example .env
+   nano .env   # isi DB_DATABASE, DB_USERNAME, DB_PASSWORD, APP_URL, APP_KEY
+   php artisan key:generate
+   ```
+4. **Jalankan migration & seed** (data awal admin, jurusan, pengaturan):
+   ```bash
+   php artisan migrate --force
+   php artisan db:seed --force
+   ```
+5. **Login admin default** (ubah password setelah login): lihat `database/seeders/UserSeeder.php`.
+
+### Variabel `.env` database (wajib di hosting)
+
+| Variabel | Contoh cPanel | Keterangan |
+|----------|---------------|------------|
+| `DB_HOST` | `localhost` | Biasanya `localhost`, bukan IP |
+| `DB_DATABASE` | `user_smkn8` | Nama database lengkap dari cPanel |
+| `DB_USERNAME` | `user_smkn8` | User MySQL dari cPanel |
+| `DB_PASSWORD` | `***` | Password user MySQL |
+
+Produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://domain-anda.sch.id`.
+
 ## Setelah git pull
 
 ```bash
@@ -63,7 +94,25 @@ ALTER TABLE `ppdb_registrations`
     MODIFY `status` VARCHAR(20) NOT NULL DEFAULT 'pending';
 ```
 
-Setelah itu, ubah status pendaftar ke **Data Sudah Valid** lalu cetak Kartu TES lagi.
+Setelah itu, ubah status pendaftar ke **Data Sudah Valid** lalu cetak Bukti Validasi lagi.
+
+## Update kode jurusan (AK, DKV, RPL, TITL, TSM)
+
+Setelah `git pull` versi terbaru, jalankan migration jurusan:
+
+**Opsi A — lewat SSH (disarankan):**
+
+```bash
+cd ~/repositories/websekolahku_v1
+php artisan migrate --force
+php artisan optimize:clear
+```
+
+**Opsi B — lewat phpMyAdmin** (jika tidak ada SSH):
+
+Jalankan SQL dari file `deploy/update-major-codes.sql`.
+
+Dropdown formulir PPDB menampilkan kode singkat; laporan/cetak PDF memakai nama lengkap jurusan.
 
 ## Gambar tidak muncul?
 
