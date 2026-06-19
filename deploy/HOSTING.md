@@ -133,6 +133,33 @@ Jalankan SQL dari file `deploy/update-major-codes.sql`.
 
 Dropdown formulir PPDB menampilkan kode singkat; laporan/cetak PDF memakai nama lengkap jurusan.
 
+## Favicon tidak muncul di tab browser?
+
+Setelah `git pull`, file favicon ada di `public/` repo tetapi **belum otomatis masuk `public_html`**. Tanpa file itu, tab browser menampilkan ikon globe abu-abu.
+
+**Opsi A — SSH (disarankan):**
+
+```bash
+cd ~/repositories/websekolahku_v1
+git pull origin main
+bash deploy/setup-public-html.sh
+php artisan optimize:clear
+```
+
+**Opsi B — cPanel File Manager (tanpa SSH):**
+
+Salin dari `repositories/websekolahku_v1/public/` ke **`public_html/`** (root domain):
+
+- `favicon.ico`
+- `favicon-light.png`
+- `favicon-dark.png`
+- `favicon-16x16.png`, `favicon-32x32.png`, `favicon-96x96.png`
+- `apple-touch-icon.png`
+- `android-chrome-192x192.png`, `android-chrome-512x512.png`
+- `site.webmanifest`
+
+Lalu hard refresh browser (`Ctrl+Shift+R` / `Cmd+Shift+R`). Google Search bisa butuh **beberapa hari** untuk memperbarui favicon di hasil pencarian.
+
 ## Gambar tidak muncul?
 
 1. Jalankan `bash deploy/setup-public-html.sh` (perbaiki symlink + restore backup).

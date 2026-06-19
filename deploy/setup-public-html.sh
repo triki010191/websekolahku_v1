@@ -30,6 +30,13 @@ if [ -d "$WEB/public/images" ]; then
     cp -an "$WEB/public/images/." "$WEB/images/" 2>/dev/null || cp -a "$WEB/public/images/." "$WEB/images/"
 fi
 
+# favicon & PWA icons (wajib di public_html — bukan hanya di repo/public)
+for favicon in favicon.ico favicon-light.png favicon-dark.png favicon-16x16.png favicon-32x32.png favicon-96x96.png apple-touch-icon.png android-chrome-192x192.png android-chrome-512x512.png site.webmanifest; do
+    if [ -f "$REPO/public/$favicon" ]; then
+        cp -a "$REPO/public/$favicon" "$WEB/$favicon"
+    fi
+done
+
 # Hapus folder storage salah (bukan symlink), lalu buat symlink benar
 if [ -L "$WEB/storage" ]; then
     rm -f "$WEB/storage"
@@ -72,7 +79,7 @@ done
 
 echo ""
 echo "==> Cek asset statis (harus ada file):"
-ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" "$WEB/images/banner-spmb-sekolah.jpg" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
+ls "$WEB/js/ppdb-wizard.js" "$WEB/css/app.css" "$WEB/images/spmb-banten-official.png" "$WEB/images/banner-spmb-sekolah.jpg" "$WEB/favicon.ico" "$WEB/favicon-light.png" 2>&1 || echo "    PERINGATAN: ada asset yang belum tersalin!"
 echo ""
 echo "==> PENTING: css/js/images disalin ke public_html. Tanpa script ini, git pull saja"
 echo "    TIDAK memperbarui /css/app.css — tampilan bisa tampak lama/putih."

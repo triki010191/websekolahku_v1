@@ -19,7 +19,7 @@ Options +FollowSymLinks -MultiViews -Indexes
 
     # css/js/images statis di root public_html — storage TIDAK di-skip
     # (supaya file upload bisa dilayani Laravel bila symlink rusak)
-    RewriteRule ^(css|js|images|favicon\.ico|robots\.txt)(/|$) - [L]
+    RewriteRule ^(css|js|images|favicon\.ico|favicon-.*\.png|apple-touch-icon\.png|android-chrome-.*\.png|site\.webmanifest|robots\.txt)(/|$) - [L]
 
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
