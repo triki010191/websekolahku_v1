@@ -128,11 +128,11 @@
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <span><span class="badge bg-info me-2">DKV</span>Desain Komunikasi Visual</span>
-                            <span class="fw-semibold">2 Rombel <span class="text-secondary fw-normal">(72 Siswa)</span></span>
+                            <span class="fw-semibold">1 Rombel <span class="text-secondary fw-normal">(36 Siswa)</span></span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <span><span class="badge bg-primary me-2">RPL</span>Rekayasa Perangkat Lunak</span>
-                            <span class="fw-semibold">1 Rombel <span class="text-secondary fw-normal">(36 Siswa)</span></span>
+                            <span class="fw-semibold">2 Rombel <span class="text-secondary fw-normal">(72 Siswa)</span></span>
                         </div>
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <span><span class="badge bg-warning text-dark me-2">TITL</span>Teknik Instalasi Tenaga Listrik</span>

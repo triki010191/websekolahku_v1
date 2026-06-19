@@ -1,3 +1,6 @@
+-- File ini digabung ke deploy/hosting-phpmyadmin-update.sql
+-- Gunakan file gabungan itu untuk update lengkap di phpMyAdmin.
+--
 -- Jalankan di phpMyAdmin jika `php artisan migrate --force` tidak bisa di hosting.
 -- Memperbarui kode & nama jurusan: AK, DKV, RPL, TITL, TSM (nama lengkap untuk laporan/cetak).
 

@@ -42,7 +42,26 @@ head -25 ~/public_html/index.php
 
 Produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://domain-anda.sch.id`.
 
-## Setelah git pull
+## Hosting tanpa terminal (phpMyAdmin saja)
+
+Jika **tidak ada SSH/terminal**, setelah upload/pull kode terbaru:
+
+1. Buka **cPanel → phpMyAdmin**
+2. Pilih **database website**
+3. Tab **SQL** → buka file **`deploy/hosting-phpmyadmin-update.sql`**
+4. Salin semua isinya → tempel → **Go / Jalankan**
+
+File itu memperbarui:
+- Kolom `status` pendaftaran PPDB (agar status **Data Sudah Valid** & cetak Bukti Validasi tidak error)
+- Kode & nama jurusan (AK, DKV, RPL, TITL, TSM)
+
+Setelah SQL berhasil, refresh halaman admin SPMB.
+
+File terpisah (jika hanya butuh satu bagian):
+- `deploy/fix-ppdb-valid-status.sql` — hanya perbaikan status
+- `deploy/update-major-codes.sql` — hanya update jurusan
+
+## Setelah git pull (jika ada SSH)
 
 ```bash
 cd ~/repositories/websekolahku_v1
