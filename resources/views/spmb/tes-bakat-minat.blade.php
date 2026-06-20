@@ -38,34 +38,36 @@
 
                     <div class="row g-4 my-4">
                         <div class="col-md-6">
-                            <div class="border rounded-3 p-4 h-100 bg-body-tertiary">
-                                <h3 class="h6 fw-bold text-uppercase text-primary mb-3">Hari Pertama</h3>
-                                <div class="d-flex align-items-center gap-2 mb-3">
-                                    <i class="bi bi-calendar-event text-primary fs-5"></i>
-                                    <span class="fw-semibold">Selasa, 23 Juni 2026</span>
+                            <div class="tes-jadwal-card tes-jadwal-card--day1 rounded-3 p-4 h-100">
+                                <span class="tes-jadwal-card__badge tes-jadwal-card__badge--day1">Hari Pertama</span>
+                                <div class="d-flex align-items-center gap-2 mb-3 mt-1">
+                                    <span class="tes-jadwal-card__icon tes-jadwal-card__icon--day1">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </span>
+                                    <span class="fw-semibold tes-jadwal-card__date">Selasa, 23 Juni 2026</span>
                                 </div>
-                                <p class="small text-secondary mb-2">Jurusan yang mengikuti tes:</p>
-                                <ol class="mb-3 ps-3">
-                                    <li>Akuntansi (AKL) – <strong>55 Peserta</strong></li>
-                                    <li>Teknik Instalasi Tenaga Listrik (TITL) – <strong>66 Peserta</strong></li>
-                                    <li>Desain Komunikasi Visual (DKV) – <strong>39 Peserta</strong></li>
+                                <p class="small tes-jadwal-card__label mb-2">Jurusan yang mengikuti tes:</p>
+                                <ol class="mb-0 ps-3 tes-jadwal-card__list">
+                                    <li>Akuntansi (AKL)</li>
+                                    <li>Teknik Instalasi Tenaga Listrik (TITL)</li>
+                                    <li>Desain Komunikasi Visual (DKV)</li>
                                 </ol>
-                                <div class="badge bg-primary fs-6">Jumlah Peserta: 160 Orang</div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="border rounded-3 p-4 h-100 bg-body-tertiary">
-                                <h3 class="h6 fw-bold text-uppercase text-primary mb-3">Hari Kedua</h3>
-                                <div class="d-flex align-items-center gap-2 mb-3">
-                                    <i class="bi bi-calendar-event text-primary fs-5"></i>
-                                    <span class="fw-semibold">Rabu, 24 Juni 2026</span>
+                            <div class="tes-jadwal-card tes-jadwal-card--day2 rounded-3 p-4 h-100">
+                                <span class="tes-jadwal-card__badge tes-jadwal-card__badge--day2">Hari Kedua</span>
+                                <div class="d-flex align-items-center gap-2 mb-3 mt-1">
+                                    <span class="tes-jadwal-card__icon tes-jadwal-card__icon--day2">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </span>
+                                    <span class="fw-semibold tes-jadwal-card__date">Rabu, 24 Juni 2026</span>
                                 </div>
-                                <p class="small text-secondary mb-2">Jurusan yang mengikuti tes:</p>
-                                <ol class="mb-3 ps-3">
-                                    <li>Rekayasa Perangkat Lunak (RPL) – <strong>81 Peserta</strong></li>
-                                    <li>Teknik Sepeda Motor (TSM) – <strong>56 Peserta</strong></li>
+                                <p class="small tes-jadwal-card__label mb-2">Jurusan yang mengikuti tes:</p>
+                                <ol class="mb-0 ps-3 tes-jadwal-card__list">
+                                    <li>Rekayasa Perangkat Lunak (RPL)</li>
+                                    <li>Teknik Sepeda Motor (TSM)</li>
                                 </ol>
-                                <div class="badge bg-primary fs-6">Jumlah Peserta: 137 Orang</div>
                             </div>
                         </div>
                     </div>
@@ -73,7 +75,7 @@
                     <h3 class="h5 fw-bold mt-4 mb-3"><i class="bi bi-list-check text-primary me-2"></i>Ketentuan Peserta</h3>
                     <ol class="mb-4">
                         <li class="mb-2">Hadir paling lambat pukul <strong>07.30 WIB</strong>.</li>
-                        <li class="mb-2">Tes dimulai pukul <strong>08.00 WIB</strong>.</li>
+                        <li class="mb-2">Tes dimulai pukul <strong>08.00 WIB</strong> sampai selesai.</li>
                         <li class="mb-2">Membawa bukti pendaftaran SPMB.</li>
                         <li class="mb-2">Membawa alat tulis pribadi.</li>
                         <li class="mb-2">Menggunakan seragam sekolah asal yang rapi dan sopan.</li>
