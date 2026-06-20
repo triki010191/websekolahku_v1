@@ -37,7 +37,7 @@
         ],
         [
             'label' => 'Tes Bakat Minat',
-            'desc'  => 'Informasi Belum Tersedia',
+            'desc'  => 'Jadwal tes seleksi SPMB 23–24 Juni 2026',
             'icon'  => 'bi-calendar2-week',
             'href'  => spmb_route('spmb.tes-bakat-minat', '/spmb-2026/tes-bakat-minat'),
             'color' => 'warning',
