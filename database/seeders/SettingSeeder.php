@@ -59,6 +59,7 @@ class SettingSeeder extends Seeder
             ['key' => 'ppdb_start',    'value' => '2026-06-01',      'group' => 'ppdb', 'type' => 'date'],
             ['key' => 'ppdb_end',      'value' => '2026-07-15',      'group' => 'ppdb', 'type' => 'date'],
             ['key' => 'ppdb_announce', 'value' => '2026-07-20',      'group' => 'ppdb', 'type' => 'date'],
+            ['key' => 'spmb_graduation_published', 'value' => '0', 'group' => 'ppdb', 'type' => 'bool'],
             ['key' => 'spmb_banten_url',  'value' => 'https://spmb.bantenprov.go.id/', 'group' => 'ppdb'],
             ['key' => 'spmb_banten_logo', 'value' => '',               'group' => 'ppdb', 'type' => 'image'],
         ];

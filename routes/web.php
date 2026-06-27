@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\MajorController as AdminMajor;
 use App\Http\Controllers\Admin\PageController as AdminPage;
 use App\Http\Controllers\Admin\PostController as AdminPost;
 use App\Http\Controllers\Admin\PpdbController as AdminPpdb;
+use App\Http\Controllers\Admin\SpmbGraduationResultController as AdminSpmbGraduation;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TeacherController as AdminTeacher;
 use App\Http\Controllers\Admin\UserController;
@@ -90,6 +91,7 @@ Route::get('/spmb-2026/jadwal-tes', [SpmbController::class, 'jadwalTes'])->name(
 Route::get('/spmb-2026/tes-bakat-minat', [SpmbController::class, 'tesBakatMinat'])->name('spmb.tes-bakat-minat');
 Route::get('/spmb-2026/daftar-ulang', [SpmbController::class, 'daftarUlang'])->name('spmb.daftar-ulang');
 Route::get('/spmb-2026/panduan-dapodik', [SpmbController::class, 'panduanDapodik'])->name('spmb.panduan-dapodik');
+Route::get('/spmb-2026/pengumuman-kelulusan', [SpmbController::class, 'pengumumanKelulusan'])->name('spmb.pengumuman-kelulusan');
 Route::get('/ppdb', [SpmbController::class, 'index'])->name('ppdb.index');
 Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.create');
 Route::get('/ppdb/csrf-token', [PpdbController::class, 'csrfToken'])->name('ppdb.csrf');
@@ -130,6 +132,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', 'admin.modu
         ->parameters(['gallery' => 'album']);
     Route::post('gallery/{album}/items', [AdminGallery::class, 'addItem'])->name('gallery.items.store');
     Route::delete('gallery/items/{item}', [AdminGallery::class, 'destroyItem'])->name('gallery.items.destroy');
+
+    Route::get('spmb-kelulusan/export/excel', [AdminSpmbGraduation::class, 'exportExcel'])->name('spmb-graduation-results.export.excel');
+    Route::get('spmb-kelulusan/export/template', [AdminSpmbGraduation::class, 'exportTemplate'])->name('spmb-graduation-results.export.template');
+    Route::post('spmb-kelulusan/import/excel', [AdminSpmbGraduation::class, 'importExcel'])->name('spmb-graduation-results.import.excel');
+    Route::post('spmb-kelulusan/toggle-publish', [AdminSpmbGraduation::class, 'togglePublish'])->name('spmb-graduation-results.toggle-publish');
+    Route::resource('spmb-kelulusan', AdminSpmbGraduation::class)
+        ->except('show')
+        ->parameters(['spmb-kelulusan' => 'spmb_graduation_result'])
+        ->names('spmb-graduation-results');
 
     Route::get('ppdb/export/excel', [AdminPpdb::class, 'exportExcel'])->name('ppdb.export.excel');
     Route::get('ppdb/{ppdb}/export/pdf', [AdminPpdb::class, 'exportPdf'])->name('ppdb.export.pdf');

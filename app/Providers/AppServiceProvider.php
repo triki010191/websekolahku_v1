@@ -107,6 +107,7 @@ class AppServiceProvider extends ServiceProvider
             'spmb.tes-bakat-minat'  => ['uri' => '/spmb-2026/tes-bakat-minat', 'action' => 'tesBakatMinat'],
             'spmb.daftar-ulang'     => ['uri' => '/spmb-2026/daftar-ulang', 'action' => 'daftarUlang'],
             'spmb.panduan-dapodik'  => ['uri' => '/spmb-2026/panduan-dapodik', 'action' => 'panduanDapodik'],
+            'spmb.pengumuman-kelulusan' => ['uri' => '/spmb-2026/pengumuman-kelulusan', 'action' => 'pengumumanKelulusan'],
         ];
 
         foreach ($routes as $name => $config) {

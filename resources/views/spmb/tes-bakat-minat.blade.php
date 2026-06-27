@@ -101,7 +101,7 @@
                     <a href="{{ route('spmb.index') }}" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-1"></i> Kembali ke Info SPMB
                     </a>
-                    <a href="{{ route('spmb.index') }}#pengumuman-spmb" class="btn btn-outline-primary">
+                    <a href="{{ route('spmb.pengumuman-kelulusan') }}" class="btn btn-outline-primary">
                         <i class="bi bi-megaphone me-1"></i> Lihat Pengumuman SPMB
                     </a>
                 </div>

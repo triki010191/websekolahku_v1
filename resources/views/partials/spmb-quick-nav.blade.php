@@ -46,7 +46,7 @@
             'label' => 'Pengumuman Kelulusan',
             'desc'  => 'Hasil seleksi dan pengumuman resmi SPMB',
             'icon'  => 'bi-megaphone',
-            'href'  => spmb_route('spmb.index', '/spmb-2026', '#pengumuman-spmb'),
+            'href'  => spmb_route('spmb.pengumuman-kelulusan', '/spmb-2026/pengumuman-kelulusan'),
             'color' => 'danger',
         ],
         [

@@ -39,6 +39,7 @@
             <a href="{{ route('admin.majors.index') }}" class="@if(request()->routeIs('admin.majors.*')) active @endif"><i class="bi bi-mortarboard"></i> Jurusan</a>
             <a href="{{ route('admin.teachers.index') }}" class="@if(request()->routeIs('admin.teachers.*')) active @endif"><i class="bi bi-people"></i> Guru &amp; TU</a>
             <a href="{{ route('admin.ppdb.index') }}" class="@if(request()->routeIs('admin.ppdb.*')) active @endif"><i class="bi bi-person-check"></i> SPMB</a>
+            <a href="{{ route('admin.spmb-graduation-results.index') }}" class="@if(request()->routeIs('admin.spmb-graduation-results.*')) active @endif"><i class="bi bi-list-check"></i> Hasil Seleksi SPMB</a>
             <a href="{{ route('admin.gallery.index') }}" class="@if(request()->routeIs('admin.gallery.*')) active @endif"><i class="bi bi-images"></i> Galeri</a>
             <a href="{{ route('admin.hero-slides.index') }}" class="@if(request()->routeIs('admin.hero-slides.*')) active @endif"><i class="bi bi-collection-play"></i> Slider beranda</a>
             <a href="{{ route('admin.downloads.index') }}" class="@if(request()->routeIs('admin.downloads.*')) active @endif"><i class="bi bi-cloud-arrow-down"></i> Download</a>

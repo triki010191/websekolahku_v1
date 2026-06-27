@@ -4,6 +4,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <h1 class="h4 mb-0">Data Formulir Dapodik</h1>
     <div class="d-flex gap-2">
+        <a href="{{ route('admin.spmb-graduation-results.index') }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-list-check"></i> Hasil Seleksi</a>
         <a href="{{ route('admin.ppdb.export.excel', request()->only('status')) }}" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
     </div>
 </div>
