@@ -5,9 +5,6 @@
 @section('content')
 @php
     $yearLabel = setting('ppdb_year', date('Y').'/'.(date('Y')+1));
-    $endDate   = setting('ppdb_end');
-    $announce  = setting('ppdb_announce');
-    $fmt = fn ($d) => $d ? \Carbon\Carbon::parse($d)->translatedFormat('d F Y') : '—';
     $spmbBanner = public_asset_url('images/banner-spmb-sekolah.jpg') ?? asset('images/banner-spmb-sekolah.jpg');
 @endphp
 
@@ -67,32 +64,48 @@
     <div class="container">
         <h2 class="h5 fw-bold mb-4"><i class="bi bi-calendar-event text-primary me-2"></i>Jadwal Penting</h2>
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-md-6 col-xl-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-primary small fw-semibold text-uppercase">Pra SPMB</div>
+                        <div class="fs-5 fw-bold">20 April - 31 Mei 2026</div>
+                        <p class="small text-secondary mb-0 mt-2">Validasi data, aktivasi akun, dan verifikasi dokumen.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
                         <div class="text-primary small fw-semibold text-uppercase">Pendaftaran</div>
-                        <div class="fs-5 fw-bold">16 s.d 20 Juni 2026</div>
+                        <div class="fs-5 fw-bold">16 - 20 Juni 2026</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6 col-xl-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
-                        <div class="text-danger small fw-semibold text-uppercase">Penutupan</div>
-                        <div class="fs-5 fw-bold">{{ $fmt($endDate) }}</div>
+                        <div class="text-info small fw-semibold text-uppercase">Tes Minat dan Bakat</div>
+                        <div class="fs-5 fw-bold">23 s.d 24 Juni 2026</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6 col-xl-4">
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-body">
-                        <div class="text-success small fw-semibold text-uppercase">Pengumuman Hasil</div>
-                        <div class="fs-5 fw-bold">{{ $fmt($announce) }}</div>
+                        <div class="text-success small fw-semibold text-uppercase">Pengumuman Hasil Seleksi</div>
+                        <div class="fs-5 fw-bold">6 Juli 2026</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="text-danger small fw-semibold text-uppercase">Daftar Ulang</div>
+                        <div class="fs-5 fw-bold">7 - 10 Juli 2026</div>
                     </div>
                 </div>
             </div>
         </div>
-        <p class="small text-secondary mt-3 mb-0">Jadwal penutupan dan pengumuman dapat diubah dari Admin → <strong>Pengaturan</strong> (grup PPDB).</p>
     </div>
 </section>
 
@@ -178,32 +191,6 @@
                             <button type="submit" class="btn btn-primary btn-sm w-100 mt-1"><i class="bi bi-file-earmark-pdf me-1"></i> Cek &amp; Unduh Formulir</button>
                         </form>
                     </div>
-                </div>
-
-                <div id="pengumuman-spmb" class="card border-0 shadow-sm sticky-top scroll-margin-top" style="top:5.5rem">
-                    <div class="card-header bg-white fw-bold"><i class="bi bi-megaphone text-warning me-2"></i>Pengumuman SPMB</div>
-                    <div class="list-group list-group-flush">
-                        @forelse($announcements as $a)
-                        <a href="{{ route('pengumuman.show', $a->slug) }}" class="list-group-item list-group-item-action">
-                            <div class="d-flex justify-content-between gap-2 align-items-start">
-                                <span class="fw-semibold small">{{ $a->title }}</span>
-                                @if($a->priority === 'urgent')
-                                    <span class="badge bg-danger">Penting</span>
-                                @elseif($a->priority === 'important')
-                                    <span class="badge bg-warning text-dark">Info</span>
-                                @endif
-                            </div>
-                            <div class="small text-secondary">{{ $a->published_at?->translatedFormat('d M Y') }}</div>
-                        </a>
-                        @empty
-                        <div class="list-group-item small text-secondary">Belum ada pengumuman SPMB. Tambahkan di Admin → Pengumuman (kategori PPDB).</div>
-                        @endforelse
-                    </div>
-                    @if($announcements->isNotEmpty())
-                    <div class="card-footer bg-white">
-                        <a href="{{ route('pengumuman.index') }}" class="small">Lihat semua pengumuman →</a>
-                    </div>
-                    @endif
                 </div>
 
                 <div class="card border-0 shadow-sm mt-3">
